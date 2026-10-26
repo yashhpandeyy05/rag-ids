@@ -1,0 +1,17 @@
+{
+ "run": "small",
+ "calls": 88,
+ "answering_model": "openai/gpt-oss-20b",
+ "answering_tokens_per_call": {
+  "A": 1021,
+  "B": 2709
+ },
+ "answering_tokens_total": 164156,
+ "answering_days_at_200k_per_day": 0.82,
+ "answering_minutes_at_tpm_limit": 20.5,
+ "judge_model": "gemini-3.5-flash-lite",
+ "judge_tokens_per_call": 4691,
+ "judge_tokens_total": 412850,
+ "judge_minutes_at_rpm_limit": 6.3,
+ "note": "Estimates use ~4 characters per token. Real counts are logged in cache/llm_calls.jsonl."
+}

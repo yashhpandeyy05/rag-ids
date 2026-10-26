@@ -1,0 +1,169 @@
+qid,condition,type,id,id_type,official_name,status_in_files,outcome,note,was_in_evidence
+Q02,B,respond,CAPEC-482,capec,TCP Flood,draft,correct,,True
+Q02,B,respond,T1499.001,attack,OS Exhaustion Flood,active,correct,,True
+Q02,B,respond,T1498.001,attack,Direct Network Flood,active,correct,,True
+Q03,A,reference,T1499.001,attack,OS Exhaustion Flood,active,correct,,False
+Q03,A,reference,CAPEC-111,capec,JSON Hijacking (aka JavaScript Hijacking),draft,mismatched,real ID not related to the detected label,False
+Q03,A,reference,CVE-2019-11477,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q03,A,reference,CVE-2020-25705,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q03,A,reference,CVE-2021-22555,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q03,B,reference,CAPEC-482,capec,TCP Flood,draft,correct,,True
+Q03,B,reference,T1499.001,attack,OS Exhaustion Flood,active,correct,,True
+Q03,C,reference,T1046,attack,Network Service Discovery,active,mismatched,real ID not related to the detected label,False
+Q03,C,reference,CAPEC-163,capec,Spear Phishing,draft,mismatched,given the wrong name,False
+Q03,C,reference,CVE-2021-26855,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q03,C,reference,CVE-2022-27774,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q04,B,identify,CAPEC-469,capec,HTTP DoS,draft,correct,,True
+Q05,B,respond,CAPEC-469,capec,HTTP DoS,draft,correct,,True
+Q05,B,respond,T1499.002,attack,Service Exhaustion Flood,active,correct,,True
+Q06,A,reference,T1499.001,attack,OS Exhaustion Flood,active,mismatched,real ID not related to the detected label,False
+Q06,A,reference,CAPEC-112,capec,Brute Force,draft,mismatched,real ID not related to the detected label,False
+Q06,A,reference,CVE-2019-0211,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q06,A,reference,CVE-2021-41773,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q06,A,reference,CVE-2019-9511,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q06,A,reference,CVE-2020-0605,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q06,A,reference,CVE-2020-1938,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q06,B,reference,T1499.002,attack,Service Exhaustion Flood,active,correct,,True
+Q06,B,reference,CAPEC-469,capec,HTTP DoS,draft,correct,,True
+Q06,C,reference,T1071,attack,Application Layer Protocol,active,mismatched,real ID not related to the detected label,False
+Q06,C,reference,T1041,attack,Exfiltration Over C2 Channel,active,mismatched,real ID not related to the detected label,False
+Q06,C,reference,CAPEC-163,capec,Spear Phishing,draft,mismatched,real ID not related to the detected label,False
+Q06,C,reference,CAPEC-115,capec,Authentication Bypass,draft,mismatched,real ID not related to the detected label,False
+Q06,C,reference,CVE-2021-41773,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q07,B,identify,T1557.002,attack,ARP Cache Poisoning,active,correct,,True
+Q08,B,respond,T1557.002,attack,ARP Cache Poisoning,active,correct,,True
+Q08,B,respond,M1037,mitigation,Filter Network Traffic,active,correct,,True
+Q08,B,respond,M1035,mitigation,Limit Access to Resource Over Network,active,correct,,True
+Q08,B,respond,M1031,mitigation,Network Intrusion Prevention,active,correct,,True
+Q08,B,respond,M1041,mitigation,Encrypt Sensitive Information,active,correct,,True
+Q09,A,reference,T1557.001,attack,Name Resolution Poisoning and SMB Relay,active,mismatched,given the wrong name,False
+Q09,A,reference,CAPEC-163,capec,Spear Phishing,draft,mismatched,real ID not related to the detected label,False
+Q09,A,reference,CVE-2020-16898,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q09,A,reference,CVE-2021-33766,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q09,A,reference,CVE-2022-22965,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q09,A,reference,CVE-2023-28252,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q09,B,reference,T1557.002,attack,ARP Cache Poisoning,active,correct,,True
+Q09,B,reference,CAPEC-141,capec,Cache Poisoning,draft,correct,,True
+Q09,C,reference,T1071.004,attack,DNS,active,mismatched,real ID not related to the detected label,False
+Q09,C,reference,CAPEC-115,capec,Authentication Bypass,draft,mismatched,real ID not related to the detected label,False
+Q09,C,reference,CVE-2020-25705,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q09,C,reference,CVE-2021-25216,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q10,B,identify,CAPEC-300,capec,Port Scanning,stable,correct,,True
+Q11,B,respond,CAPEC-300,capec,Port Scanning,stable,correct,,True
+Q11,B,respond,T1046,attack,Network Service Discovery,active,correct,,True
+Q12,A,reference,T1046,attack,Network Service Discovery,active,correct,,False
+Q12,A,reference,CAPEC-111,capec,JSON Hijacking (aka JavaScript Hijacking),draft,mismatched,real ID not related to the detected label,False
+Q12,A,reference,CVE-2020-13844,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q12,A,reference,CVE-2021-20231,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q12,B,reference,T1046,attack,Network Service Discovery,active,correct,,True
+Q12,B,reference,CAPEC-300,capec,Port Scanning,stable,correct,,True
+Q12,B,reference,CAPEC-287,capec,TCP SYN Scan,stable,correct,,True
+Q12,C,reference,T1046,attack,Network Service Discovery,active,correct,,False
+Q12,C,reference,CAPEC-163,capec,Spear Phishing,draft,mismatched,given the wrong name,False
+Q13,B,identify,CAPEC-308,capec,UDP Scan,stable,correct,,True
+Q14,B,respond,CAPEC-308,capec,UDP Scan,stable,correct,,True
+Q14,B,respond,CAPEC-298,capec,UDP Ping,stable,mismatched,real ID not related to the detected label,True
+Q14,B,respond,T1046,attack,Network Service Discovery,active,correct,,True
+Q14,B,respond,T1498.002,attack,Reflection Amplification,active,mismatched,real ID not related to the detected label,True
+Q15,A,reference,T1046,attack,Network Service Discovery,active,correct,,False
+Q15,A,reference,T1046.001,attack,,,fabricated,not in the official ATT&CK/CAPEC files,False
+Q15,A,reference,CAPEC-163,capec,Spear Phishing,draft,mismatched,given the wrong name,False
+Q15,A,reference,CVE-2021-20238,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q15,A,reference,CVE-2022-22965,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q15,B,reference,T1046,attack,Network Service Discovery,active,correct,,True
+Q15,B,reference,CAPEC-308,capec,UDP Scan,stable,correct,,True
+Q15,C,reference,T1071.004,attack,DNS,active,mismatched,real ID not related to the detected label,False
+Q15,C,reference,T1573,attack,Encrypted Channel,active,mismatched,real ID not related to the detected label,False
+Q15,C,reference,T1090,attack,Proxy,active,mismatched,real ID not related to the detected label,False
+Q17,B,respond,CAPEC-303,capec,TCP Xmas Scan,stable,correct,,True
+Q17,B,respond,T1046,attack,Network Service Discovery,active,correct,,True
+Q17,B,respond,M1031,mitigation,Network Intrusion Prevention,active,correct,,True
+Q17,B,respond,M1030,mitigation,Network Segmentation,active,correct,,True
+Q17,B,respond,M1042,mitigation,Disable or Remove Feature or Program,active,correct,,True
+Q18,A,reference,T1046,attack,Network Service Discovery,active,correct,,False
+Q18,A,reference,T1046.001,attack,,,fabricated,not in the official ATT&CK/CAPEC files,False
+Q18,A,reference,CAPEC-163,capec,Spear Phishing,draft,mismatched,given the wrong name,False
+Q18,A,reference,CVE-2020-0796,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q18,A,reference,CVE-2017-0144,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q18,A,reference,CVE-2021-34739,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q18,A,reference,CVE-2018-0171,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q18,A,reference,CVE-2021-41773,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q18,A,reference,CVE-2022-23943,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q18,A,reference,CVE-2020-25705,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q18,B,reference,CAPEC-303,capec,TCP Xmas Scan,stable,correct,,True
+Q18,B,reference,T1046,attack,Network Service Discovery,active,correct,,True
+Q18,C,reference,T1046,attack,Network Service Discovery,active,correct,,False
+Q18,C,reference,CAPEC-163,capec,Spear Phishing,draft,mismatched,given the wrong name,False
+Q20,B,respond,T1557.002,attack,ARP Cache Poisoning,active,correct,,True
+Q20,B,respond,M1035,mitigation,Limit Access to Resource Over Network,active,correct,,True
+Q20,B,respond,M1037,mitigation,Filter Network Traffic,active,correct,,True
+Q20,B,respond,M1042,mitigation,Disable or Remove Feature or Program,active,correct,,True
+Q20,B,respond,M1031,mitigation,Network Intrusion Prevention,active,correct,,True
+Q20,B,respond,M1041,mitigation,Encrypt Sensitive Information,active,correct,,True
+Q20,B,respond,M1017,mitigation,User Training,active,correct,,True
+Q21,A,reference,T1557,attack,Adversary-in-the-Middle,active,correct,,False
+Q21,A,reference,T1557.001,attack,Name Resolution Poisoning and SMB Relay,active,mismatched,real ID not related to the detected label,False
+Q21,A,reference,CAPEC-115,capec,Authentication Bypass,draft,mismatched,real ID not related to the detected label,False
+Q21,A,reference,CVE-2020-12345,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q21,A,reference,CVE-2021-34527,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q21,A,reference,CVE-2022-22965,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q21,A,reference,CVE-2019-11510,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q21,B,reference,T1557.002,attack,ARP Cache Poisoning,active,correct,,True
+Q21,B,reference,CAPEC-141,capec,Cache Poisoning,draft,correct,,True
+Q21,C,reference,T1046,attack,Network Service Discovery,active,mismatched,real ID not related to the detected label,False
+Q21,C,reference,CAPEC-163,capec,Spear Phishing,draft,mismatched,given the wrong name,False
+Q22,B,identify,CAPEC-312,capec,Active OS Fingerprinting,stable,correct,,True
+Q22,B,identify,T1595,attack,Active Scanning,active,correct,,True
+Q22,B,identify,T1082,attack,System Information Discovery,active,correct,,True
+Q23,B,respond,CAPEC-312,capec,Active OS Fingerprinting,stable,correct,,True
+Q23,B,respond,T1595,attack,Active Scanning,active,correct,,True
+Q23,B,respond,T1082,attack,System Information Discovery,active,correct,,True
+Q23,B,respond,T1095,attack,Non-Application Layer Protocol,active,mismatched,real ID not related to the detected label,True
+Q23,B,respond,M1030,mitigation,Network Segmentation,active,mismatched,real ID not related to the detected label,True
+Q23,B,respond,M1031,mitigation,Network Intrusion Prevention,active,mismatched,real ID not related to the detected label,True
+Q23,B,respond,M1037,mitigation,Filter Network Traffic,active,mismatched,real ID not related to the detected label,True
+Q23,B,respond,M1047,mitigation,Audit,active,mismatched,real ID not related to the detected label,True
+Q24,A,reference,T1016.001,attack,Internet Connection Discovery,active,mismatched,real ID not related to the detected label,False
+Q24,A,reference,CAPEC-163,capec,Spear Phishing,draft,mismatched,given the wrong name,False
+Q24,B,reference,CAPEC-312,capec,Active OS Fingerprinting,stable,correct,,True
+Q24,B,reference,T1082,attack,System Information Discovery,active,correct,,True
+Q24,B,reference,T1595,attack,Active Scanning,active,correct,,True
+Q24,C,reference,T1046,attack,Network Service Discovery,active,mismatched,real ID not related to the detected label,False
+Q24,C,reference,CAPEC-111,capec,JSON Hijacking (aka JavaScript Hijacking),draft,mismatched,real ID not related to the detected label,False
+Q26,B,respond,CAPEC-49,capec,Password Brute Forcing,draft,correct,,True
+Q26,B,respond,T1110.001,attack,Password Guessing,active,correct,,True
+Q26,B,respond,T1021.004,attack,SSH,active,correct,,True
+Q27,A,reference,T1110.001,attack,Password Guessing,active,correct,,False
+Q27,A,reference,CAPEC-112,capec,Brute Force,draft,mismatched,real ID not related to the detected label,False
+Q27,A,reference,CVE-2020-15778,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q27,A,reference,CVE-2018-15473,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q27,A,reference,CVE-2016-0777,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q27,A,reference,CVE-2016-0778,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q27,A,reference,CVE-2022-29173,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q27,B,reference,T1110.001,attack,Password Guessing,active,correct,,True
+Q27,B,reference,CAPEC-49,capec,Password Brute Forcing,draft,correct,,True
+Q27,C,reference,T1021.004,attack,SSH,active,correct,,False
+Q27,C,reference,CVE-2022-42898,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q27,C,reference,CVE-2023-38408,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q30,A,reference,T1071.001,attack,Web Protocols,active,mismatched,real ID not related to the detected label,False
+Q30,A,reference,T1041,attack,Exfiltration Over C2 Channel,active,mismatched,real ID not related to the detected label,False
+Q30,C,reference,T1071.004,attack,DNS,active,mismatched,real ID not related to the detected label,False
+Q30,C,reference,T1568.002,attack,Domain Generation Algorithms,active,mismatched,real ID not related to the detected label,False
+Q30,C,reference,CAPEC-163,capec,Spear Phishing,draft,mismatched,given the wrong name,False
+Q33,A,reference,CVE-2020-13844,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q33,A,reference,T1041,attack,Exfiltration Over C2 Channel,active,mismatched,real ID not related to the detected label,False
+Q33,A,reference,CAPEC-115,capec,Authentication Bypass,draft,mismatched,real ID not related to the detected label,False
+Q33,C,reference,T1071.004,attack,DNS,active,mismatched,given the wrong name,False
+Q33,C,reference,CAPEC-571,capec,Block Logging to Central Repository,draft,mismatched,real ID not related to the detected label,False
+Q33,C,reference,CAPEC-115,capec,Authentication Bypass,draft,mismatched,real ID not related to the detected label,False
+Q33,C,reference,CVE-2020-13844,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q33,C,reference,CVE-2021-33295,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q33,C,reference,CVE-2022-22965,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q33,C,reference,CVE-2023-33201,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+Q36,A,reference,T1557,attack,Adversary-in-the-Middle,active,mismatched,real ID not related to the detected label,False
+Q36,C,reference,T1071.001,attack,Web Protocols,active,mismatched,real ID not related to the detected label,False
+TRAP2,B,trap,CVE-2012-4985,cve,CVE-2012-4985,modified,correct,example CVE for Spoofing in our knowledge base,True
+TRAP2,B,trap,CVE-2021-29280,cve,CVE-2021-29280,modified,correct,example CVE for Spoofing in our knowledge base,True
+TRAP2,C,trap,CVE-2019-11510,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+TRAP2,C,trap,CVE-2020-16898,cve,,,unverifiable,"real CVE, not in our knowledge base",False
+TRAP5,A,trap,T1499,attack,Endpoint Denial of Service,active,correct,,False

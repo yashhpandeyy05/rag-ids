@@ -1,0 +1,143 @@
+# Label cards: one per dataset label.
+# SOURCE: written for this project (NOT an official source). Shown to the student
+# for review. Every "observed" statement was measured on the RT-IoT2022 CSV
+# (123,117 rows, before de-duplication) on 5 October 2026.
+# Tools are named only where the label name or the UCI dataset page states them.
+
+dataset: "RT-IoT2022"
+labels:
+  DOS_SYN_Hping:
+    name: "TCP SYN flood generated with Hping"
+    tool: "Hping (named in the label and on the UCI dataset page)"
+    meaning: >-
+      A denial-of-service (DoS) attack: the attacker sends a very large number of
+      TCP SYN packets (connection requests) to exhaust the target's resources.
+    observed: >-
+      94,659 rows, all TCP to destination port 21, with no service detected.
+      Each flow is tiny: median 1 forward packet and a median duration of
+      0.000003 seconds. Most rows differ only in their source port, so just 57
+      rows remain once the source port is dropped and duplicates are removed.
+
+  DDOS_Slowloris:
+    name: "Slowloris HTTP denial of service"
+    tool: "Slowloris (named in the label and on the UCI dataset page)"
+    meaning: >-
+      An application-layer DoS attack: the attacker opens many HTTP connections and
+      keeps them open by sending incomplete requests slowly, so the web server runs
+      out of connections for real users.
+    observed: >-
+      534 rows, nearly all TCP to port 80 with the HTTP service. Flows are long
+      (median 20 seconds) but carry little data: a median of about 100 payload
+      bytes per second.
+
+  ARP_poisioning:
+    name: "ARP cache poisoning (spoofing)"
+    tool: "Not stated in the dataset documentation"
+    meaning: >-
+      A spoofing attack on the local network: forged ARP messages link the
+      attacker's hardware address to another device's IP address, so traffic meant
+      for that device passes through the attacker (a man-in-the-middle position).
+    observed: >-
+      7,750 rows. The flows are mostly DNS over UDP (ports 53 and 5353) and SSL/TLS
+      on port 443. The ARP messages themselves are not flows, so they are not in
+      the data; the label marks traffic captured while the poisoning was running.
+      The dataset spells the label "poisioning".
+
+  NMAP_TCP_scan:
+    name: "Nmap TCP port scan"
+    tool: "Nmap (named in the label)"
+    meaning: >-
+      Reconnaissance: the attacker probes many TCP ports to find which services
+      are listening. The dataset does not say whether a SYN scan or a connect scan
+      was used.
+    observed: >-
+      1,002 rows, all TCP, to 1,000 different destination ports (Nmap probes
+      1,000 common ports by default). Flows are single-packet and last a few
+      microseconds.
+
+  NMAP_UDP_SCAN:
+    name: "Nmap UDP port scan"
+    tool: "Nmap (named in the label)"
+    meaning: >-
+      Reconnaissance: the attacker sends UDP packets to many ports and infers from
+      the replies, or their absence, which UDP services are open.
+    observed: >-
+      2,590 rows, mostly UDP (2,446) to 982 different ports, with a median of 1
+      forward packet. About 140 rows are TCP to port 80.
+
+  NMAP_XMAS_TREE_SCAN:
+    name: "Nmap Xmas tree scan"
+    tool: "Nmap (named in the label)"
+    meaning: >-
+      Reconnaissance: TCP probes with the FIN, PSH and URG flags all set, an
+      unusual combination. Closed and open ports reply differently on many
+      systems, which reveals port state.
+    observed: >-
+      2,010 rows, almost all TCP. Typical rows have 1 FIN, 1 PSH and 1 URG flag
+      and last a few microseconds.
+
+  NMAP_FIN_SCAN:
+    name: "Nmap FIN scan"
+    tool: "Nmap (named in the label)"
+    meaning: >-
+      Reconnaissance: TCP probes with only the FIN flag set, sent without first
+      opening a connection, to learn whether ports are open or closed.
+    observed: >-
+      Only 28 rows (5 after duplicates are removed). 24 are TCP to port 22 with
+      exactly 1 FIN flag. The other 4 rows are 3 DNS flows (UDP port 53)
+      and 1 ordinary HTTP connection, which a FIN scan does not produce, so the
+      label also covers some background traffic.
+
+  NMAP_OS_DETECTION:
+    name: "Nmap operating-system detection"
+    tool: "Nmap (named in the label)"
+    meaning: >-
+      Reconnaissance: the attacker sends specially crafted probes and compares the
+      replies with known operating-system fingerprints to guess the target's OS.
+    observed: >-
+      2,000 rows, all TCP, to 1,000 different destination ports, mostly single-packet
+      flows lasting a few microseconds. Window-size features are among the most
+      informative for this label.
+
+  Metasploit_Brute_Force_SSH:
+    name: "SSH password brute force with Metasploit"
+    tool: "Metasploit (named in the label)"
+    meaning: >-
+      A brute-force attack: automated, repeated login attempts against an SSH
+      server, guessing passwords.
+    observed: >-
+      Only 37 rows. 28 are TCP to port 22 with the SSH service (median 15
+      forward packets and 2 seconds per flow). The other 9 are DNS or HTTP flows
+      that were captured under the same label.
+
+  Thing_Speak:
+    name: "Normal traffic: ThingSpeak IoT platform"
+    tool: "Benign IoT device traffic"
+    meaning: >-
+      Normal traffic from devices that send sensor data to the ThingSpeak IoT
+      cloud platform.
+    observed: >-
+      8,108 rows: about half DNS over UDP (port 53), plus HTTP on port 80
+      (2,667 rows) and SSL/TLS on port 443 (1,097 rows).
+
+  MQTT_Publish:
+    name: "Normal traffic: MQTT publish"
+    tool: "Benign IoT device traffic"
+    meaning: >-
+      Normal traffic from devices that publish messages to an MQTT broker. MQTT is
+      a lightweight publish/subscribe protocol common in IoT.
+    observed: >-
+      4,146 rows, all TCP, nearly all to port 1883 with the MQTT service. Flows
+      are long-lived (median 44 seconds).
+
+  Wipro_bulb:
+    name: "Normal traffic: Wipro smart bulb"
+    tool: "Benign IoT device traffic"
+    meaning: >-
+      Normal traffic from a Wipro smart light bulb talking to its cloud service
+      and the local network.
+    observed: >-
+      253 rows: SSL/TLS on port 443 (94), TCP to port 6668 (56), DNS (53) and
+      SSL/TLS on port 8886 (13).
+      Zeek labels 43 of the port-6668 flows as the IRC service, which is probably
+      a misidentification of the bulb's own protocol.

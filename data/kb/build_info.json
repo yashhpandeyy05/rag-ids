@@ -1,0 +1,31 @@
+{
+ "built_at": "2026-10-25T18:09:09+00:00",
+ "embedding_model": "BAAI/bge-small-en-v1.5",
+ "sources": {
+  "attack": {
+   "url": "https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json",
+   "file": "enterprise-attack.json",
+   "version": "Enterprise ATT&CK v20.0 (modified 2026-10-13)",
+   "records": null,
+   "downloaded_at": "2026-10-25T18:05:53+00:00",
+   "sha256": "81113ba98afa2928f3dcff62022539f7ce30c315c32e14422f11ff95ce534352"
+  },
+  "capec": {
+   "url": "https://capec.mitre.org/data/xml/capec_latest.xml",
+   "file": "capec_latest.xml",
+   "version": "CAPEC 3.9 (2023-01-24)",
+   "records": null,
+   "downloaded_at": "2026-10-25T18:06:01+00:00",
+   "sha256": "70279a2dff0cb0ad79e546adb07828335a704ad5210e047e09e986172fc9e34d"
+  },
+  "nvd": {
+   "url": "https://services.nvd.nist.gov/rest/json/cves/2.0",
+   "file": "nvd_cves.json",
+   "version": "NVD CVE API 2.0",
+   "records": 269,
+   "downloaded_at": "2026-10-25T18:09:08+00:00",
+   "sha256": "4c24d655217511040bf59195e3224d48a6f49dbe5c6cf7069823dbcd2f0e35d7"
+  }
+ },
+ "chunks": 2339
+}

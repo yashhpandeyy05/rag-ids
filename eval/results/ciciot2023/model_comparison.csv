@@ -1,0 +1,4 @@
+model,macro_f1_pooled,macro_f1_fold_mean,macro_f1_fold_std,accuracy,fit_seconds_per_fold
+Logistic Regression,0.5579,0.5578,0.0045,0.6074,5.7
+Random Forest,0.613,0.6129,0.0055,0.6602,1.87
+XGBoost,0.6302,0.6301,0.0055,0.6764,15.07

@@ -1,0 +1,30 @@
+# Secrets - NEVER commit
+.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# LLM response cache, call log, NVD lookups (personal, regenerable)
+cache/
+
+# Large or regenerable data (comments must be on their own line in .gitignore)
+# - RT-IoT2022 CSV, downloaded by src.data_loader
+data/raw/
+# - train/test split, rebuilt by src.data_loader
+data/processed/*/*.parquet
+# - MITRE/CAPEC/NVD downloads; versions + dates are kept in data/kb/kb_sources_manifest.json
+data/kb_raw/
+# - built by src.kb_builder
+data/kb/chunks.json
+data/kb/id_registry.json
+data/chroma_db/
+# - trained detector, rebuilt by src.detector
+models/
+
+# Node / Frontend & Logs
+node_modules/
+dist/
+*.log
+

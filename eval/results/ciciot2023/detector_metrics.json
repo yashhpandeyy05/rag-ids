@@ -1,0 +1,84 @@
+{
+  "dataset": "CICIoT2023",
+  "trained_at": "2026-10-25T22:22:33+00:00",
+  "versions": {
+    "xgboost": "3.4.1",
+    "scikit-learn": "1.9.1"
+  },
+  "train_rows": 34064,
+  "test_rows": 8517,
+  "chosen_model": "XGBoost",
+  "cv_comparison": [
+    {
+      "model": "Logistic Regression",
+      "macro_f1_pooled": 0.5579,
+      "macro_f1_fold_mean": 0.5578,
+      "macro_f1_fold_std": 0.0045,
+      "accuracy": 0.6074,
+      "fit_seconds_per_fold": 5.7
+    },
+    {
+      "model": "Random Forest",
+      "macro_f1_pooled": 0.613,
+      "macro_f1_fold_mean": 0.6129,
+      "macro_f1_fold_std": 0.0055,
+      "accuracy": 0.6602,
+      "fit_seconds_per_fold": 1.87
+    },
+    {
+      "model": "XGBoost",
+      "macro_f1_pooled": 0.6302,
+      "macro_f1_fold_mean": 0.6301,
+      "macro_f1_fold_std": 0.0055,
+      "accuracy": 0.6764,
+      "fit_seconds_per_fold": 15.07
+    }
+  ],
+  "test": {
+    "macro_f1": 0.6305,
+    "accuracy": 0.6757,
+    "false_alarms": 143,
+    "normal_flows": 300,
+    "false_alarm_rate": 0.4766666666666667
+  },
+  "leakage_check": {
+    "ports_removed_here": [],
+    "cv_macro_f1_with_ports": 0.6302,
+    "cv_macro_f1_without_ports": 0.6302,
+    "difference": -0.0,
+    "per_class_without_ports": {
+      "Backdoor_Malware": 0.2407,
+      "BenignTraffic": 0.4108,
+      "BrowserHijacking": 0.5542,
+      "CommandInjection": 0.3878,
+      "DDoS-ACK_Fragmentation": 0.9875,
+      "DDoS-HTTP_Flood": 0.8379,
+      "DDoS-ICMP_Flood": 0.9983,
+      "DDoS-ICMP_Fragmentation": 0.9912,
+      "DDoS-SYN_Flood": 0.5592,
+      "DDoS-SlowLoris": 0.9498,
+      "DDoS-SynonymousIP_Flood": 0.6407,
+      "DDoS-TCP_Flood": 0.7702,
+      "DDoS-UDP_Flood": 0.6947,
+      "DDoS-UDP_Fragmentation": 0.9908,
+      "DNS_Spoofing": 0.7049,
+      "DictionaryBruteForce": 0.5188,
+      "DoS-HTTP_Flood": 0.8419,
+      "DoS-SYN_Flood": 0.7569,
+      "DoS-TCP_Flood": 0.738,
+      "DoS-UDP_Flood": 0.6876,
+      "MITM-ArpSpoofing": 0.6869,
+      "Mirai-greeth_flood": 0.9908,
+      "Mirai-greip_flood": 0.9917,
+      "Mirai-udpplain": 0.9967,
+      "Recon-HostDiscovery": 0.6014,
+      "Recon-OSScan": 0.1967,
+      "Recon-PingSweep": 0.1824,
+      "Recon-PortScan": 0.3734,
+      "SqlInjection": 0.2887,
+      "Uploading_Attack": 0.0795,
+      "VulnerabilityScan": 0.3264,
+      "XSS": 0.1904
+    }
+  }
+}

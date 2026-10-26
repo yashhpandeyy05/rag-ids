@@ -1,0 +1,9 @@
+question_type,condition,claims,contradicted,unsupported
+identify,A,95,1 of 95 (1.1%),1 of 95 (1.1%)
+identify,B,68,0 of 68 (0.0%),3 of 68 (4.4%)
+reference,A,64,4 of 64 (6.2%),28 of 64 (43.8%)
+reference,B,45,1 of 45 (2.2%),1 of 45 (2.2%)
+respond,A,96,0 of 96 (0.0%),28 of 96 (29.2%)
+respond,B,78,0 of 78 (0.0%),8 of 78 (10.3%)
+trap,A,34,0 of 34 (0.0%),8 of 34 (23.5%)
+trap,B,5,0 of 5 (0.0%),0 of 5 (0.0%)

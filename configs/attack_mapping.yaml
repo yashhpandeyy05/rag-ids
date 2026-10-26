@@ -1,0 +1,91 @@
+# Links each dataset label to the official IDs that describe it.
+# Verified against MITRE ATT&CK Enterprise v19.2 (STIX, modified 2026-08-05)
+# and CAPEC 3.9 (XML) on 5 October 2026 - see PLAN.md "Attack mapping".
+#
+# - Labels are shared across datasets: add a block here for a new label.
+# - The attack FAMILY of a label is NOT stored here; it lives in the dataset
+#   config (configs/<dataset>.yaml, "label_to_family").
+# - Mitigations are not listed: the knowledge base finds them automatically
+#   from ATT&CK's "mitigates" relationships and CAPEC's own mitigation text.
+# - The FIRST capec and FIRST attack entry are the "primary" ones; they are
+#   always put in front of the LLM. Others are added while space allows.
+# - A label with no block here still works (semantic search only) and logs a warning.
+# - Normal traffic labels have empty lists on purpose.
+
+labels:
+  DOS_SYN_Hping:
+    capec: ["CAPEC-482"]                  # TCP Flood
+    attack: ["T1499.001", "T1498.001"]    # OS Exhaustion Flood; Direct Network Flood
+
+  DDOS_Slowloris:
+    capec: ["CAPEC-469"]                  # HTTP DoS
+    attack: ["T1499.002"]                 # Service Exhaustion Flood
+
+  ARP_poisioning:
+    capec: ["CAPEC-141"]                  # Cache Poisoning
+    attack: ["T1557.002"]                 # ARP Cache Poisoning
+
+  NMAP_TCP_scan:
+    # The dataset does not say which TCP scan was used, so both are listed.
+    capec: ["CAPEC-300", "CAPEC-287", "CAPEC-301"]   # Port Scanning; TCP SYN Scan; TCP Connect Scan
+    attack: ["T1046"]                     # Network Service Discovery
+
+  NMAP_UDP_SCAN:
+    capec: ["CAPEC-308"]                  # UDP Scan
+    attack: ["T1046"]
+
+  NMAP_XMAS_TREE_SCAN:
+    capec: ["CAPEC-303"]                  # TCP Xmas Scan
+    attack: ["T1046"]
+
+  NMAP_FIN_SCAN:
+    capec: ["CAPEC-302"]                  # TCP FIN Scan
+    attack: ["T1046"]
+
+  NMAP_OS_DETECTION:
+    capec: ["CAPEC-312"]                  # Active OS Fingerprinting
+    attack: ["T1082", "T1595"]            # System Information Discovery (CAPEC's own cross-reference); Active Scanning
+
+  Metasploit_Brute_Force_SSH:
+    capec: ["CAPEC-49"]                   # Password Brute Forcing
+    attack: ["T1110.001", "T1021.004"]    # Password Guessing; Remote Services: SSH
+
+  Thing_Speak:  {capec: [], attack: []}
+  MQTT_Publish: {capec: [], attack: []}
+  Wipro_bulb:   {capec: [], attack: []}
+
+  # CICIoT2023 labels
+  BenignTraffic: {capec: [], attack: []}
+  DDoS-ICMP_Flood: {capec: ["CAPEC-486"], attack: ["T1498.001"]}
+  DDoS-UDP_Flood: {capec: ["CAPEC-485"], attack: ["T1498.001"]}
+  DDoS-TCP_Flood: {capec: ["CAPEC-482"], attack: ["T1499.001"]}
+  DDoS-PSHACK_Flood: {capec: ["CAPEC-482"], attack: ["T1499.001"]}
+  DDoS-SYN_Flood: {capec: ["CAPEC-482"], attack: ["T1499.001"]}
+  DDoS-RSTFINFlood: {capec: ["CAPEC-482"], attack: ["T1499.001"]}
+  DDoS-SynonymousIP_Flood: {capec: ["CAPEC-482"], attack: ["T1498.001"]}
+  DDoS-ICMP_Fragmentation: {capec: ["CAPEC-486"], attack: ["T1498.001"]}
+  DDoS-UDP_Fragmentation: {capec: ["CAPEC-485"], attack: ["T1498.001"]}
+  DDoS-ACK_Fragmentation: {capec: ["CAPEC-482"], attack: ["T1498.001"]}
+  DDoS-HTTP_Flood: {capec: ["CAPEC-469"], attack: ["T1499.002"]}
+  DDoS-SlowLoris: {capec: ["CAPEC-469"], attack: ["T1499.002"]}
+  DoS-UDP_Flood: {capec: ["CAPEC-485"], attack: ["T1498.001"]}
+  DoS-TCP_Flood: {capec: ["CAPEC-482"], attack: ["T1499.001"]}
+  DoS-SYN_Flood: {capec: ["CAPEC-482"], attack: ["T1499.001"]}
+  DoS-HTTP_Flood: {capec: ["CAPEC-469"], attack: ["T1499.002"]}
+  Recon-HostDiscovery: {capec: ["CAPEC-292"], attack: ["T1018"]}
+  Recon-OSScan: {capec: ["CAPEC-312"], attack: ["T1082"]}
+  Recon-PortScan: {capec: ["CAPEC-300"], attack: ["T1046"]}
+  Recon-PingSweep: {capec: ["CAPEC-292"], attack: ["T1018"]}
+  VulnerabilityScan: {capec: ["CAPEC-310"], attack: ["T1595.002"]}
+  DictionaryBruteForce: {capec: ["CAPEC-49"], attack: ["T1110.001"]}
+  DNS_Spoofing: {capec: ["CAPEC-142"], attack: ["T1557"]}
+  MITM-ArpSpoofing: {capec: ["CAPEC-141"], attack: ["T1557.002"]}
+  SqlInjection: {capec: ["CAPEC-66"], attack: ["T1190"]}
+  CommandInjection: {capec: ["CAPEC-88"], attack: ["T1059"]}
+  XSS: {capec: ["CAPEC-63"], attack: ["T1189"]}
+  BrowserHijacking: {capec: ["CAPEC-183"], attack: ["T1189"]}
+  Uploading_Attack: {capec: ["CAPEC-650"], attack: ["T1190"]}
+  Backdoor_Malware: {capec: ["CAPEC-549"], attack: ["T1059"]}
+  Mirai-greeth_flood: {capec: ["CAPEC-482"], attack: ["T1498.001"]}
+  Mirai-greip_flood: {capec: ["CAPEC-482"], attack: ["T1498.001"]}
+  Mirai-udpplain: {capec: ["CAPEC-485"], attack: ["T1498.001"]}

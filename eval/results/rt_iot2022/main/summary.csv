@@ -1,0 +1,4 @@
+run,model,condition,answers,answers_judged,claims,strict_rate (contradicted / claims),unsupported_rate ((contradicted + not in evidence) / claims),IDs mentioned,fabricated IDs,mismatched IDs,n_contradicted,n_not_in_evidence,n_fabricated,n_ids
+main,openai/gpt-oss-120b,A (no retrieval),44,44,299,3 of 299 (1.0%),67 of 299 (22.4%),60,2 of 60 (3.3%),18 of 60 (30.0%),3,64,2,60
+main,openai/gpt-oss-120b,B (with retrieval),44,44,232,0 of 232 (0.0%),8 of 232 (3.4%),68,0 of 68 (0.0%),7 of 68 (10.3%),0,8,0,68
+main,openai/gpt-oss-120b,"C (raw features, no detector)",44,44,205,27 of 205 (13.2%),91 of 205 (44.4%),40,0 of 40 (0.0%),24 of 40 (60.0%),27,64,0,40

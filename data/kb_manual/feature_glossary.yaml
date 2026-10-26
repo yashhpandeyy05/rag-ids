@@ -1,0 +1,122 @@
+# Feature glossary: plain-language meaning of the flow features the detector
+# reports most often among its top-5 contributing features.
+# SOURCE: written for this project (NOT an official source). Shown to the student
+# for review. Units were checked on the data on 5 October 2026:
+#   flow_duration is in SECONDS; all *_iat.*, active.* and idle.* values are in
+#   MICROSECONDS (flow_iat.tot = flow_duration x 1,000,000 on long flows).
+# Terms: "forward" (fwd) = packets from the side that opened the flow,
+#        "backward" (bwd) = packets from the other side,
+#        "flow" = both directions together,
+#        "IAT" = inter-arrival time, the gap between two consecutive packets,
+#        "payload" = the data bytes a packet carries after its headers.
+# One-hot columns (proto_*, service_*) are 1 when the flow has that protocol or
+# service and 0 otherwise.
+
+features:
+  # --- ports, protocol, service ------------------------------------------------
+  id.resp_p: {meaning: "destination port number the flow was sent to", unit: "port number"}
+  proto_tcp: {meaning: "1 if the flow uses TCP", unit: "0 or 1"}
+  proto_udp: {meaning: "1 if the flow uses UDP", unit: "0 or 1"}
+  proto_icmp: {meaning: "1 if the flow uses ICMP", unit: "0 or 1"}
+  service_http: {meaning: "1 if Zeek recognised the HTTP (web) protocol in the flow", unit: "0 or 1"}
+  service_mqtt: {meaning: "1 if Zeek recognised the MQTT (IoT publish/subscribe) protocol", unit: "0 or 1"}
+  service_ssh: {meaning: "1 if Zeek recognised the SSH (secure remote login) protocol", unit: "0 or 1"}
+  service_dns: {meaning: "1 if Zeek recognised the DNS (name lookup) protocol", unit: "0 or 1"}
+  service_ssl: {meaning: "1 if Zeek recognised SSL/TLS (encrypted connection) in the flow", unit: "0 or 1"}
+  "service_-": {meaning: "1 if Zeek could not recognise any application protocol in the flow", unit: "0 or 1"}
+
+  # --- size and duration ----------------------------------------------------------
+  flow_duration: {meaning: "time from the first to the last packet of the flow", unit: "seconds"}
+  fwd_pkts_tot: {meaning: "number of packets sent forward", unit: "packets"}
+  bwd_pkts_tot: {meaning: "number of packets sent backward (replies)", unit: "packets"}
+  fwd_pkts_per_sec: {meaning: "forward packets per second over the flow", unit: "packets per second"}
+  bwd_pkts_per_sec: {meaning: "backward packets per second over the flow", unit: "packets per second"}
+  flow_pkts_per_sec: {meaning: "packets per second in both directions", unit: "packets per second"}
+  payload_bytes_per_second: {meaning: "data (payload) bytes per second in both directions", unit: "bytes per second"}
+  fwd_subflow_pkts: {meaning: "average packets per forward sub-flow (a burst of packets without a long pause)", unit: "packets"}
+  fwd_subflow_bytes: {meaning: "average payload bytes per forward sub-flow", unit: "bytes"}
+  bwd_subflow_bytes: {meaning: "average payload bytes per backward sub-flow", unit: "bytes"}
+
+  # --- payload sizes ----------------------------------------------------------------
+  fwd_pkts_payload.min: {meaning: "smallest forward packet payload", unit: "bytes"}
+  fwd_pkts_payload.max: {meaning: "largest forward packet payload", unit: "bytes"}
+  fwd_pkts_payload.avg: {meaning: "average forward packet payload", unit: "bytes"}
+  bwd_pkts_payload.min: {meaning: "smallest backward packet payload", unit: "bytes"}
+  bwd_pkts_payload.std: {meaning: "spread (standard deviation) of backward packet payloads", unit: "bytes"}
+  flow_pkts_payload.max: {meaning: "largest packet payload in either direction", unit: "bytes"}
+  flow_pkts_payload.avg: {meaning: "average packet payload in either direction", unit: "bytes"}
+  flow_pkts_payload.tot: {meaning: "total payload bytes in both directions", unit: "bytes"}
+
+  # --- headers and TCP windows ---------------------------------------------------------
+  fwd_header_size_min: {meaning: "smallest forward packet header (TCP/UDP header length)", unit: "bytes"}
+  fwd_header_size_tot: {meaning: "total header bytes of all forward packets", unit: "bytes"}
+  bwd_header_size_tot: {meaning: "total header bytes of all backward packets", unit: "bytes"}
+  fwd_init_window_size: {meaning: "TCP receive-window size announced in the first forward packet", unit: "bytes"}
+  bwd_init_window_size: {meaning: "TCP receive-window size announced in the first backward packet", unit: "bytes"}
+  fwd_last_window_size: {meaning: "TCP receive-window size in the last forward packet", unit: "bytes"}
+
+  # --- TCP flags (counts of packets with that flag set) --------------------------------
+  flow_SYN_flag_count: {meaning: "packets with the SYN flag (request to open a TCP connection)", unit: "packets"}
+  flow_FIN_flag_count: {meaning: "packets with the FIN flag (request to close a TCP connection)", unit: "packets"}
+  flow_RST_flag_count: {meaning: "packets with the RST flag (abrupt reset of a TCP connection)", unit: "packets"}
+  flow_ACK_flag_count: {meaning: "packets with the ACK flag (acknowledging received data)", unit: "packets"}
+  fwd_PSH_flag_count: {meaning: "forward packets with the PSH flag (deliver data to the application immediately)", unit: "packets"}
+  fwd_URG_flag_count: {meaning: "forward packets with the URG flag (urgent data); rare in ordinary traffic", unit: "packets"}
+
+  # --- timing ----------------------------------------------------------------------------
+  flow_iat.min: {meaning: "shortest gap between two consecutive packets in the flow", unit: "microseconds"}
+  fwd_iat.min: {meaning: "shortest gap between two consecutive forward packets", unit: "microseconds"}
+  fwd_iat.avg: {meaning: "average gap between consecutive forward packets", unit: "microseconds"}
+  fwd_iat.tot: {meaning: "sum of the gaps between consecutive forward packets", unit: "microseconds"}
+  bwd_iat.min: {meaning: "shortest gap between two consecutive backward packets", unit: "microseconds"}
+  active.min: {meaning: "shortest period in which the flow was sending packets before going idle", unit: "microseconds"}
+  idle.max: {meaning: "longest pause in the flow with no packets", unit: "microseconds"}
+
+  # --- all remaining feature columns (added 5 Oct 2026 so every feature the
+  #     detector can report has a meaning; same unit conventions as above) ---
+  fwd_data_pkts_tot: {meaning: "number of forward packets that carry data (payload)", unit: "packets"}
+  bwd_data_pkts_tot: {meaning: "number of backward packets that carry data (payload)", unit: "packets"}
+  down_up_ratio: {meaning: "backward packets divided by forward packets", unit: "ratio"}
+  fwd_header_size_max: {meaning: "largest header of forward packets", unit: "bytes"}
+  bwd_header_size_min: {meaning: "smallest header of backward packets", unit: "bytes"}
+  bwd_header_size_max: {meaning: "largest header of backward packets", unit: "bytes"}
+  bwd_PSH_flag_count: {meaning: "backward packets with the PSH flag set", unit: "packets"}
+  bwd_URG_flag_count: {meaning: "backward packets with the URG flag set", unit: "packets"}
+  flow_CWR_flag_count: {meaning: "packets with the CWR flag (TCP congestion signalling)", unit: "packets"}
+  flow_ECE_flag_count: {meaning: "packets with the ECE flag (TCP congestion signalling)", unit: "packets"}
+  fwd_pkts_payload.tot: {meaning: "total payload bytes sent forward", unit: "bytes"}
+  fwd_pkts_payload.std: {meaning: "spread (standard deviation) of packet payloads sent forward", unit: "bytes"}
+  bwd_pkts_payload.max: {meaning: "largest packet payload sent backward", unit: "bytes"}
+  bwd_pkts_payload.tot: {meaning: "total payload bytes sent backward", unit: "bytes"}
+  bwd_pkts_payload.avg: {meaning: "average packet payload sent backward", unit: "bytes"}
+  flow_pkts_payload.min: {meaning: "smallest packet payload in either direction", unit: "bytes"}
+  flow_pkts_payload.std: {meaning: "spread (standard deviation) of packet payloads in either direction", unit: "bytes"}
+  fwd_iat.max: {meaning: "longest gap between consecutive forward packets", unit: "microseconds"}
+  fwd_iat.std: {meaning: "spread (standard deviation) of the gaps between consecutive forward packets", unit: "microseconds"}
+  bwd_iat.max: {meaning: "longest gap between consecutive backward packets", unit: "microseconds"}
+  bwd_iat.tot: {meaning: "sum of the gaps between consecutive backward packets", unit: "microseconds"}
+  bwd_iat.avg: {meaning: "average gap between consecutive backward packets", unit: "microseconds"}
+  bwd_iat.std: {meaning: "spread (standard deviation) of the gaps between consecutive backward packets", unit: "microseconds"}
+  flow_iat.max: {meaning: "longest gap between consecutive packets in the flow", unit: "microseconds"}
+  flow_iat.tot: {meaning: "sum of the gaps between consecutive packets in the flow", unit: "microseconds"}
+  flow_iat.avg: {meaning: "average gap between consecutive packets in the flow", unit: "microseconds"}
+  flow_iat.std: {meaning: "spread (standard deviation) of the gaps between consecutive packets in the flow", unit: "microseconds"}
+  bwd_subflow_pkts: {meaning: "average packets per backward sub-flow (a burst of packets without a long pause)", unit: "packets"}
+  fwd_bulk_bytes: {meaning: "average bytes of forward bulk transfers (long runs of data packets in one direction)", unit: "bytes"}
+  bwd_bulk_bytes: {meaning: "average bytes of backward bulk transfers (long runs of data packets in one direction)", unit: "bytes"}
+  fwd_bulk_packets: {meaning: "average packets of forward bulk transfers (long runs of data packets in one direction)", unit: "packets"}
+  bwd_bulk_packets: {meaning: "average packets of backward bulk transfers (long runs of data packets in one direction)", unit: "packets"}
+  fwd_bulk_rate: {meaning: "average rate of forward bulk transfers (long runs of data packets in one direction)", unit: "bytes per second"}
+  bwd_bulk_rate: {meaning: "average rate of backward bulk transfers (long runs of data packets in one direction)", unit: "bytes per second"}
+  active.max: {meaning: "longest period in which the flow was sending packets", unit: "microseconds"}
+  active.tot: {meaning: "sum of all periods in which the flow was sending packets", unit: "microseconds"}
+  active.avg: {meaning: "average period in which the flow was sending packets", unit: "microseconds"}
+  active.std: {meaning: "spread (standard deviation) of the periods in which the flow was sending packets", unit: "microseconds"}
+  idle.min: {meaning: "shortest pause in the flow with no packets", unit: "microseconds"}
+  idle.tot: {meaning: "sum of all pauses in the flow with no packets", unit: "microseconds"}
+  idle.avg: {meaning: "average pause in the flow with no packets", unit: "microseconds"}
+  idle.std: {meaning: "spread (standard deviation) of the pauses in the flow with no packets", unit: "microseconds"}
+  service_ntp: {meaning: "1 if Zeek recognised the NTP (time synchronisation) protocol in the flow", unit: "0 or 1"}
+  service_dhcp: {meaning: "1 if Zeek recognised the DHCP (address assignment) protocol in the flow", unit: "0 or 1"}
+  service_irc: {meaning: "1 if Zeek recognised the IRC (chat) protocol in the flow", unit: "0 or 1"}
+  service_radius: {meaning: "1 if Zeek recognised the RADIUS (network login) protocol in the flow", unit: "0 or 1"}

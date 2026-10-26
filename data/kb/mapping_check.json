@@ -1,0 +1,188 @@
+[
+ {
+  "label": "DOS_SYN_Hping",
+  "id": "CAPEC-482",
+  "exists": true,
+  "status": "draft",
+  "official_name": "TCP Flood",
+  "capec_attack_refs": [
+   "T1498.001",
+   "T1499.001",
+   "T1499.002"
+  ]
+ },
+ {
+  "label": "DOS_SYN_Hping",
+  "id": "T1499.001",
+  "exists": true,
+  "status": "active",
+  "official_name": "OS Exhaustion Flood"
+ },
+ {
+  "label": "DOS_SYN_Hping",
+  "id": "T1498.001",
+  "exists": true,
+  "status": "active",
+  "official_name": "Direct Network Flood"
+ },
+ {
+  "label": "DDOS_Slowloris",
+  "id": "CAPEC-469",
+  "exists": true,
+  "status": "draft",
+  "official_name": "HTTP DoS",
+  "capec_attack_refs": [
+   "T1499.002"
+  ]
+ },
+ {
+  "label": "DDOS_Slowloris",
+  "id": "T1499.002",
+  "exists": true,
+  "status": "active",
+  "official_name": "Service Exhaustion Flood"
+ },
+ {
+  "label": "ARP_poisioning",
+  "id": "CAPEC-141",
+  "exists": true,
+  "status": "draft",
+  "official_name": "Cache Poisoning",
+  "capec_attack_refs": [
+   "T1557.002"
+  ]
+ },
+ {
+  "label": "ARP_poisioning",
+  "id": "T1557.002",
+  "exists": true,
+  "status": "active",
+  "official_name": "ARP Cache Poisoning"
+ },
+ {
+  "label": "NMAP_TCP_scan",
+  "id": "CAPEC-300",
+  "exists": true,
+  "status": "stable",
+  "official_name": "Port Scanning",
+  "capec_attack_refs": [
+   "T1046"
+  ]
+ },
+ {
+  "label": "NMAP_TCP_scan",
+  "id": "CAPEC-287",
+  "exists": true,
+  "status": "stable",
+  "official_name": "TCP SYN Scan",
+  "capec_attack_refs": []
+ },
+ {
+  "label": "NMAP_TCP_scan",
+  "id": "CAPEC-301",
+  "exists": true,
+  "status": "stable",
+  "official_name": "TCP Connect Scan",
+  "capec_attack_refs": []
+ },
+ {
+  "label": "NMAP_TCP_scan",
+  "id": "T1046",
+  "exists": true,
+  "status": "active",
+  "official_name": "Network Service Discovery"
+ },
+ {
+  "label": "NMAP_UDP_SCAN",
+  "id": "CAPEC-308",
+  "exists": true,
+  "status": "stable",
+  "official_name": "UDP Scan",
+  "capec_attack_refs": []
+ },
+ {
+  "label": "NMAP_UDP_SCAN",
+  "id": "T1046",
+  "exists": true,
+  "status": "active",
+  "official_name": "Network Service Discovery"
+ },
+ {
+  "label": "NMAP_XMAS_TREE_SCAN",
+  "id": "CAPEC-303",
+  "exists": true,
+  "status": "stable",
+  "official_name": "TCP Xmas Scan",
+  "capec_attack_refs": []
+ },
+ {
+  "label": "NMAP_XMAS_TREE_SCAN",
+  "id": "T1046",
+  "exists": true,
+  "status": "active",
+  "official_name": "Network Service Discovery"
+ },
+ {
+  "label": "NMAP_FIN_SCAN",
+  "id": "CAPEC-302",
+  "exists": true,
+  "status": "stable",
+  "official_name": "TCP FIN Scan",
+  "capec_attack_refs": []
+ },
+ {
+  "label": "NMAP_FIN_SCAN",
+  "id": "T1046",
+  "exists": true,
+  "status": "active",
+  "official_name": "Network Service Discovery"
+ },
+ {
+  "label": "NMAP_OS_DETECTION",
+  "id": "CAPEC-312",
+  "exists": true,
+  "status": "stable",
+  "official_name": "Active OS Fingerprinting",
+  "capec_attack_refs": [
+   "T1082"
+  ]
+ },
+ {
+  "label": "NMAP_OS_DETECTION",
+  "id": "T1082",
+  "exists": true,
+  "status": "active",
+  "official_name": "System Information Discovery"
+ },
+ {
+  "label": "NMAP_OS_DETECTION",
+  "id": "T1595",
+  "exists": true,
+  "status": "active",
+  "official_name": "Active Scanning"
+ },
+ {
+  "label": "Metasploit_Brute_Force_SSH",
+  "id": "CAPEC-49",
+  "exists": true,
+  "status": "draft",
+  "official_name": "Password Brute Forcing",
+  "capec_attack_refs": [
+   "T1110.001"
+  ]
+ },
+ {
+  "label": "Metasploit_Brute_Force_SSH",
+  "id": "T1110.001",
+  "exists": true,
+  "status": "active",
+  "official_name": "Password Guessing"
+ },
+ {
+  "label": "Metasploit_Brute_Force_SSH",
+  "id": "T1021.004",
+  "exists": true,
+  "status": "active",
+  "official_name": "SSH"
+ }
+]

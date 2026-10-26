@@ -1,0 +1,59 @@
+# Dataset configuration for RT-IoT2022.
+# Cite as: Sharmila, B. S. and Nagapadma, R. (2023). RT-IoT2022.
+#          UCI Machine Learning Repository. https://doi.org/10.24432/C5P338 (CC BY 4.0)
+#
+# Everything the code needs to know about a dataset is in a file like this one.
+# Processed files go to data/processed/<key>/ and models to models/<key>/,
+# where <key> is this file's name without ".yaml".
+
+dataset_name: "RT-IoT2022"
+citation: "Sharmila, B. S. and Nagapadma, R. (2023). RT-IoT2022. UCI Machine Learning Repository. https://doi.org/10.24432/C5P338 (CC BY 4.0)"
+
+# How to load it. The loader tries the UCI package first, then the zip.
+source:
+  uci_id: 942
+  zip_url: "https://archive.ics.uci.edu/static/public/942/rt-iot2022.zip"
+  local_csv: "data/raw/rt_iot2022.csv"   # the one local copy; never downloaded twice
+
+label_column: "Attack_type"
+
+# Columns removed before training:
+#  - "Unnamed: 0" is a row number that appears when the CSV comes from the zip
+#  - "id.orig_p" (source port) is effectively random
+drop_columns:
+  - "Unnamed: 0"
+  - "id.orig_p"
+
+# Port columns that remain after dropping. The leakage check retrains without them.
+port_columns:
+  - "id.resp_p"
+
+# Text columns that are one-hot encoded.
+categorical_columns:
+  - "proto"
+  - "service"
+
+split:
+  test_size: 0.20
+  random_seed: 42
+
+# Remove exact duplicate rows (after dropping the columns above) BEFORE the
+# train/test split, so the same flow can never sit in both sets.
+dedup_before_split: true
+
+# THE single source of truth for "label -> shared attack family".
+# Shared families: Normal, DoS, Reconnaissance, Spoofing, Brute force,
+#                  Web attack, Botnet/Malware, Other
+label_to_family:
+  DOS_SYN_Hping: "DoS"
+  DDOS_Slowloris: "DoS"
+  ARP_poisioning: "Spoofing"          # dataset's own spelling, kept on purpose
+  NMAP_TCP_scan: "Reconnaissance"
+  NMAP_UDP_SCAN: "Reconnaissance"
+  NMAP_XMAS_TREE_SCAN: "Reconnaissance"
+  NMAP_FIN_SCAN: "Reconnaissance"
+  NMAP_OS_DETECTION: "Reconnaissance"
+  Metasploit_Brute_Force_SSH: "Brute force"
+  Thing_Speak: "Normal"
+  MQTT_Publish: "Normal"
+  Wipro_bulb: "Normal"

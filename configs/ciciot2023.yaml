@@ -1,0 +1,63 @@
+# Dataset configuration for CICIoT2023 - OPTIONAL MILESTONE 8, NOT BUILT YET.
+# Source: Canadian Institute for Cybersecurity, https://www.unb.ca/cic/datasets/iotdataset-2023.html
+# 33 attacks in 7 categories from 105 IoT devices; adds web attacks and Mirai botnet traffic.
+#
+# Not verified: the column names and label spellings below follow the dataset's
+# documentation and must be checked against the downloaded CSV files before use.
+# It is deliberately not active yet: without a "label_column" key the app and the
+# loaders ignore it. Rename "label_column_TODO" to "label_column" once the CSV sample exists.
+
+dataset_name: "CICIoT2023"
+citation: "Neto, E. C. P. et al. (2023). CICIoT2023: A real-time dataset and benchmark for large-scale attacks in IoT environment. Sensors 23(13), 5941."
+
+source:
+  # The full dataset is very large: download a few of its CSV files by hand from the
+  # CIC page, then build a stratified sample of 200,000-300,000 rows into local_csv.
+  local_csv: "data/raw/ciciot2023_sample.csv"
+
+label_column: "Label"
+drop_columns:
+  - "attack_class"
+  - "label"
+port_columns: []          # CICIoT2023 has no port columns, so the leakage check is skipped
+categorical_columns: []   # "Protocol Type" is already numeric in CICIoT2023
+split:
+  test_size: 0.20
+  random_seed: 42
+dedup_before_split: true
+
+label_to_family:
+  BenignTraffic: "Normal"
+  DDoS-ICMP_Flood: "DoS"
+  DDoS-UDP_Flood: "DoS"
+  DDoS-TCP_Flood: "DoS"
+  DDoS-PSHACK_Flood: "DoS"
+  DDoS-SYN_Flood: "DoS"
+  DDoS-RSTFINFlood: "DoS"
+  DDoS-SynonymousIP_Flood: "DoS"
+  DDoS-ICMP_Fragmentation: "DoS"
+  DDoS-UDP_Fragmentation: "DoS"
+  DDoS-ACK_Fragmentation: "DoS"
+  DDoS-HTTP_Flood: "DoS"
+  DDoS-SlowLoris: "DoS"
+  DoS-UDP_Flood: "DoS"
+  DoS-TCP_Flood: "DoS"
+  DoS-SYN_Flood: "DoS"
+  DoS-HTTP_Flood: "DoS"
+  Recon-HostDiscovery: "Reconnaissance"
+  Recon-OSScan: "Reconnaissance"
+  Recon-PortScan: "Reconnaissance"
+  Recon-PingSweep: "Reconnaissance"
+  VulnerabilityScan: "Reconnaissance"
+  DictionaryBruteForce: "Brute force"
+  DNS_Spoofing: "Spoofing"
+  MITM-ArpSpoofing: "Spoofing"
+  SqlInjection: "Web attack"
+  CommandInjection: "Web attack"
+  XSS: "Web attack"
+  BrowserHijacking: "Web attack"
+  Uploading_Attack: "Web attack"
+  Backdoor_Malware: "Botnet/Malware"
+  Mirai-greeth_flood: "Botnet/Malware"
+  Mirai-greip_flood: "Botnet/Malware"
+  Mirai-udpplain: "Botnet/Malware"

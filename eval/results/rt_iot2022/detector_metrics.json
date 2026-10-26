@@ -1,0 +1,66 @@
+{
+  "dataset": "RT-IoT2022",
+  "trained_at": "2026-10-25T18:05:09+00:00",
+  "versions": {
+    "xgboost": "3.4.1",
+    "scikit-learn": "1.9.1"
+  },
+  "train_rows": 19071,
+  "test_rows": 4768,
+  "chosen_model": "XGBoost",
+  "cv_comparison": [
+    {
+      "model": "Logistic Regression",
+      "macro_f1_pooled": 0.8143,
+      "macro_f1_fold_mean": 0.815,
+      "macro_f1_fold_std": 0.0092,
+      "accuracy": 0.938,
+      "fit_seconds_per_fold": 4.33
+    },
+    {
+      "model": "Random Forest",
+      "macro_f1_pooled": 0.8812,
+      "macro_f1_fold_mean": 0.881,
+      "macro_f1_fold_std": 0.0055,
+      "accuracy": 0.9843,
+      "fit_seconds_per_fold": 1.55
+    },
+    {
+      "model": "XGBoost",
+      "macro_f1_pooled": 0.8882,
+      "macro_f1_fold_mean": 0.8878,
+      "macro_f1_fold_std": 0.0074,
+      "accuracy": 0.9877,
+      "fit_seconds_per_fold": 7.67
+    }
+  ],
+  "test": {
+    "macro_f1": 0.8749,
+    "accuracy": 0.9874,
+    "false_alarms": 22,
+    "normal_flows": 2393,
+    "false_alarm_rate": 0.00919348098620978
+  },
+  "leakage_check": {
+    "ports_removed_here": [
+      "id.resp_p"
+    ],
+    "cv_macro_f1_with_ports": 0.8882,
+    "cv_macro_f1_without_ports": 0.8865,
+    "difference": 0.0017,
+    "per_class_without_ports": {
+      "ARP_poisioning": 0.9825,
+      "DDOS_Slowloris": 0.9167,
+      "DOS_SYN_Hping": 0.9778,
+      "MQTT_Publish": 0.9983,
+      "Metasploit_Brute_Force_SSH": 0.8772,
+      "NMAP_FIN_SCAN": 0.0,
+      "NMAP_OS_DETECTION": 0.9997,
+      "NMAP_TCP_scan": 0.9981,
+      "NMAP_UDP_SCAN": 0.9447,
+      "NMAP_XMAS_TREE_SCAN": 0.998,
+      "Thing_Speak": 0.9902,
+      "Wipro_bulb": 0.9548
+    }
+  }
+}

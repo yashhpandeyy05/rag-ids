@@ -1,0 +1,106 @@
+/* GhostType - React Bits Pro */
+.ghost-type {
+  --gt-text: inherit;
+  --gt-accent: #7C9BFF;
+  --gt-ghost-opacity: 0.38;
+  --gt-font-size: inherit;
+  --gt-font-weight: inherit;
+  --gt-line-height: inherit;
+
+  position: relative;
+  display: inline-block;
+  color: var(--gt-text);
+  font-size: var(--gt-font-size);
+  font-weight: var(--gt-font-weight);
+  line-height: var(--gt-line-height);
+  font-family: inherit;
+  margin: 0;
+}
+
+.ghost-type__main {
+  color: var(--gt-text);
+  white-space: pre-wrap;
+}
+
+.ghost-type__ghost {
+  opacity: var(--gt-ghost-opacity);
+  color: var(--gt-text);
+  transition: opacity 250ms ease;
+  white-space: pre-wrap;
+}
+
+.ghost-type__accepted {
+  position: relative;
+  opacity: 1;
+  color: var(--gt-accent);
+  white-space: pre-wrap;
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    var(--gt-text) 0%,
+    var(--gt-accent) 50%,
+    var(--gt-text) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: ghost-type-sweep 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes ghost-type-sweep {
+  0% {
+    background-position: 100% center;
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 0% center;
+    opacity: 1;
+  }
+}
+
+.ghost-type__caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  vertical-align: -0.12em;
+  margin-left: 2px;
+  background-color: var(--gt-accent);
+  border-radius: 1px;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--gt-accent) 60%, transparent);
+}
+
+.ghost-type__caret--blink {
+  animation: ghost-type-blink 900ms infinite;
+}
+
+@keyframes ghost-type-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.ghost-type__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ghost-type__accepted {
+    animation: none;
+    -webkit-text-fill-color: currentColor;
+    color: var(--gt-accent);
+  }
+  .ghost-type__caret {
+    animation: none;
+    opacity: 1;
+  }
+}

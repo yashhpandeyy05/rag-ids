@@ -1,0 +1,275 @@
+# Scenario cards for the app's "Lab" screen: how each dataset label is presented.
+# This is presentation only (icons, plain-language stories, animation style).
+# A label that is not listed here still works: it gets a card built from its label card.
+#
+# motion: flood | slow | scan | spoof | brute | normal   (controls the traffic animation)
+# Every story is a short, plain description of the attack or device, not a claim
+# about this particular flow. The flow's own numbers are shown after launch.
+
+scenarios:
+  DOS_SYN_Hping:
+    icon: "💥"
+    headline: "SYN flood"
+    story: "Thousands of fake connection requests per second until the device has no room left for real users."
+    motion: flood
+    from: "Attacker"
+    to: "IoT device"
+
+  DDOS_Slowloris:
+    icon: "🐌"
+    headline: "Slowloris"
+    story: "Opens many web connections and never finishes them, tying up the server a trickle at a time."
+    motion: slow
+    from: "Attacker"
+    to: "Web server"
+
+  ARP_poisioning:
+    icon: "🎭"
+    headline: "ARP poisoning"
+    story: "Forged local-network messages make devices trust the attacker as the router, so their traffic passes through it."
+    motion: spoof
+    from: "IoT device"
+    to: "Router"
+    via: "Attacker"
+
+  NMAP_TCP_scan:
+    icon: "🔎"
+    headline: "TCP port scan"
+    story: "Knocks on a thousand ports to find which services are listening."
+    motion: scan
+    from: "Scanner"
+    to: "IoT device"
+
+  NMAP_UDP_SCAN:
+    icon: "📡"
+    headline: "UDP port scan"
+    story: "Sends UDP packets to many ports and reads the silence or the errors that come back."
+    motion: scan
+    from: "Scanner"
+    to: "IoT device"
+
+  NMAP_XMAS_TREE_SCAN:
+    icon: "🎄"
+    headline: "Xmas tree scan"
+    story: "Probes with an unusual flag combination that makes many systems reveal which ports are open."
+    motion: scan
+    from: "Scanner"
+    to: "IoT device"
+
+  NMAP_FIN_SCAN:
+    icon: "🕯️"
+    headline: "FIN scan"
+    story: "A quiet probe that skips the normal handshake to slip past simple firewalls. Only 5 unique examples exist, so the detector is weak here."
+    motion: scan
+    from: "Scanner"
+    to: "IoT device"
+
+  NMAP_OS_DETECTION:
+    icon: "🧬"
+    headline: "OS fingerprinting"
+    story: "Sends oddly crafted packets and studies the replies to guess which operating system the device runs."
+    motion: scan
+    from: "Scanner"
+    to: "IoT device"
+
+  Metasploit_Brute_Force_SSH:
+    icon: "🔑"
+    headline: "SSH password guessing"
+    story: "Tries password after password against the remote-login service until one works."
+    motion: brute
+    from: "Attacker"
+    to: "SSH server"
+
+  Thing_Speak:
+    icon: "🌡️"
+    headline: "Sensor reporting"
+    story: "A normal sensor sends its readings to the ThingSpeak cloud."
+    motion: normal
+    from: "Sensor"
+    to: "Cloud"
+
+  MQTT_Publish:
+    icon: "📬"
+    headline: "MQTT message"
+    story: "A normal device publishes a small message to its broker."
+    motion: normal
+    from: "Device"
+    to: "MQTT broker"
+
+  Wipro_bulb:
+    icon: "💡"
+    headline: "Smart bulb"
+    story: "A normal smart bulb talks to its cloud service."
+    motion: normal
+    from: "Bulb"
+    to: "Cloud"
+
+  # CICIoT2023 Scenarios
+  BenignTraffic:
+    icon: "🛡️"
+    headline: "Benign IoT Traffic"
+    story: "Legitimate IoT sensor, hub, and smart home communications operating normally."
+    motion: normal
+    from: "IoT Device"
+    to: "Cloud Gateway"
+
+  Mirai-greeth_flood:
+    icon: "🤖"
+    headline: "Mirai Botnet GRE Flood"
+    story: "Infected IoT botnet nodes flood encapsulated GRE Ethernet frames to overwhelm network infrastructure."
+    motion: flood
+    from: "Botnet Bot"
+    to: "IoT Gateway"
+
+  Mirai-greip_flood:
+    icon: "🤖"
+    headline: "Mirai Botnet IP Flood"
+    story: "Mirai malware sends high-volume GRE IP packets to saturate bandwidth and crash the device."
+    motion: flood
+    from: "Botnet Bot"
+    to: "IoT Gateway"
+
+  Mirai-udpplain:
+    icon: "🤖"
+    headline: "Mirai UDP Flood"
+    story: "Mirai botnet floods raw UDP packets at massive rates, exhausting network socket buffers."
+    motion: flood
+    from: "Botnet Bot"
+    to: "IoT Gateway"
+
+  DDoS-SYN_Flood:
+    icon: "💥"
+    headline: "Distributed SYN Flood"
+    story: "Multiple botnet nodes flood TCP SYN handshakes to exhaust server connection pools."
+    motion: flood
+    from: "Attacker Pool"
+    to: "Web Server"
+
+  DoS-SYN_Flood:
+    icon: "💥"
+    headline: "SYN Flood"
+    story: "Repeated SYN packets flood the target without completing TCP three-way handshakes."
+    motion: flood
+    from: "Attacker"
+    to: "IoT Device"
+
+  DDoS-ICMP_Flood:
+    icon: "⚡"
+    headline: "ICMP Ping Flood"
+    story: "Overwhelms target network interfaces with thousands of echo request pings."
+    motion: flood
+    from: "Attacker"
+    to: "Router"
+
+  DDoS-UDP_Flood:
+    icon: "🌊"
+    headline: "DDoS UDP Flood"
+    story: "Massive volumetric packet storm targeting arbitrary UDP ports on the destination device."
+    motion: flood
+    from: "Attacker"
+    to: "IoT Device"
+
+  DDoS-SlowLoris:
+    icon: "🐌"
+    headline: "Slowloris Exhaustion"
+    story: "Holds thousands of HTTP connections open with slow, partial headers until the server stalls."
+    motion: slow
+    from: "Attacker"
+    to: "Web Server"
+
+  Recon-PortScan:
+    icon: "🔎"
+    headline: "Recon Port Scan"
+    story: "Systematically probes network ports across target devices to map exposed services."
+    motion: scan
+    from: "Scanner"
+    to: "IoT Subnet"
+
+  Recon-OSScan:
+    icon: "🧬"
+    headline: "OS Fingerprinting"
+    story: "Transmits abnormal TCP/IP probes to analyze TCP window size and TTL responses."
+    motion: scan
+    from: "Scanner"
+    to: "IoT Device"
+
+  Recon-HostDiscovery:
+    icon: "📡"
+    headline: "Host Discovery Sweep"
+    story: "Scans local network ranges to discover active and responsive IoT devices."
+    motion: scan
+    from: "Scanner"
+    to: "Local Subnet"
+
+  VulnerabilityScan:
+    icon: "🎯"
+    headline: "Vulnerability Scan"
+    story: "Automated vulnerability probing tool searching for outdated firmware and exploits."
+    motion: scan
+    from: "Scanner"
+    to: "IoT Device"
+
+  DictionaryBruteForce:
+    icon: "🔑"
+    headline: "Dictionary Credential Attack"
+    story: "Automated wordlist attacks testing default IoT credentials (admin/admin, root/root)."
+    motion: brute
+    from: "Attacker"
+    to: "IoT Service"
+
+  DNS_Spoofing:
+    icon: "🌐"
+    headline: "DNS Cache Poisoning"
+    story: "Injects false DNS resolution replies to redirect IoT traffic to malicious adversary servers."
+    motion: spoof
+    from: "Attacker"
+    to: "DNS Resolver"
+
+  MITM-ArpSpoofing:
+    icon: "🎭"
+    headline: "ARP Cache Poisoning (MITM)"
+    story: "Broadcasts forged ARP packets to intercept and manipulate device traffic."
+    motion: spoof
+    from: "IoT Device"
+    to: "Router"
+    via: "Attacker"
+
+  SqlInjection:
+    icon: "💉"
+    headline: "SQL Injection Attack"
+    story: "Injects malicious database queries through vulnerable IoT web management interfaces."
+    motion: brute
+    from: "Attacker"
+    to: "Management Portal"
+
+  CommandInjection:
+    icon: "💻"
+    headline: "OS Command Injection"
+    story: "Executes arbitrary operating system commands on the IoT device through unvalidated input."
+    motion: brute
+    from: "Attacker"
+    to: "Device Shell"
+
+  XSS:
+    icon: "📜"
+    headline: "Cross-Site Scripting (XSS)"
+    story: "Injects malicious client-side scripts into the IoT device web configuration portal."
+    motion: brute
+    from: "Attacker"
+    to: "Web Portal"
+
+  BrowserHijacking:
+    icon: "🧭"
+    headline: "Browser Hijacking"
+    story: "Modifies IoT web portal settings to redirect administration sessions."
+    motion: brute
+    from: "Attacker"
+    to: "Browser"
+
+  Backdoor_Malware:
+    icon: "🦠"
+    headline: "Backdoor Malware Activity"
+    story: "Persistent backdoor beaconing to remote Command and Control (C2) infrastructure."
+    motion: spoof
+    from: "Infected Device"
+    to: "C2 Server"

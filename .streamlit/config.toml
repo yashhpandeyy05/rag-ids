@@ -1,0 +1,18 @@
+# Streamlit settings for RAG-IDS (read when you run `streamlit run app/Home.py`
+# from the project folder).
+[server]
+# The file watcher scans every imported library to reload the app when code changes.
+# Scanning the `transformers` library (used by the embedding model) prints hundreds of
+# harmless "No module named 'torchvision'" tracebacks, so it is switched off.
+# After editing the code, stop the app (Ctrl+C) and start it again.
+fileWatcherType = "none"
+
+[theme]
+base = "light"
+primaryColor = "#3355FF"
+backgroundColor = "#F5F7FA"
+secondaryBackgroundColor = "#E9EEF5"
+textColor = "#14213D"
+
+[client]
+toolbarMode = "minimal"

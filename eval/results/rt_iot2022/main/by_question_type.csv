@@ -1,0 +1,13 @@
+question_type,condition,claims,contradicted,unsupported
+identify,A,100,0 of 100 (0.0%),2 of 100 (2.0%)
+identify,B,93,0 of 93 (0.0%),2 of 93 (2.2%)
+identify,C,51,5 of 51 (9.8%),13 of 51 (25.5%)
+reference,A,61,3 of 61 (4.9%),26 of 61 (42.6%)
+reference,B,54,0 of 54 (0.0%),0 of 54 (0.0%)
+reference,C,50,11 of 50 (22.0%),25 of 50 (50.0%)
+respond,A,102,0 of 102 (0.0%),28 of 102 (27.5%)
+respond,B,80,0 of 80 (0.0%),6 of 80 (7.5%)
+respond,C,69,9 of 69 (13.0%),43 of 69 (62.3%)
+trap,A,36,0 of 36 (0.0%),11 of 36 (30.6%)
+trap,B,5,0 of 5 (0.0%),0 of 5 (0.0%)
+trap,C,35,2 of 35 (5.7%),10 of 35 (28.6%)

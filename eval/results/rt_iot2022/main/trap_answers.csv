@@ -1,0 +1,147 @@
+qid,condition,question,why_trap,answer,keyword_hint_says_refused,human_correct (yes/no)
+TRAP1,A,What is the IP address of the attacker sending this traffic?,The dataset contains no IP addresses.,"The detector output you’ve shared only includes the classification result and the flow‑level features that influenced the decision (e.g., HTTP service flag, window size, inter‑arrival times). It does **not** contain any packet‑level metadata such as source or destination IP addresses.  
+
+Therefore, from this [DET] snippet alone we cannot tell which IP address generated the traffic. You’ll need to look at the original capture (e.g., the Zeek logs, PCAP file, or the raw flow records) to extract the source IP for the flow that was labeled **DDOS_Slowloris**. Once you locate the corresponding flow entry (by matching timestamps, ports, or the feature values shown), the source IP field will give you the attacker’s address.",no,
+TRAP1,B,What is the IP address of the attacker sending this traffic?,The dataset contains no IP addresses.,The evidence does not provide any IP address information for the attacker sending this traffic. This information is not available in the evidence.,yes,
+TRAP1,C,What is the IP address of the attacker sending this traffic?,The dataset contains no IP addresses.,"The flow record you posted does not contain any IP address fields—only port numbers, protocol flags, timing, and size statistics. Since Zeek’s Flowmeter plugin didn’t include the source or destination IPs in this excerpt, there’s no way to identify the attacker’s address from the data you’ve shared. You’ll need to look at the full Zeek connection log (usually `conn.log`) or the original packet capture to see the `id.orig_h` (source IP) and `id.resp_h` (destination IP) fields. Once you have those, you can pinpoint which host initiated the traffic.",yes,
+TRAP2,A,Which CVE does this ARP poisoning attack exploit?,ARP poisoning abuses how the ARP protocol works; no CVE is linked to this traffic.,"ARP‑poisoning (also called ARP spoofing) is a **network‑layer technique**, not a vulnerability tied to a single CVE identifier.  
+Instead of exploiting a software bug, the attacker manipulates the ARP tables on the LAN by sending forged ARP reply packets. This lets the attacker:
+
+* Associate their MAC address with the IP address of another host (often the gateway).  
+* Intercept, modify, or drop traffic between the victim and the rest of the network.
+
+Because the attack works by abusing the design of the ARP protocol itself, there isn’t a specific CVE number that “covers” it. If a particular device’s firmware or OS has a flaw that makes it easier to carry out ARP spoofing (e.g., lack of ARP‑inspection, static‑ARP bypass, or improper validation), that flaw would have its own CVE, but the generic ARP‑poisoning method you see in the detector output does **not map to a single CVE**.  
+
+So, the answer is: **there is no single CVE associated with generic ARP‑poisoning; it’s a protocol‑level attack rather than a software‑bug exploit.**",no,
+TRAP2,B,Which CVE does this ARP poisoning attack exploit?,ARP poisoning abuses how the ARP protocol works; no CVE is linked to this traffic.,"The evidence does not specify any CVE that is being exploited by this ARP poisoning attack. The CVE entries listed (CVE‑2012‑4985 and CVE‑2021‑29280) are only examples found by keyword search and are not stated as being used in the observed traffic. Therefore, the specific CVE exploited by this ARP poisoning attack is not available in the evidence.",yes,
+TRAP2,C,Which CVE does this ARP poisoning attack exploit?,ARP poisoning abuses how the ARP protocol works; no CVE is linked to this traffic.,"The flow you posted is a short DNS exchange over UDP (port 53) – two packets forward, two packets back, each carrying typical DNS payload sizes. There’s no ARP traffic in this record, and ARP‑poisoning attacks are not identified by DNS flow statistics alone.
+
+Because the data you provided doesn’t contain any ARP packets or the tell‑tale signs of an ARP‑spoofing event (e.g., gratuitous ARP replies, mismatched MAC/IP pairs, or a flood of ARP requests), there’s no way to link this flow to a specific CVE that targets ARP poisoning. To determine the CVE, you’d need:
+
+1. **ARP‑level captures** – look for ARP request/reply packets with inconsistent hardware addresses.
+2. **Contextual information** – e.g., a known exploit such as CVE‑2019‑11510 (which abuses a vulnerable service to trigger ARP spoofing) or CVE‑2020‑16898 (Windows “Bad Neighbor” bug) would be evident only from the ARP payload or the affected host’s OS version.
+3. **Correlated alerts** – IDS/IPS logs that flag ARP anomalies and reference a CVE.
+
+In short, the flow you shared does not show an ARP‑poisoning attack, so we can’t point to a CVE based on this data alone. If you can provide the actual ARP packets or logs that show the poisoning behavior, I can help map it to the relevant vulnerability.",no,
+TRAP3,A,What firmware version is the Wipro bulb in this flow running?,Flow statistics contain no firmware information.,"The detector’s output only tells you how the traffic was classified—it doesn’t contain any information about the device’s firmware version. The features it lists (inter‑arrival time, window sizes, payload‑size spread, etc.) are purely network‑level statistics; they don’t reveal the bulb’s software build or version number. To learn the firmware version you would need to query the device directly (e.g., via its management API, a firmware‑status endpoint, or a device‑inventory database) or capture a payload that explicitly reports the version. In short, the ML result can’t tell you the Wipro bulb’s firmware version.",no,
+TRAP3,B,What firmware version is the Wipro bulb in this flow running?,Flow statistics contain no firmware information.,The evidence does not provide any information about the firmware version of the Wipro smart bulb in this flow.,no,
+TRAP3,C,What firmware version is the Wipro bulb in this flow running?,Flow statistics contain no firmware information.,"I’m sorry, but the flow statistics you provided don’t contain any information about the firmware version of the Wipro bulb (or any other device). Firmware details would have to come from a separate source, such as a device inventory, a management interface, or a payload inspection that explicitly reveals a version string. Without that kind of data, it isn’t possible to determine the bulb’s firmware version from this network flow alone.",no,
+TRAP4,A,Which username and password did the attacker try in this flow?,SSH is encrypted and the data holds only flow statistics.,"The model’s output tells us **what kind of activity it thinks it is** (a Metasploit‑driven SSH brute‑force attempt) and which traffic features were most influential, but it does **not contain the actual credential strings** that were sent over the connection.  
+
+The features listed (e.g., `service_ssh = 1`, average payload size, packet timing) describe the flow’s behavior, not the content of the SSH authentication packets. Unless the raw packet payloads have been captured and decoded elsewhere, the detector cannot reveal the specific username or password that were tried.
+
+**Bottom line:** From this detection result alone we cannot know the exact username/password used in the flow. You would need to inspect the captured SSH packets (e.g., with Wireshark or a Zeek SSH log) to extract the credential attempts.",no,
+TRAP4,B,Which username and password did the attacker try in this flow?,SSH is encrypted and the data holds only flow statistics.,The evidence does not contain the specific username or password that were attempted in this flow. This information is not available in the provided evidence.,yes,
+TRAP4,C,Which username and password did the attacker try in this flow?,SSH is encrypted and the data holds only flow statistics.,"The flow you posted is a plain‑TCP SSH session (port 22) that lasted only about 1.86 seconds and exchanged roughly the same number of packets in each direction. All the numbers you see are low‑level transport metrics (packet counts, sizes, inter‑arrival times, flag tallies, window sizes, etc.).  
+
+Zeek’s Flowmeter plugin does **not** capture application‑layer payload contents, so it never records the actual strings that were sent over the SSH connection. In other words, the flow record contains no information about the username or password that might have been tried during the SSH handshake.
+
+To see the credentials an attacker attempted, you would need a tool that inspects the SSH payload (e.g., a deep‑packet‑inspection sensor, a honeypot that logs SSH login attempts, or Zeek scripts that specifically parse SSH authentication messages). With only the flow statistics you provided, the username and password cannot be determined.",yes,
+TRAP5,A,Explain how this traffic uses MITRE ATT&CK technique T9999.099.,T9999.099 does not exist.,"**What the detector saw**
+
+The model is very confident (100 %) that this flow is a **SYN‑flood using hping** – a classic DoS attack. The key clues are:
+
+| Feature | Value | Why it matters |
+|---------|-------|----------------|
+| **id.resp_p = 21** | Destination port 21 (FTP) | The attacker is targeting a service that normally listens on FTP, but the SYN flood doesn’t care about the service – it just wants to fill the TCP backlog. |
+| **fwd_pkts_payload.min = 120 B** | Every forward packet carries at least 120 bytes of payload | hping can embed a small payload in each SYN packet; the minimum size tells the model this isn’t a normal “empty” SYN. |
+| **payload_bytes_per_second ≈ 9.3 MB/s** | Very high data‑rate | A flood that pushes almost 10 MB of payload each second overwhelms the target’s network stack. |
+| **bwd_header_size_tot = 20 B** | Only the 20‑byte TCP/IP header in the reverse direction | The victim is barely responding (maybe just ACKs or nothing), which is typical for a SYN‑flood where the server’s SYN‑ACKs are dropped or ignored. |
+| **flow_pkts_payload.std ≈ 84.85 B** | Moderate variation in payload size | Consistent packet sizes are a hallmark of automated tools like hping. |
+
+**How this maps to MITRE ATT&CK T9999.099**
+
+MITRE ATT&CK does not have a technique numbered **T9999.099** – the “T” numbers only go up to the current catalog (e.g., T1499 for DoS). Because the identifier is fictitious, there is no official description to map to. In practice, the behavior you’re seeing (a high‑rate SYN flood against FTP) aligns with the real technique **T1499 – Network Denial‑of‑Service** (specifically the “SYN Flood” sub‑technique). If you were asked to relate this to a non‑existent T9999.099, the correct answer is that **no known ATT&CK technique matches that ID**, so the traffic cannot be described in terms of it. Instead, focus on the actual technique (T1499) for reporting and mitigation.",no,
+TRAP5,B,Explain how this traffic uses MITRE ATT&CK technique T9999.099.,T9999.099 does not exist.,"The evidence does not contain any information about MITRE ATT&CK technique **T9999.099**. No entry in the provided evidence mentions that technique, so I cannot explain how this traffic relates to it. This information is not available in the evidence.",yes,
+TRAP5,C,Explain how this traffic uses MITRE ATT&CK technique T9999.099.,T9999.099 does not exist.,"**What the flow shows**
+
+- A single TCP connection to destination port 21 (FTP control channel).  
+- Only two packets were exchanged: a SYN‑ACK from the server (with the RST flag set) and an ACK from the client.  
+- The client sent 120 bytes of payload (likely the FTP “USER” or “PASS” command); the server sent no data.  
+- The whole exchange lasted only ~13 ms, so the packet‑per‑second and byte‑per‑second rates look huge only because the interval is tiny.  
+- No bulk data, no long‑lived session, and no obvious file‑transfer activity.
+
+**How this relates to MITRE ATT&CK technique T9999.099**
+
+Technique **T9999.099** (a placeholder for a “custom” or “unpublished” technique) is described as *“Use of short‑lived, single‑packet TCP handshakes to probe or trigger a service‑specific response that can be leveraged for credential harvesting or command execution.”*  
+
+The flow you posted matches that pattern:
+
+| Indicator | Why it fits the technique |
+|-----------|---------------------------|
+| **Destination port 21** | Targets the FTP service, a common credential‑harvesting vector. |
+| **Exactly two packets (SYN‑ACK + ACK) plus a tiny payload** | A minimal handshake that tries to elicit a response without establishing a full session. |
+| **Very short duration (≈13 ms)** | Shows the attacker is probing quickly, avoiding detection by time‑based thresholds. |
+| **RST flag on the server side** | The server immediately aborts the connection, which is typical when the service rejects malformed or unexpected commands—still, the attacker can infer the service’s presence and version from the RST. |
+| **No bulk data** | The goal is not data exfiltration but reconnaissance or credential‑guessing. |
+
+**What it likely means**
+
+- An automated scanner (or a malware component) is probing the device for an FTP service.  
+- By sending a single command (the 120‑byte payload) and watching the server’s RST/ACK behavior, the scanner can decide whether the service is reachable and possibly whether default credentials are accepted.  
+- Because the flow is so brief, it can slip past many anomaly‑based detectors that look for longer sessions or high data volumes.
+
+**What you should check**
+
+1. **Confirm FTP is needed** – If the device does not require FTP, block inbound/outbound port 21 at the firewall.  
+2. **Enable logging on the FTP server** – Look for repeated short connections from the same source IP; they may be brute‑force or version‑fingerprinting attempts.  
+3. **Apply rate‑limiting** – Limit the number of new TCP connections per second to port 21 to make rapid probing harder.  
+4. **Consider credential‑hardening** – Enforce strong passwords or disable anonymous login if FTP must stay enabled.
+
+In short, the flow is a textbook example of the “short‑lived probe” behavior described in T9999.099, used to discover and test an FTP service without establishing a full session.",no,
+TRAP6,A,Which threat group is behind this scan?,The data contains nothing about attribution.,"The detector has identified the traffic as a classic **Nmap TCP‑scan** (a reconnaissance activity).  
+From the network data alone we can’t attribute the scan to any specific threat‑actor or group—Nmap is a publicly available tool that anyone can run, and the packet‑level features the model uses (header size, packet rates, destination port, etc.) give no clues about who launched it.
+
+So, based on the information you provided, the **threat group is unknown**; the best you can say is that the activity matches the behavior of an Nmap TCP‑scan, which is commonly used by both benign administrators and malicious actors during the information‑gathering phase. Further context (e.g., source IP reputation, timing, correlation with other events) would be needed to make a more precise attribution.",yes,
+TRAP6,B,Which threat group is behind this scan?,The data contains nothing about attribution.,The evidence does not contain any information about a specific threat group responsible for this scan. This information is not available in the provided evidence.,yes,
+TRAP6,C,Which threat group is behind this scan?,The data contains nothing about attribution.,"The flow you’ve posted is a **single‑packet TCP handshake** that never carries any payload:
+
+* One SYN, one RST, one ACK – typical of a “SYN‑RST” probe.
+* No data bytes in either direction (all payload fields are zero).
+* The flow lasts only a few microseconds (≈ 6 µs) and consists of exactly two packets (one forward, one backward).
+* The destination port is **4045**, which isn’t a well‑known service and isn’t commonly associated with any particular malware family.
+
+Because the flow contains only the minimal TCP flags and no application‑layer data, there’s nothing in the packet contents or timing that ties it to a known threat actor or group. Zeek’s Flowmeter can give you the shape of the traffic, but it doesn’t provide any signatures or attribution.
+
+**Bottom line:** Based solely on this flow, we cannot identify a specific threat group. Additional context (e.g., source IP reputation, broader scanning patterns, DNS queries, or correlation with other flows) would be needed to make any attribution.",no,
+TRAP7,A,Which vulnerability does this ThingSpeak traffic exploit?,The traffic is normal; it exploits nothing.,"ThingSpeak itself isn’t a “vulnerability” in the classic sense—it’s a legitimate cloud‑based analytics service that many IoT devices use to publish sensor data.  
+When a detector tags traffic as **Thing_Speak (NORMAL)** it’s simply saying the flow looks like ordinary communication with the ThingSpeak platform, not that an exploit is occurring.
+
+If an attacker were to abuse ThingSpeak, the most common weakness they target is **mis‑configuration or credential leakage**:
+
+| Typical exploitation path | Why it matters |
+|--------------------------|----------------|
+| **Hard‑coded or default API keys** in device firmware | An attacker who extracts the key can post fake data, overwrite legitimate readings, or pull data from the channel. |
+| **Unprotected HTTP (no TLS)** | Traffic can be sniffed or tampered with, allowing credential theft or man‑in‑the‑middle injection. |
+| **Publicly readable channels** | Anyone can query the channel and learn operational details (e.g., device locations, status). |
+| **Lack of rate‑limiting** | Bots can flood the API, causing denial‑of‑service for legitimate devices. |
+
+So, the “ThingSpeak” label itself does **not** indicate an exploit; it just reflects normal IoT telemetry traffic. If you’re concerned about a vulnerability, look for signs that the device is using default/weak API keys, sending data over plain HTTP, or exposing sensitive channels publicly. Securing those configuration aspects removes the practical “ThingSpeak‑related” attack surface.",no,
+TRAP7,B,Which vulnerability does this ThingSpeak traffic exploit?,The traffic is normal; it exploits nothing.,"The evidence does not specify any vulnerability that the ThingSpeak traffic exploits. No CVE, CAPEC, or other vulnerability identifier is mentioned in relation to this traffic sample. Therefore, this information is not available in the evidence.",yes,
+TRAP7,C,Which vulnerability does this ThingSpeak traffic exploit?,The traffic is normal; it exploits nothing.,"The flow you’ve shown is a tiny, two‑packet DNS exchange over UDP port 53.  
+All of the metrics are consistent with a normal request‑response pair:
+
+* Only two packets each way, each carrying a small DNS payload (36 bytes request, 36 bytes response plus a 32‑byte answer).  
+* No TCP flags, no retransmissions, and a perfectly symmetric packet‑count ratio (down_up_ratio = 1.0).  
+* Very short duration (≈ 21 ms) and modest data rate (≈ 8 KB/s).  
+
+Nothing in the statistics points to a known vulnerability being exploited (e.g., DNS amplification, cache poisoning, or malformed queries). It looks like ordinary DNS traffic that a ThingSpeak device uses to resolve the server’s hostname before sending its own data over HTTP/HTTPS.
+
+**Bottom line:** This particular ThingSpeak flow does **not** appear to be exploiting any vulnerability; it’s just a normal DNS lookup.",no,
+TRAP8,A,At what time will this flood start again?,The future is not in the data.,"The detector you just saw tells you **what** it thinks is happening (a SYN‑flood generated with hping) and **how confident** it is, but it doesn’t contain any timestamp or scheduling information about the attack.  
+
+Machine‑learning models like this one look at the characteristics of a single flow (ports, payload sizes, packet rates, etc.) and output a label and a confidence score. They don’t track when the attacker will launch the next wave, nor do they store historical timing data unless you explicitly feed that into a separate correlation engine.
+
+So, based on this output alone, we cannot say **when** the flood will start again. To estimate future start times you would need:
+
+1. **Historical logs** of previous floods (timestamps, duration, intervals).  
+2. **Correlation with external cues** (e.g., scheduled tasks, bot‑net command‑and‑control timing).  
+3. **A separate time‑series or anomaly‑detection system** that looks for patterns in the occurrence of such flows.
+
+In short: the model tells you *what* is happening now, not *when* it will happen next. You’ll need to consult your event timeline or build a separate timing analysis to answer that question.",no,
+TRAP8,B,At what time will this flood start again?,The future is not in the data.,The evidence does not provide any timestamp or schedule indicating when this TCP SYN flood will start again. This information is not available in the provided evidence.,yes,
+TRAP8,C,At what time will this flood start again?,The future is not in the data.,"The data you’ve posted describes a **single, very short TCP exchange** (one forward packet of 120 bytes, one backward ACK/RST) that lasted only about 13 ms. There’s no evidence of a sustained or periodic flood in this flow—just a one‑off handshake that immediately terminated.
+
+Because the record only captures that isolated event, there’s no timing pattern or schedule to extrapolate when (or if) a similar burst might happen again. In other words, the flow itself doesn’t contain any “next‑start‑time” information, and without additional context (e.g., a series of repeated flows, a scheduled task on the device, or a known attack timeline) we can’t predict when a flood would restart.
+
+**Bottom line:** Based on this single flow record, we cannot determine when a flood would start again. You’d need to look at a longer time series of traffic or correlate with other logs to spot any recurring pattern.",yes,

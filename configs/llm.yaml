@@ -1,0 +1,103 @@
+# LLM roles used by RAG-IDS.
+# Every model name lives here so that nothing in src/ hard-codes one.
+# Checked against the providers' public model lists on 5 October 2026
+# (see PLAN.md, "LLM line-up"). Re-check with:  python -m src.check_llm
+
+roles:
+  # Writes the answers shown to the analyst and used in the evaluation.
+  answering:
+    provider: gemini
+    model: "gemini-3.5-flash-lite"
+    temperature: 0.2          # lowest allowed -> most repeatable answers
+    reasoning_effort: "low"   # hidden reasoning tokens count against the limits
+    max_tokens: 1500          # room for the hidden reasoning + a ~200-word answer
+    requests_per_minute: 15
+    tokens_per_minute: 240000
+
+  # Demo-only fallbacks for the answering role (see "fallbacks" below). They are used by the
+  # web app when the main answering model is rate-limited or down, and ONLY if the matching
+  # key is in .env. The evaluation never uses them, so its numbers stay from one model.
+  # Both serve NVIDIA's Nemotron-3-Super (120B, tool calling); no reasoning_effort is sent
+  # because these models do not use that setting. Model names checked 5 Oct 2026 against
+  # the providers' public model lists.
+  answering_fallback_nvidia:
+    provider: nvidia
+    model: "nvidia/nemotron-3-super-120b-a12b"
+    temperature: 0.0
+    max_tokens: 1500
+    requests_per_minute: 30
+    tokens_per_minute: 40000
+
+  answering_fallback_openrouter:
+    provider: openrouter
+    model: "nvidia/nemotron-3-super-120b-a12b:free"
+    temperature: 0.0
+    max_tokens: 1500
+    requests_per_minute: 15
+    tokens_per_minute: 40000
+
+  # Optional second answering model, used only by the evaluation's "small" run
+  # to compare two model sizes. Same provider, settings and free limits.
+  answering_small:
+    provider: groq
+    model: "openai/gpt-oss-20b"
+    temperature: 0.0
+    reasoning_effort: "low"
+    max_tokens: 1500
+    requests_per_minute: 30
+    tokens_per_minute: 8000
+
+  # Scores the answers in the evaluation only. Must be a DIFFERENT model
+  # from the answering model, otherwise the model would mark its own work.
+  # Chosen 5 Oct 2026 from the student's real free limits (AI Studio page):
+  #   gemini-3.8-flash       5 req/min, 20 req/day   -> ~220 judge calls would take 11 days
+  #   qwen/qwen3.8-27b       200k tokens/day (Groq)  -> ~1M judge tokens would take ~5 days
+  #   gemini-3.5-flash-lite  15 req/min, 500 req/day, 250k tokens/min -> fits in one sitting
+  judge:
+    provider: gemini
+    model: "gemini-3.5-flash-lite"
+    # Google strongly recommends temperature 1.0 for Gemini 3 models
+    # (lower values "may lead to unexpected behavior, such as looping").
+    # Repeatability instead comes from the disk cache: every judge
+    # response is stored, so re-running the report re-uses the same verdicts.
+    temperature: 1.0
+    reasoning_effort: "low"
+    max_tokens: 4000
+    json_output: true
+    requests_per_minute: 14
+    tokens_per_minute: 240000
+
+  # Alternative judge (the brief's suggestion). Too slow on the free plan for the
+  # full evaluation, see above. To use it, set  judge_role: judge_groq  below
+  # (for a whole run, never mid-run).
+  judge_groq:
+    provider: groq
+    model: "qwen/qwen3.8-27b"
+    temperature: 0.0
+    reasoning_effort: "low"   # Qwen on Groq also thinks; its <think> text is stripped by the client
+    max_tokens: 4000
+    json_output: true
+    requests_per_minute: 30
+    tokens_per_minute: 8000
+
+# Which role entry the evaluation uses as its judge. Change in ONE place.
+judge_role: judge
+
+# Tried in this order when a role fails (rate limit, daily limit, outage). Only the web app
+# turns this on (llm_client.FALLBACK_ENABLED); a fallback with no key in .env is skipped.
+fallbacks:
+  answering: [answering_fallback_nvidia, answering_fallback_openrouter]
+
+providers:
+  groq:
+    base_url: "https://api.groq.com/openai/v1"
+    api_key_env: "GROQ_API_KEY"
+  gemini:
+    base_url: "https://generativelanguage.googleapis.com/v1beta/openai/"
+    api_key_env: "GEMINI_API_KEY"
+  nvidia:
+    base_url: "https://integrate.api.nvidia.com/v1"
+    api_key_env: "NVIDIA_API_KEY"
+  openrouter:
+    base_url: "https://openrouter.ai/api/v1"
+    api_key_env: "OPENROUTER_API_KEY"

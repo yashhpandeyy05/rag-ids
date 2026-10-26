@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-phase="armory">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RAG-IDS · Attack range</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="description" content="Launch simulated attacks on an IoT network, watch a machine-learning detector classify them, and question an analyst whose answers cite MITRE ATT&CK, CAPEC and CVE sources.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230A101C'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%23E8EDF6' stroke-width='2'/%3E%3Cpath d='M16 16 L25 9' stroke='%237C9BFF' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%237C9BFF'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/static/style.css?v=2.5.0">
+<script>
+  // Apply the saved (or system) theme before first paint, so there is no flash.
+  (function () {
+    var t = null; try { t = localStorage.getItem('theme'); } catch (e) {}
+    if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    document.documentElement.dataset.theme = t;
+  })();
+</script>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-top">
+    <button class="sidebar-brand" id="brand" aria-label="RAG-IDS Attack Range">
+      <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true">
+        <circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="16" cy="16" r="7" fill="none" stroke="currentColor" stroke-width="2" opacity=".55"/>
+        <path d="M16 16 L27 8" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="16" cy="16" r="2.4" fill="var(--accent)"/>
+      </svg>
+      <div class="brand-text">
+        <span class="brand-name">RAG-IDS</span>
+        <span class="brand-sub">Security Range</span>
+      </div>
+    </button>
+    <button class="iconbtn sidebar-collapse-btn" id="sidebarCollapseBtn" aria-label="Close sidebar" title="Close sidebar (Ctrl+B)">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+  </div>
+  
+  <div class="sidebar-menu" id="sidebarMenu"></div>
+
+  <div class="sidebar-footer">
+    <div style="display:flex;align-items:center;justify-content:space-between;width:100%">
+      <span class="mono" style="font-size:.68rem;letter-spacing:.08em;color:var(--muted)">DETECTOR</span>
+      <span class="pill mono" id="modelPill">…</span>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;width:100%;margin-top:.2rem">
+      <span class="mono" style="font-size:.68rem;letter-spacing:.08em;color:var(--muted)">THEME</span>
+      <button class="iconbtn" id="themeBtn" aria-label="Switch light or dark theme" title="Switch theme">
+        <svg class="i-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </div>
+</aside>
+
+<div class="app-content">
+  <button class="sidebar-expand-pill" id="sidebarExpandBtn" aria-label="Toggle navigation sidebar" title="Open navigation menu (Ctrl+B)">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+
+<!-- ============================ RANGE ============================ -->
+<div id="view-range" class="body">
+  <main class="main">
+
+    <section class="stage" id="stage" aria-label="Network simulation">
+      <div id="ascii-stage" class="ascii-stage-backdrop"></div>
+      <canvas id="sim"></canvas>
+
+      <!-- armory: headline over the idle network -->
+      <div class="hero" id="hero">
+        <div class="kicker mono">IoT intrusion detection · live range</div>
+        <h1>Break something.<br>Watch the model catch it.</h1>
+        <p>Pick an attack and it plays out on a simulated network, replayed from real captured traffic. The detector names it and explains itself, then an analyst answers your questions with every claim tied to an official source.</p>
+        <div class="hero-actions" style="display:flex;gap:.8rem;margin:1.4rem 0 1.2rem;flex-wrap:wrap;align-items:center">
+          <button class="btn" id="heroUploadBtn" style="padding:.6rem 1.25rem;font-size:.9rem;font-weight:600;display:inline-flex;align-items:center;gap:.5rem">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload File to Test Attack
+          </button>
+          <input type="file" id="heroUploadInput" accept=".csv,.tsv,.json,.jsonl,.txt,.parquet" style="display:none">
+          <button class="btn ghost" id="heroMysteryBtn" style="padding:.6rem 1.15rem;font-size:.9rem;display:inline-flex;align-items:center;gap:.45rem">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Launch Mystery Attack
+          </button>
+        </div>
+        <div class="stats mono" id="stats"></div>
+      </div>
+
+      <!-- live: heads-up display -->
+      <div class="hud hud-tl" id="hudTitle"></div>
+      <div class="hud hud-tr mono" id="hudClock">00.0 s</div>
+      <ol class="steps" id="steps">
+        <li>Capture the flow</li><li id="stepMeasure">Measure features</li><li>Score the labels</li><li>Decide</li>
+      </ol>
+      <div class="scope" id="scope" aria-live="polite"><div class="scope-h mono">DETECTOR SCOPE</div><div id="bars"></div></div>
+      <div class="stampwrap" id="stampwrap"></div>
+      <div class="tele mono" id="tele"></div>
+
+
+    </section>
+
+    <!-- ============================ PLAYBOOK ARMORY (LANDING SCROLL) ============================ -->
+    <section class="results armory-section" id="view-armory">
+      <div id="ascii-armory" class="view-ascii-backdrop"></div>
+      <div class="results-in">
+        <div class="sec-header">
+          <div class="kicker mono">Threat Playbooks & Tactics · Attack Catalog</div>
+          <h1>Playbook Armory</h1>
+          <p class="sec-intro">
+            Select a real captured network flow scenario to launch against the intrusion detection model.
+            Watch the telemetry stream through the live detector, classify in real time, and investigate the attack with the RAG analyst.
+          </p>
+        </div>
+
+        <div class="armory-filter-bar">
+          <button class="chip on" data-filter="all">All Playbooks</button>
+          <button class="chip" data-filter="DDoS">DDoS / DoS</button>
+          <button class="chip" data-filter="Reconnaissance">Reconnaissance</button>
+          <button class="chip" data-filter="Spoofing">Spoofing & MITM</button>
+          <button class="chip" data-filter="Brute Force">Brute Force</button>
+          <button class="chip" data-filter="Normal">Normal Traffic</button>
+        </div>
+
+        <!-- armory: playbooks -->
+        <section class="deck armory-deck-full" id="deck">
+          <div class="deck-h">
+            <div>
+              <h2 style="font-size:1.18rem;font-weight:700">Attack Scenario Catalog</h2>
+              <div class="deck-hint mono" id="deckHint">drag, scroll or use the arrows</div>
+            </div>
+            <div class="deck-arrows">
+              <button class="iconbtn" id="prev" aria-label="Scroll playbooks left">‹</button>
+              <button class="iconbtn" id="next" aria-label="Scroll playbooks right">›</button>
+            </div>
+          </div>
+          <div class="rail-wrap" id="railWrap">
+            <div class="rail" id="rail" tabindex="0" aria-label="Attack playbooks, scrollable"></div>
+          </div>
+          <div class="rail-prog" id="railProg" aria-hidden="true"><i></i></div>
+        </section>
+      </div>
+    </section>
+
+    <!-- case file -->
+    <section class="report" id="report">
+      <div class="report-bar">
+        <div class="mono crumb" id="crumb"></div>
+        <div class="report-actions">
+          <button class="btn ghost" id="again">↻ Same attack, new flow</button>
+          <button class="btn" id="newattack">New attack</button>
+          <button class="btn ghost" id="openAssistantBtn" style="display:none;align-items:center;gap:.4rem">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Open Analyst
+          </button>
+        </div>
+      </div>
+      <article class="card incident" id="incident"></article>
+      <div class="two">
+        <article class="card" id="why"></article>
+        <article class="card" id="refs"></article>
+      </div>
+    </section>
+  </main>
+
+  <!-- analyst -->
+  <aside class="assistant" id="assistant" aria-label="Analyst chat">
+    <div class="a-head">
+      <div><div class="a-title">Analyst</div><div class="a-sub mono" id="aSub">answers cite their sources</div></div>
+      <div style="display:flex;gap:.35rem;align-items:center">
+        <button class="iconbtn" id="widen" aria-label="Widen the chat" title="Widen">⇤⇥</button>
+        <button class="iconbtn" id="closeAssistantBtn" aria-label="Close analyst chat" title="Close chat">✕</button>
+      </div>
+    </div>
+    <div class="modes" role="tablist" aria-label="Answer mode" id="modes">
+      <button role="tab" data-mode="memory" title="The model answers from memory. No sources.">Memory</button>
+      <button role="tab" data-mode="kb" class="on" title="Answers may only use the detector output and retrieved MITRE, CAPEC and CVE records, and must cite them.">Knowledge base</button>
+      <button role="tab" data-mode="compare" title="Answers twice so you can compare.">Compare both</button>
+    </div>
+    <div class="msgs" id="msgs">
+      <div class="empty" id="aEmpty">
+        <div class="empty-t">Ask about this incident</div>
+        <div class="empty-d">Try <b>Compare both</b> to see the same question answered from memory and from the knowledge base, with every cited ID checked against the official MITRE files.</div>
+      </div>
+    </div>
+    <div class="suggest" id="suggest"></div>
+    <form class="composer" id="composer" autocomplete="off">
+      <input id="q" type="text" placeholder="Ask about this flow, or any attack type…" aria-label="Your question">
+      <button class="send" type="submit" aria-label="Send">➤</button>
+    </form>
+    <label class="tools mono"><input type="checkbox" id="tools"> let the analyst run the detector and search itself</label>
+  </aside>
+</div>
+
+<!-- ============================ RESULTS ============================ -->
+<div id="view-results" class="results" hidden>
+  <div id="ascii-results" class="view-ascii-backdrop"></div>
+  <div class="results-in" id="resultsIn"><div class="empty">Loading…</div></div>
+  <div class="eval-nav-footer" style="display:flex;justify-content:center;margin:3.5rem 0 2.5rem">
+    <button class="btn ghost" id="jumpToSecurityBtn" style="padding:.65rem 1.6rem;font-size:.88rem;display:inline-flex;align-items:center;gap:.5rem;border-radius:999px">
+      <span>Continue to Security Evaluation</span>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ============================ SECURITY EVALUATION ============================ -->
+<div id="view-security" class="results" hidden>
+  <div id="ascii-security" class="view-ascii-backdrop"></div>
+  <div class="results-in" id="secIn">
+    <div style="margin-bottom:1.2rem">
+      <button class="chip" id="jumpToResultsBtn" style="cursor:pointer;display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .75rem">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 11l-5-5-5 5M17 18l-5-5-5 5"/></svg>
+        <span>Back to Model Results</span>
+      </button>
+    </div>
+    <div class="sec-header">
+      <div class="kicker mono">Adversarial RAG Security Suite · Red Team Evaluation</div>
+      <h1>RAG Security & Pipeline Integrity</h1>
+      <p class="sec-intro">
+        Experimental red-team evaluation of three major attack vectors against the live Retrieval-Augmented Generation (RAG) pipeline.
+        Based on recent peer-reviewed security research: <em>Behnia et al. (arXiv:2509.20324v1)</em> and <em>RAGuard (arXiv:2510.25025)</em>.
+        All tests run against real SentenceTransformer embeddings (<span class="mono">BAAI/bge-small-en-v1.5</span>) and ChromaDB vector collections with verified test isolation.
+      </p>
+    </div>
+
+    <div class="sec-grid">
+      <!-- 1. Membership Inference Card -->
+      <article class="card sec-card" id="card-mia" style="--fam:#7C9BFF">
+        <div class="sec-card-art">
+          <div class="sec-card-mini" aria-hidden="true"><i></i><i></i><i></i></div>
+          <span class="sec-tag mono">arXiv:2509.20324v1 §IV-A</span>
+          <span class="ico" title="Document-Level Membership Inference">🔬</span>
+          <span class="status-pill ready" id="status-mia">Ready</span>
+        </div>
+        <div class="sec-card-body">
+          <h3>1. Document-Level Membership Inference (DL-MIA)</h3>
+          <div class="sub">Determines whether target cybersecurity documents were incorporated into the RAG knowledge base.</div>
+          <p class="sec-desc">
+            Evaluates observable RAG retrieval behaviors by comparing known member chunks from the threat KB against external control non-member documents.
+            Computes candidate probes, measures top-k cosine similarity and token containment, performs an optimal threshold sweep, and calculates ROC-AUC, Precision, Recall, and F1.
+          </p>
+          <div class="sec-config">
+            <div class="sec-field">
+              <label for="mia-sample-size">Candidate Sample Size (per group)</label>
+              <input type="number" id="mia-sample-size" min="2" max="8" value="6">
+            </div>
+            <div class="sec-field">
+              <label for="mia-threshold">Decision Threshold &tau; (leave empty for optimal sweep)</label>
+              <input type="number" id="mia-threshold" step="0.05" min="0.0" max="1.0" placeholder="Auto">
+            </div>
+          </div>
+          <div class="sec-actions">
+            <button class="sec-launch-btn" id="btn-run-mia">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Run MIA Experiment ▸
+            </button>
+            <div class="sec-progress" id="prog-mia" hidden>
+              <span class="spinner"></span> <span>Running membership inference against ChromaDB...</span>
+            </div>
+          </div>
+          <div class="sec-error err" id="err-mia" hidden></div>
+          <div class="sec-result" id="res-mia" hidden></div>
+        </div>
+      </article>
+
+      <!-- 2. Knowledge-Base Data Poisoning Card -->
+      <article class="card sec-card" id="card-poison" style="--fam:#FF754C">
+        <div class="sec-card-art">
+          <div class="sec-card-mini" aria-hidden="true"><i></i><i></i><i></i></div>
+          <span class="sec-tag mono">arXiv:2509.20324v1 §IV-C · RAGuard</span>
+          <span class="ico" title="Knowledge-Base Data Poisoning">💉</span>
+          <span class="status-pill ready" id="status-poison">Ready</span>
+        </div>
+        <div class="sec-card-body">
+          <h3>2. Knowledge-Base Data Poisoning</h3>
+          <div class="sub">Evaluates whether injected adversarial documents with trigger phrases manipulate retrieval ranking and answers.</div>
+          <p class="sec-desc">
+            Evaluates pipeline vulnerability by injecting crafted malicious chunks with adversarial trigger tokens into an isolated test collection (<span class="mono">threat_kb_sec_eval_poison</span>).
+            Compares clean baseline retrieval against poisoned retrieval, tests whether false mitigation overrides hijack rank-1 context, computes Attack Success Rate (ASR) and Retrieval Success Rate (RSR), benchmarks RAGuard Text Similarity (TS), and verifies safe cleanup.
+          </p>
+          <div class="sec-config">
+            <div class="sec-field" style="flex: 2; min-width: 240px;">
+              <label for="poison-trigger">Adversarial Trigger Phrase</label>
+              <input type="text" id="poison-trigger" value="[IOT-DEF-OVERRIDE]">
+            </div>
+            <div class="sec-field">
+              <label for="poison-queries">Number of Attack Scenarios</label>
+              <input type="number" id="poison-queries" min="1" max="3" value="3">
+            </div>
+          </div>
+          <div class="sec-actions">
+            <button class="sec-launch-btn" id="btn-run-poison">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Run Data Poisoning Test ▸
+            </button>
+            <div class="sec-progress" id="prog-poison" hidden>
+              <span class="spinner"></span> <span>Running trigger injection & baseline vs poisoned retrieval...</span>
+            </div>
+          </div>
+          <div class="sec-error err" id="err-poison" hidden></div>
+          <div class="sec-result" id="res-poison" hidden></div>
+        </div>
+      </article>
+
+      <!-- 3. Retrieved-Content Leakage Card -->
+      <article class="card sec-card" id="card-leak" style="--fam:#B47CFF">
+        <div class="sec-card-art">
+          <div class="sec-card-mini" aria-hidden="true"><i></i><i></i><i></i></div>
+          <span class="sec-tag mono">arXiv:2509.20324v1 §IV-B</span>
+          <span class="ico" title="Retrieved-Content Leakage & Access Isolation">🔓</span>
+          <span class="status-pill ready" id="status-leak">Ready</span>
+        </div>
+        <div class="sec-card-body">
+          <h3>3. Retrieved-Content Leakage & Access Isolation</h3>
+          <div class="sub">Evaluates exfiltration of sensitive canary secrets across retrieval and generation boundaries.</div>
+          <p class="sec-desc">
+            Injects synthetic canary secrets (<span class="mono">CANARY-SECRET-*</span>) into an isolated test environment (<span class="mono">threat_kb_sec_eval_leakage</span>).
+            Executes direct queries and adversarial compound prompt injection queries ($q = q_s + q_c$) across tenant access boundaries.
+            Examines both retrieved vector chunks and final generated outputs to calculate Retrieval Leakage Rate (RLR), Generation Leakage Rate (GLR), and Access Control Violations, followed by automated cleanup.
+          </p>
+          <div class="sec-config">
+            <div class="sec-field">
+              <label for="leak-canaries">Number of Canary Secrets</label>
+              <input type="number" id="leak-canaries" min="1" max="3" value="3">
+            </div>
+            <div class="sec-field" style="flex: 2; min-width: 260px;">
+              <label>Evaluated Attack Vectors</label>
+              <div class="sec-static-info mono" style="padding:.5rem;background:var(--surface);border:1px solid var(--line);border-radius:8px;font-size:.78rem">Direct Extraction + Compound Injection + Multi-Tenant Isolation Check</div>
+            </div>
+          </div>
+          <div class="sec-actions">
+            <button class="sec-launch-btn" id="btn-run-leak">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Run Content Leakage Test ▸
+            </button>
+            <div class="sec-progress" id="prog-leak" hidden>
+              <span class="spinner"></span> <span>Executing direct & prompt-injection canary retrieval tests...</span>
+            </div>
+          </div>
+          <div class="sec-error err" id="err-leak" hidden></div>
+          <div class="sec-result" id="res-leak" hidden></div>
+        </div>
+      </article>
+
+      <!-- 4. Custom Dataset Simulation Card -->
+      <article class="card sec-card" id="card-custom" style="--fam:#1FBF9A">
+        <div class="sec-card-art">
+          <div class="sec-card-mini" aria-hidden="true"><i></i><i></i><i></i></div>
+          <span class="sec-tag mono">Bring Your Own Data · Red Team Evaluation</span>
+          <span class="ico" title="Custom Dataset Attack Simulator">⚡</span>
+          <span class="status-pill ready" id="status-custom">Ready</span>
+        </div>
+        <div class="sec-card-body">
+          <h3>4. Custom Dataset Attack Simulator</h3>
+          <div class="sub">Upload your own dataset (.csv, .json, .jsonl, .txt, .parquet) and simulate any of the three RAG attacks.</div>
+          <p class="sec-desc">
+            Test your proprietary cybersecurity threat documents, incident response runbooks, or telemetry logs.
+            Upload your file or select a sample preset below, choose the target attack vector, and evaluate how the live RAG pipeline responds.
+          </p>
+
+          <!-- Dataset Upload & Preset Bar -->
+          <div class="sec-config" style="flex-direction:column;align-items:stretch;gap:.9rem">
+            <div style="display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between">
+              <div class="sec-field" style="flex:1;min-width:240px">
+                <label for="custom-file-input">Upload Dataset File (.csv, .json, .jsonl, .txt, .parquet)</label>
+                <input type="file" id="custom-file-input" accept=".csv,.tsv,.json,.jsonl,.txt,.md,.parquet">
+              </div>
+              <div style="display:flex;flex-direction:column;gap:.35rem">
+                <label class="mono" style="font-size:.74rem;font-weight:600;color:var(--text)">Or Try a Ready Sample Preset:</label>
+                <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+                  <button type="button" class="btn ghost" id="btn-load-preset-mia" style="padding:.35rem .7rem;font-size:.78rem;display:inline-flex;align-items:center;gap:.35rem">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    Threat Intel (MIA)
+                  </button>
+                  <button type="button" class="btn ghost" id="btn-load-preset-poison" style="padding:.35rem .7rem;font-size:.78rem;display:inline-flex;align-items:center;gap:.35rem">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 22 22 22 12 2"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r="1"/></svg>
+                    Injected Overrides
+                  </button>
+                  <button type="button" class="btn ghost" id="btn-load-preset-leak" style="padding:.35rem .7rem;font-size:.78rem;display:inline-flex;align-items:center;gap:.35rem">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    Canary Vault
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dataset Loaded Preview Box -->
+            <div id="custom-dataset-preview-wrap" style="display:none;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.8rem 1rem">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
+                <span class="mono" style="font-size:.82rem;font-weight:600;color:#1FBF9A" id="custom-preview-title">Loaded: 0 documents</span>
+                <span class="mono" style="font-size:.74rem;color:var(--muted)" id="custom-preview-sub"></span>
+              </div>
+              <details>
+                <summary class="mono" style="font-size:.76rem;cursor:pointer;color:var(--muted)">Inspect Parsed Sample Documents</summary>
+                <div id="custom-preview-list" style="margin-top:.6rem;display:flex;flex-direction:column;gap:.4rem"></div>
+              </details>
+            </div>
+          </div>
+
+          <!-- Attack Selection & Options -->
+          <div class="sec-config">
+            <div class="sec-field" style="flex:1;min-width:260px">
+              <label>Select Attack to Simulate</label>
+              <div style="display:flex;gap:1.2rem;margin-top:.35rem;flex-wrap:wrap">
+                <label style="display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.84rem;color:var(--text)">
+                  <input type="radio" name="custom-attack" value="membership_inference" checked>
+                  <span>1. Membership Inference (MIA)</span>
+                </label>
+                <label style="display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.84rem;color:var(--text)">
+                  <input type="radio" name="custom-attack" value="data_poisoning">
+                  <span>2. Data Poisoning</span>
+                </label>
+                <label style="display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.84rem;color:var(--text)">
+                  <input type="radio" name="custom-attack" value="retrieved_leakage">
+                  <span>3. Content Leakage</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="sec-field" id="custom-opt-mia">
+              <label for="custom-mia-threshold">Decision Threshold &tau; (optional)</label>
+              <input type="number" id="custom-mia-threshold" step="0.05" min="0.0" max="1.0" placeholder="0.78">
+            </div>
+
+            <div class="sec-field" id="custom-opt-poison" style="display:none">
+              <label for="custom-poison-trigger">Adversarial Trigger Token</label>
+              <input type="text" id="custom-poison-trigger" value="[CUSTOM-IOT-OVERRIDE]">
+            </div>
+
+            <div class="sec-field" id="custom-opt-leak" style="display:none">
+              <label for="custom-leak-canary">Canary Secret Token to Track</label>
+              <input type="text" id="custom-leak-canary" value="CANARY-SECRET-USER-9021">
+            </div>
+          </div>
+
+          <!-- Custom Attack Query / Prompt Payload -->
+          <div class="sec-query-box" style="margin-top:.85rem;padding:.9rem 1.1rem;background:color-mix(in srgb, var(--surface) 60%, var(--bg));border:1px solid var(--line);border-radius:10px;display:flex;flex-direction:column;gap:.5rem">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem">
+              <label for="custom-attack-query" style="font-weight:700;font-size:.85rem;display:flex;align-items:center;gap:.45rem;color:var(--text)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <span id="custom-query-title">Simulation Query / Attack Prompt</span>
+              </label>
+              <div style="display:flex;gap:.45rem;align-items:center">
+                <span class="mono" style="font-size:.7rem;color:var(--muted)">Quick Fill:</span>
+                <button type="button" class="btn ghost mono" id="btn-query-quick-sample" style="padding:.2rem .6rem;font-size:.73rem">Insert Example Query</button>
+              </div>
+            </div>
+            <div style="position:relative;display:flex;align-items:center">
+              <input type="text" id="custom-attack-query" placeholder="Enter custom query or probe prompt to test against your dataset..." style="width:100%;padding:.6rem .8rem;background:var(--bg);border:1px solid var(--line);border-radius:6px;color:var(--text);font-size:.86rem">
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.4rem">
+              <span class="mono" style="font-size:.73rem;color:var(--muted)" id="custom-query-hint">
+                MIA Probe: Evaluates cosine similarity &amp; chunk containment of this query against threat_kb.
+              </span>
+              <span class="mono" style="font-size:.71rem;color:var(--muted)">Optional · Leave blank for automatic dataset probe</span>
+            </div>
+          </div>
+
+          <div class="sec-actions">
+            <button class="sec-launch-btn" id="btn-run-custom" disabled>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Simulate Attack on Dataset ▸
+            </button>
+            <div class="sec-progress" id="prog-custom" hidden>
+              <span class="spinner"></span> <span>Running simulation on uploaded documents...</span>
+            </div>
+          </div>
+          <div class="sec-error err" id="err-custom" hidden></div>
+          <div class="sec-result" id="res-custom" hidden></div>
+        </div>
+      </article>
+    </div>  </div>
+</div>
+
+</div><!-- .app-content -->
+
+      <!-- ==================== UPLOAD ATTACK MODAL ==================== -->
+      <div id="uploadAttackModal" class="upload-modal-overlay" hidden>
+        <div class="upload-modal-box">
+          <div class="upload-modal-header">
+            <div>
+              <div class="sec-tag mono" style="font-size:.72rem;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:.25rem">Custom Attack Injection · Live Network Range</div>
+              <h2 style="margin:0 0 .25rem;font:800 1.25rem var(--font);color:var(--text)">Upload Traffic File to Test Attack</h2>
+              <div style="font-size:.84rem;color:var(--muted);line-height:1.4">
+                Upload your own network flow file (.csv, .json, .txt) to evaluate against the XGBoost intrusion detection model in real-time.
+              </div>
+            </div>
+            <button type="button" class="btn ghost modal-close-btn" id="uploadModalClose" style="padding:.3rem .6rem;line-height:1;border-radius:8px">✕</button>
+          </div>
+
+          <div class="upload-dropzone" id="uploadDropzone">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:.5rem"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <div style="font-weight:600;font-size:.95rem;color:var(--text);margin-bottom:.25rem">
+              Drag &amp; drop your flow file here, or <span style="color:var(--accent);text-decoration:underline;cursor:pointer" id="dropzoneBrowseBtn">browse files</span>
+            </div>
+            <div style="font-size:.78rem;color:var(--muted)" class="mono">Supports CSV, JSON, TXT with network telemetry / flow features</div>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.6rem;margin-top:1rem">
+            <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+              <span class="mono" style="font-size:.76rem;color:var(--muted)">Need a test template?</span>
+              <a href="/api/sample-flow-template" download="sample_attack_flow.csv" class="btn ghost" style="padding:.3rem .65rem;font-size:.78rem;display:inline-flex;align-items:center;gap:.35rem;text-decoration:none">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download Sample CSV
+              </a>
+              <button type="button" class="btn ghost" id="btnUseSamplePreset" style="padding:.3rem .65rem;font-size:.78rem;display:inline-flex;align-items:center;gap:.35rem">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                Quick-Load Sample Attack
+              </button>
+            </div>
+          </div>
+
+          <div id="uploadFilePreviewCard" style="display:none;margin-top:1rem;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:.9rem 1.1rem">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div style="display:flex;align-items:center;gap:.6rem">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                <div>
+                  <div id="previewFileName" style="font-weight:700;font-size:.9rem;color:var(--text)">filename.csv</div>
+                  <div id="previewFileMeta" class="mono" style="font-size:.74rem;color:var(--muted)">4.2 KB · 1 flow row</div>
+                </div>
+              </div>
+              <span class="chip" style="background:color-mix(in srgb, #1FBF9A 15%, transparent);color:#1FBF9A;font-weight:600;font-size:.75rem">Ready to simulate</span>
+            </div>
+            <div id="previewFeaturesGrid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));gap:.6rem;margin-top:.8rem;padding-top:.8rem;border-top:1px solid color-mix(in srgb, var(--line) 60%, transparent)">
+            </div>
+          </div>
+
+          <div id="uploadErrorMsg" class="err" style="display:none;margin-top:.8rem;padding:.5rem .8rem;border-radius:8px;font-size:.82rem"></div>
+
+          <div style="display:flex;justify-content:flex-end;gap:.8rem;margin-top:1.4rem">
+            <button type="button" class="btn ghost" id="uploadModalCancel">Cancel</button>
+            <button type="button" class="btn" id="btnLaunchUploadedAttack" style="padding:.6rem 1.4rem;font-weight:700;display:inline-flex;align-items:center;gap:.45rem" disabled>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Launch Attack on Network
+            </button>
+          </div>
+        </div>
+      </div>
+
+<script src="/static/vendor/gsap.min.js"></script>
+<script src="/static/vendor/ScrollTrigger.min.js"></script>
+<script src="/static/vendor/lenis.min.js"></script>
+<script src="/static/branched-menu.js?v=2.5.0"></script>
+<script src="/static/gradient-ascii.js?v=2.5.0"></script>
+<script src="/static/app.js?v=2.5.0"></script>
+</body>
+</html>

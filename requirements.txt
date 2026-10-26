@@ -1,0 +1,24 @@
+# RAG-IDS direct dependencies, pinned. Tested on Python 3.14.7 (Arch Linux), 5 October 2026.
+# requirements-lock.txt pins every package (including dependencies) for an exact rebuild.
+#
+# The next line makes pip take the small CPU-only PyTorch build (~200 MB) instead of the
+# multi-GB CUDA build that plain PyPI gives on Linux. No GPU is needed.
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+pandas==3.0.6            # tables
+pyarrow==25.0.1          # parquet files for the train/test split
+ucimlrepo==0.0.7         # download RT-IoT2022 from UCI
+scikit-learn==1.9.1      # split, cross-validation, Logistic Regression, Random Forest, metrics, kappa
+xgboost==3.4.1           # the detector; pred_contribs gives per-prediction feature contributions
+joblib==1.6.0            # save the fitted preprocessor
+matplotlib==3.11.2       # confusion matrix and evaluation charts
+torch==2.14.1            # backend for the embedding model (CPU build, see above)
+sentence-transformers==6.1.0  # runs BAAI/bge-small-en-v1.5 embeddings
+chromadb==1.5.9          # local vector store with metadata
+openai==3.24.0           # one client for both Groq and Gemini (OpenAI-compatible endpoints)
+python-dotenv==1.2.4     # read API keys from .env
+pyyaml==6.0.3            # config files
+requests==2.34.2         # downloads (MITRE, CAPEC, NVD)
+fastapi==0.142.2         # web server for the demo app (web/server.py)
+uvicorn==0.54.0          # runs the web server
+streamlit==1.65.0        # the earlier, simpler demo app (app/), kept as a fallback

@@ -1,0 +1,1871 @@
+qid,condition,claim_no,claim,answer,human_verdict (SUPPORTED / CONTRADICTED / NOT_IN_EVIDENCE)
+Q09,C,1,The traffic contains a UDP port 53 DNS exchange.,"**What we see**
+
+- UDP / port 53 – a DNS exchange.  
+- Exactly two packets forward (client → server) and two packets backward (server → client).  
+- Each request is 51 bytes, each response is 106‑122 bytes – the size of a typical DNS query and a DNS answer that contains one or a few resource records.  
+- The flow lasts only 0.0003 s and the packet‑rate numbers are just the result of dividing the tiny packet count by that duration; they are not indicative of a flood.  
+- No TCP flags, no payload anomalies, no bulk‑transfer behavior.
+
+**Likely ATT&CK / CAPEC mapping**
+
+| Framework | Technique / Pattern | Why it fits |
+|-----------|---------------------|-------------|
+| MITRE ATT&CK (Enterprise) | **T1071.004 – Application Layer Protocol: DNS** | The traffic is a normal DNS request/response. ATT&CK lists DNS as a common C2 or data‑exfiltration channel, but the flow itself is just the protocol usage, not an exploit. |
+| CAPEC | **CAPEC‑115 – “DNS Cache Poisoning”** (or more generally “Manipulating DNS”) | If an attacker were abusing DNS, the relevant pattern is DNS manipulation. The observed flow, however, shows a standard query/answer with no signs of poisoning (no unusually large answers, no multiple answers, no suspicious flags). |
+
+**Known vulnerabilities (CVEs)**  
+
+The flow does **not** exhibit any malformed packets, unusually large payloads, or protocol‑level errors that would trigger a known DNS‑related CVE (e.g., CVE‑2020‑25705, CVE‑2021‑25216). It looks like a legitimate DNS lookup, so there is no direct CVE to cite for this specific flow.
+
+**Bottom line**
+
+- The traffic matches the normal use of the DNS application‑layer protocol (ATT&CK T1071.004).  
+- There is no evidence of an exploit or abuse, so no specific CVE is associated with this flow.  
+- If you are hunting for malicious DNS activity, you would look for anomalies such as unusually large answers, high query rates, uncommon domain names, or use of DNS over non‑standard ports—none of which appear here.",
+Q09,C,2,The traffic maps to MITRE ATT&CK T1071.004 Application Layer Protocol: DNS.,"**What we see**
+
+- UDP / port 53 – a DNS exchange.  
+- Exactly two packets forward (client → server) and two packets backward (server → client).  
+- Each request is 51 bytes, each response is 106‑122 bytes – the size of a typical DNS query and a DNS answer that contains one or a few resource records.  
+- The flow lasts only 0.0003 s and the packet‑rate numbers are just the result of dividing the tiny packet count by that duration; they are not indicative of a flood.  
+- No TCP flags, no payload anomalies, no bulk‑transfer behavior.
+
+**Likely ATT&CK / CAPEC mapping**
+
+| Framework | Technique / Pattern | Why it fits |
+|-----------|---------------------|-------------|
+| MITRE ATT&CK (Enterprise) | **T1071.004 – Application Layer Protocol: DNS** | The traffic is a normal DNS request/response. ATT&CK lists DNS as a common C2 or data‑exfiltration channel, but the flow itself is just the protocol usage, not an exploit. |
+| CAPEC | **CAPEC‑115 – “DNS Cache Poisoning”** (or more generally “Manipulating DNS”) | If an attacker were abusing DNS, the relevant pattern is DNS manipulation. The observed flow, however, shows a standard query/answer with no signs of poisoning (no unusually large answers, no multiple answers, no suspicious flags). |
+
+**Known vulnerabilities (CVEs)**  
+
+The flow does **not** exhibit any malformed packets, unusually large payloads, or protocol‑level errors that would trigger a known DNS‑related CVE (e.g., CVE‑2020‑25705, CVE‑2021‑25216). It looks like a legitimate DNS lookup, so there is no direct CVE to cite for this specific flow.
+
+**Bottom line**
+
+- The traffic matches the normal use of the DNS application‑layer protocol (ATT&CK T1071.004).  
+- There is no evidence of an exploit or abuse, so no specific CVE is associated with this flow.  
+- If you are hunting for malicious DNS activity, you would look for anomalies such as unusually large answers, high query rates, uncommon domain names, or use of DNS over non‑standard ports—none of which appear here.",
+Q09,C,3,There is no direct CVE to cite for this specific flow.,"**What we see**
+
+- UDP / port 53 – a DNS exchange.  
+- Exactly two packets forward (client → server) and two packets backward (server → client).  
+- Each request is 51 bytes, each response is 106‑122 bytes – the size of a typical DNS query and a DNS answer that contains one or a few resource records.  
+- The flow lasts only 0.0003 s and the packet‑rate numbers are just the result of dividing the tiny packet count by that duration; they are not indicative of a flood.  
+- No TCP flags, no payload anomalies, no bulk‑transfer behavior.
+
+**Likely ATT&CK / CAPEC mapping**
+
+| Framework | Technique / Pattern | Why it fits |
+|-----------|---------------------|-------------|
+| MITRE ATT&CK (Enterprise) | **T1071.004 – Application Layer Protocol: DNS** | The traffic is a normal DNS request/response. ATT&CK lists DNS as a common C2 or data‑exfiltration channel, but the flow itself is just the protocol usage, not an exploit. |
+| CAPEC | **CAPEC‑115 – “DNS Cache Poisoning”** (or more generally “Manipulating DNS”) | If an attacker were abusing DNS, the relevant pattern is DNS manipulation. The observed flow, however, shows a standard query/answer with no signs of poisoning (no unusually large answers, no multiple answers, no suspicious flags). |
+
+**Known vulnerabilities (CVEs)**  
+
+The flow does **not** exhibit any malformed packets, unusually large payloads, or protocol‑level errors that would trigger a known DNS‑related CVE (e.g., CVE‑2020‑25705, CVE‑2021‑25216). It looks like a legitimate DNS lookup, so there is no direct CVE to cite for this specific flow.
+
+**Bottom line**
+
+- The traffic matches the normal use of the DNS application‑layer protocol (ATT&CK T1071.004).  
+- There is no evidence of an exploit or abuse, so no specific CVE is associated with this flow.  
+- If you are hunting for malicious DNS activity, you would look for anomalies such as unusually large answers, high query rates, uncommon domain names, or use of DNS over non‑standard ports—none of which appear here.",
+Q17,B,1,The traffic is an Nmap X-mas-tree scan detected with high confidence.,"The detector is highly confident (confidence = 1.00) that the flow is an Nmap X‑mas‑tree scan, which is a reconnaissance‑type attack that uses TCP packets with FIN, PSH and URG flags set [DET][CARD_NMAP_XMAS_TREE_SCAN].  
+
+To respond to this traffic you should:
+
+* Treat it as a malicious scan and block the source at the network edge [CAPEC-303] (XMAS scans are flagged by most IDS/IPS).  
+* Deploy or ensure an intrusion detection/prevention system is monitoring for the characteristic flag combination (FIN + PSH + URG) and can generate alerts or drop the packets [CAPEC-303][T1046-MIT]‑M1031.  
+* Apply network segmentation to isolate critical IoT devices from the scanning host, limiting the scan’s reach [T1046-MIT]‑M1030.  
+* Verify that unnecessary ports and services on the IoT devices are disabled or removed, reducing the value of the scan [T1046-MIT]‑M1042.  
+
+These steps directly address the observed X‑mas‑tree scan and the recommended mitigations for network‑service discovery scans.",
+Q17,B,2,"An Nmap X-mas-tree scan is a reconnaissance-type attack using TCP packets with FIN, PSH, and URG flags set.","The detector is highly confident (confidence = 1.00) that the flow is an Nmap X‑mas‑tree scan, which is a reconnaissance‑type attack that uses TCP packets with FIN, PSH and URG flags set [DET][CARD_NMAP_XMAS_TREE_SCAN].  
+
+To respond to this traffic you should:
+
+* Treat it as a malicious scan and block the source at the network edge [CAPEC-303] (XMAS scans are flagged by most IDS/IPS).  
+* Deploy or ensure an intrusion detection/prevention system is monitoring for the characteristic flag combination (FIN + PSH + URG) and can generate alerts or drop the packets [CAPEC-303][T1046-MIT]‑M1031.  
+* Apply network segmentation to isolate critical IoT devices from the scanning host, limiting the scan’s reach [T1046-MIT]‑M1030.  
+* Verify that unnecessary ports and services on the IoT devices are disabled or removed, reducing the value of the scan [T1046-MIT]‑M1042.  
+
+These steps directly address the observed X‑mas‑tree scan and the recommended mitigations for network‑service discovery scans.",
+Q17,B,3,You should treat it as a malicious scan and block the source at the network edge.,"The detector is highly confident (confidence = 1.00) that the flow is an Nmap X‑mas‑tree scan, which is a reconnaissance‑type attack that uses TCP packets with FIN, PSH and URG flags set [DET][CARD_NMAP_XMAS_TREE_SCAN].  
+
+To respond to this traffic you should:
+
+* Treat it as a malicious scan and block the source at the network edge [CAPEC-303] (XMAS scans are flagged by most IDS/IPS).  
+* Deploy or ensure an intrusion detection/prevention system is monitoring for the characteristic flag combination (FIN + PSH + URG) and can generate alerts or drop the packets [CAPEC-303][T1046-MIT]‑M1031.  
+* Apply network segmentation to isolate critical IoT devices from the scanning host, limiting the scan’s reach [T1046-MIT]‑M1030.  
+* Verify that unnecessary ports and services on the IoT devices are disabled or removed, reducing the value of the scan [T1046-MIT]‑M1042.  
+
+These steps directly address the observed X‑mas‑tree scan and the recommended mitigations for network‑service discovery scans.",
+Q17,B,4,Deploy or ensure an intrusion detection/prevention system is monitoring for the characteristic flag combination and can drop the packets.,"The detector is highly confident (confidence = 1.00) that the flow is an Nmap X‑mas‑tree scan, which is a reconnaissance‑type attack that uses TCP packets with FIN, PSH and URG flags set [DET][CARD_NMAP_XMAS_TREE_SCAN].  
+
+To respond to this traffic you should:
+
+* Treat it as a malicious scan and block the source at the network edge [CAPEC-303] (XMAS scans are flagged by most IDS/IPS).  
+* Deploy or ensure an intrusion detection/prevention system is monitoring for the characteristic flag combination (FIN + PSH + URG) and can generate alerts or drop the packets [CAPEC-303][T1046-MIT]‑M1031.  
+* Apply network segmentation to isolate critical IoT devices from the scanning host, limiting the scan’s reach [T1046-MIT]‑M1030.  
+* Verify that unnecessary ports and services on the IoT devices are disabled or removed, reducing the value of the scan [T1046-MIT]‑M1042.  
+
+These steps directly address the observed X‑mas‑tree scan and the recommended mitigations for network‑service discovery scans.",
+Q17,B,5,"Apply network segmentation to isolate critical IoT devices from the scanning host, limiting the scan's reach.","The detector is highly confident (confidence = 1.00) that the flow is an Nmap X‑mas‑tree scan, which is a reconnaissance‑type attack that uses TCP packets with FIN, PSH and URG flags set [DET][CARD_NMAP_XMAS_TREE_SCAN].  
+
+To respond to this traffic you should:
+
+* Treat it as a malicious scan and block the source at the network edge [CAPEC-303] (XMAS scans are flagged by most IDS/IPS).  
+* Deploy or ensure an intrusion detection/prevention system is monitoring for the characteristic flag combination (FIN + PSH + URG) and can generate alerts or drop the packets [CAPEC-303][T1046-MIT]‑M1031.  
+* Apply network segmentation to isolate critical IoT devices from the scanning host, limiting the scan’s reach [T1046-MIT]‑M1030.  
+* Verify that unnecessary ports and services on the IoT devices are disabled or removed, reducing the value of the scan [T1046-MIT]‑M1042.  
+
+These steps directly address the observed X‑mas‑tree scan and the recommended mitigations for network‑service discovery scans.",
+Q17,B,6,"Verify that unnecessary ports and services on the IoT devices are disabled or removed, reducing the value of the scan.","The detector is highly confident (confidence = 1.00) that the flow is an Nmap X‑mas‑tree scan, which is a reconnaissance‑type attack that uses TCP packets with FIN, PSH and URG flags set [DET][CARD_NMAP_XMAS_TREE_SCAN].  
+
+To respond to this traffic you should:
+
+* Treat it as a malicious scan and block the source at the network edge [CAPEC-303] (XMAS scans are flagged by most IDS/IPS).  
+* Deploy or ensure an intrusion detection/prevention system is monitoring for the characteristic flag combination (FIN + PSH + URG) and can generate alerts or drop the packets [CAPEC-303][T1046-MIT]‑M1031.  
+* Apply network segmentation to isolate critical IoT devices from the scanning host, limiting the scan’s reach [T1046-MIT]‑M1030.  
+* Verify that unnecessary ports and services on the IoT devices are disabled or removed, reducing the value of the scan [T1046-MIT]‑M1042.  
+
+These steps directly address the observed X‑mas‑tree scan and the recommended mitigations for network‑service discovery scans.",
+Q33,B,1,The detector classifies the sample as normal MQTT publish traffic with full confidence.,"The detector classifies the sample as normal MQTT publish traffic with full confidence [DET]. The supporting knowledge entry describes this as benign device traffic that publishes messages to an MQTT broker [CARD_MQTT_Publish]. Because the flow is labeled “NORMAL” and no attack pattern is indicated, there is no official ATT&CK technique or CAPEC attack pattern that applies to this traffic [DET][CARD_MQTT_Publish].  
+
+The evidence does not list any CVE identifiers for this sample, so no related vulnerabilities are mentioned [DET].",
+Q33,B,2,The supporting knowledge entry describes this as benign device traffic that publishes messages to an MQTT broker.,"The detector classifies the sample as normal MQTT publish traffic with full confidence [DET]. The supporting knowledge entry describes this as benign device traffic that publishes messages to an MQTT broker [CARD_MQTT_Publish]. Because the flow is labeled “NORMAL” and no attack pattern is indicated, there is no official ATT&CK technique or CAPEC attack pattern that applies to this traffic [DET][CARD_MQTT_Publish].  
+
+The evidence does not list any CVE identifiers for this sample, so no related vulnerabilities are mentioned [DET].",
+Q33,B,3,There is no official ATT&CK technique or CAPEC attack pattern that applies to this traffic because it is labeled normal.,"The detector classifies the sample as normal MQTT publish traffic with full confidence [DET]. The supporting knowledge entry describes this as benign device traffic that publishes messages to an MQTT broker [CARD_MQTT_Publish]. Because the flow is labeled “NORMAL” and no attack pattern is indicated, there is no official ATT&CK technique or CAPEC attack pattern that applies to this traffic [DET][CARD_MQTT_Publish].  
+
+The evidence does not list any CVE identifiers for this sample, so no related vulnerabilities are mentioned [DET].",
+Q33,B,4,The evidence does not list any CVE identifiers for this sample.,"The detector classifies the sample as normal MQTT publish traffic with full confidence [DET]. The supporting knowledge entry describes this as benign device traffic that publishes messages to an MQTT broker [CARD_MQTT_Publish]. Because the flow is labeled “NORMAL” and no attack pattern is indicated, there is no official ATT&CK technique or CAPEC attack pattern that applies to this traffic [DET][CARD_MQTT_Publish].  
+
+The evidence does not list any CVE identifiers for this sample, so no related vulnerabilities are mentioned [DET].",
+Q16,C,1,The traffic is a TCP Xmas scan,"**What the flow looks like**
+
+- **Protocol:** TCP, destination port 1216 (an uncommon, high‑numbered port).  
+- **Duration:** ≈ 2 µs – the whole exchange happened in a single, almost‑instantaneous burst.  
+- **Packets:** 1 packet forward, 1 packet backward (2 packets total).  
+- **Payload:** 0 bytes in both directions – only TCP headers were exchanged.  
+- **Flags:**  
+  * Forward packet carries **FIN, PSH, ACK, URG**.  
+  * Backward packet carries **RST, ACK**.  
+- **Window size:** forward side advertises a 1024‑byte window; the reverse side advertises 0.  
+
+**Why a detector would flag it**
+
+1. **Very short, two‑packet flow** – most legitimate IoT communications involve at least a few data packets; a 2‑packet, sub‑microsecond flow is atypical.  
+2. **No payload** – the flow consists solely of control flags, which is common in port‑scanning or connection‑reset attacks.  
+3. **Mixed FIN/URG/PSH flags together** – the combination of FIN, URG, and PSH in a single packet is rare in normal traffic and often appears in crafted probes.  
+4. **RST from the responder** – the remote host immediately aborts the connection, a classic sign of a rejected or filtered port.  
+5. **Unusual destination port (1216)** – not a standard service port for most IoT devices, so the traffic looks suspicious.
+
+Putting those clues together, the flow most likely represents a **quick probe or scan** (e.g., a SYN‑less “FIN/URG” scan) that tried to hit an unexpected port, got an immediate reset, and carried no data. The detector flagged it because the statistical pattern (zero payload, extreme packet‑rate, odd flag mix, and tiny duration) deviates strongly from the baseline of normal IoT device traffic.",
+Q16,C,2,The attack family is Reconnaissance,"**What the flow looks like**
+
+- **Protocol:** TCP, destination port 1216 (an uncommon, high‑numbered port).  
+- **Duration:** ≈ 2 µs – the whole exchange happened in a single, almost‑instantaneous burst.  
+- **Packets:** 1 packet forward, 1 packet backward (2 packets total).  
+- **Payload:** 0 bytes in both directions – only TCP headers were exchanged.  
+- **Flags:**  
+  * Forward packet carries **FIN, PSH, ACK, URG**.  
+  * Backward packet carries **RST, ACK**.  
+- **Window size:** forward side advertises a 1024‑byte window; the reverse side advertises 0.  
+
+**Why a detector would flag it**
+
+1. **Very short, two‑packet flow** – most legitimate IoT communications involve at least a few data packets; a 2‑packet, sub‑microsecond flow is atypical.  
+2. **No payload** – the flow consists solely of control flags, which is common in port‑scanning or connection‑reset attacks.  
+3. **Mixed FIN/URG/PSH flags together** – the combination of FIN, URG, and PSH in a single packet is rare in normal traffic and often appears in crafted probes.  
+4. **RST from the responder** – the remote host immediately aborts the connection, a classic sign of a rejected or filtered port.  
+5. **Unusual destination port (1216)** – not a standard service port for most IoT devices, so the traffic looks suspicious.
+
+Putting those clues together, the flow most likely represents a **quick probe or scan** (e.g., a SYN‑less “FIN/URG” scan) that tried to hit an unexpected port, got an immediate reset, and carried no data. The detector flagged it because the statistical pattern (zero payload, extreme packet‑rate, odd flag mix, and tiny duration) deviates strongly from the baseline of normal IoT device traffic.",
+Q16,C,3,The detector confidence is 1.00,"**What the flow looks like**
+
+- **Protocol:** TCP, destination port 1216 (an uncommon, high‑numbered port).  
+- **Duration:** ≈ 2 µs – the whole exchange happened in a single, almost‑instantaneous burst.  
+- **Packets:** 1 packet forward, 1 packet backward (2 packets total).  
+- **Payload:** 0 bytes in both directions – only TCP headers were exchanged.  
+- **Flags:**  
+  * Forward packet carries **FIN, PSH, ACK, URG**.  
+  * Backward packet carries **RST, ACK**.  
+- **Window size:** forward side advertises a 1024‑byte window; the reverse side advertises 0.  
+
+**Why a detector would flag it**
+
+1. **Very short, two‑packet flow** – most legitimate IoT communications involve at least a few data packets; a 2‑packet, sub‑microsecond flow is atypical.  
+2. **No payload** – the flow consists solely of control flags, which is common in port‑scanning or connection‑reset attacks.  
+3. **Mixed FIN/URG/PSH flags together** – the combination of FIN, URG, and PSH in a single packet is rare in normal traffic and often appears in crafted probes.  
+4. **RST from the responder** – the remote host immediately aborts the connection, a classic sign of a rejected or filtered port.  
+5. **Unusual destination port (1216)** – not a standard service port for most IoT devices, so the traffic looks suspicious.
+
+Putting those clues together, the flow most likely represents a **quick probe or scan** (e.g., a SYN‑less “FIN/URG” scan) that tried to hit an unexpected port, got an immediate reset, and carried no data. The detector flagged it because the statistical pattern (zero payload, extreme packet‑rate, odd flag mix, and tiny duration) deviates strongly from the baseline of normal IoT device traffic.",
+Q16,C,4,A key feature pushing the detector was fwd_URG_flag_count = 1,"**What the flow looks like**
+
+- **Protocol:** TCP, destination port 1216 (an uncommon, high‑numbered port).  
+- **Duration:** ≈ 2 µs – the whole exchange happened in a single, almost‑instantaneous burst.  
+- **Packets:** 1 packet forward, 1 packet backward (2 packets total).  
+- **Payload:** 0 bytes in both directions – only TCP headers were exchanged.  
+- **Flags:**  
+  * Forward packet carries **FIN, PSH, ACK, URG**.  
+  * Backward packet carries **RST, ACK**.  
+- **Window size:** forward side advertises a 1024‑byte window; the reverse side advertises 0.  
+
+**Why a detector would flag it**
+
+1. **Very short, two‑packet flow** – most legitimate IoT communications involve at least a few data packets; a 2‑packet, sub‑microsecond flow is atypical.  
+2. **No payload** – the flow consists solely of control flags, which is common in port‑scanning or connection‑reset attacks.  
+3. **Mixed FIN/URG/PSH flags together** – the combination of FIN, URG, and PSH in a single packet is rare in normal traffic and often appears in crafted probes.  
+4. **RST from the responder** – the remote host immediately aborts the connection, a classic sign of a rejected or filtered port.  
+5. **Unusual destination port (1216)** – not a standard service port for most IoT devices, so the traffic looks suspicious.
+
+Putting those clues together, the flow most likely represents a **quick probe or scan** (e.g., a SYN‑less “FIN/URG” scan) that tried to hit an unexpected port, got an immediate reset, and carried no data. The detector flagged it because the statistical pattern (zero payload, extreme packet‑rate, odd flag mix, and tiny duration) deviates strongly from the baseline of normal IoT device traffic.",
+Q16,C,5,A key feature pushing the detector was payload_bytes_per_second = 0.0,"**What the flow looks like**
+
+- **Protocol:** TCP, destination port 1216 (an uncommon, high‑numbered port).  
+- **Duration:** ≈ 2 µs – the whole exchange happened in a single, almost‑instantaneous burst.  
+- **Packets:** 1 packet forward, 1 packet backward (2 packets total).  
+- **Payload:** 0 bytes in both directions – only TCP headers were exchanged.  
+- **Flags:**  
+  * Forward packet carries **FIN, PSH, ACK, URG**.  
+  * Backward packet carries **RST, ACK**.  
+- **Window size:** forward side advertises a 1024‑byte window; the reverse side advertises 0.  
+
+**Why a detector would flag it**
+
+1. **Very short, two‑packet flow** – most legitimate IoT communications involve at least a few data packets; a 2‑packet, sub‑microsecond flow is atypical.  
+2. **No payload** – the flow consists solely of control flags, which is common in port‑scanning or connection‑reset attacks.  
+3. **Mixed FIN/URG/PSH flags together** – the combination of FIN, URG, and PSH in a single packet is rare in normal traffic and often appears in crafted probes.  
+4. **RST from the responder** – the remote host immediately aborts the connection, a classic sign of a rejected or filtered port.  
+5. **Unusual destination port (1216)** – not a standard service port for most IoT devices, so the traffic looks suspicious.
+
+Putting those clues together, the flow most likely represents a **quick probe or scan** (e.g., a SYN‑less “FIN/URG” scan) that tried to hit an unexpected port, got an immediate reset, and carried no data. The detector flagged it because the statistical pattern (zero payload, extreme packet‑rate, odd flag mix, and tiny duration) deviates strongly from the baseline of normal IoT device traffic.",
+Q36,B,1,The detector classifies the sample as normal traffic from a Wipro smart bulb.,"The detector classifies the sample as normal traffic from a Wipro smart bulb — it is not identified as any attack pattern in the evidence [DET][CARD_Wipro_bulb]. Because the traffic is labeled “NORMAL,” there is no ATT&CK technique or CAPEC attack pattern associated with it in the provided evidence, and no CVE identifiers are mentioned for this flow.",
+Q36,B,2,The traffic is not identified as any attack pattern in the evidence.,"The detector classifies the sample as normal traffic from a Wipro smart bulb — it is not identified as any attack pattern in the evidence [DET][CARD_Wipro_bulb]. Because the traffic is labeled “NORMAL,” there is no ATT&CK technique or CAPEC attack pattern associated with it in the provided evidence, and no CVE identifiers are mentioned for this flow.",
+Q36,B,3,There is no ATT&CK technique or CAPEC attack pattern associated with it in the provided evidence.,"The detector classifies the sample as normal traffic from a Wipro smart bulb — it is not identified as any attack pattern in the evidence [DET][CARD_Wipro_bulb]. Because the traffic is labeled “NORMAL,” there is no ATT&CK technique or CAPEC attack pattern associated with it in the provided evidence, and no CVE identifiers are mentioned for this flow.",
+Q36,B,4,No CVE identifiers are mentioned for this flow.,"The detector classifies the sample as normal traffic from a Wipro smart bulb — it is not identified as any attack pattern in the evidence [DET][CARD_Wipro_bulb]. Because the traffic is labeled “NORMAL,” there is no ATT&CK technique or CAPEC attack pattern associated with it in the provided evidence, and no CVE identifiers are mentioned for this flow.",
+Q08,A,1,The model is 100% confident the flow is an ARP poisoning attack,"**What you’re seeing:**  
+The model is 100 % confident that this flow is an **ARP poisoning** attack (a type of spoofing). The key clues are extremely short inter‑packet gaps (≈8 µs) and very small, uniform payloads in the backward direction—typical of rapid ARP request/reply bursts used to poison a LAN’s ARP table.
+
+**Immediate response steps**
+
+1. **Contain the source**  
+   - Identify the MAC/IP that is sending the suspicious ARP packets (you can pull this from the flow’s 5‑tuple or from your switch’s ARP table).  
+   - Block that MAC address on the switch (port‑security) or add a static deny rule on the upstream firewall.
+
+2. **Validate the ARP tables**  
+   - On critical devices (gateways, servers, PLCs) run `arp -a` (or the vendor‑specific command) and compare the MACs to the known good list.  
+   - If any entry is wrong, manually correct it or flush the ARP cache.
+
+3. **Enable ARP inspection / DHCP snooping**  
+   - If your switches support Dynamic ARP Inspection (DAI) or IP‑Source Guard, turn them on. They will drop forged ARP replies automatically.
+
+4. **Log and alert**  
+   - Generate a security‑event ticket with the flow details (timestamp, source/destination MAC/IP, interface).  
+   - Correlate with other logs (DHCP, authentication) to see if the attacker moved laterally.
+
+5. **Post‑incident actions**  
+   - Capture a packet trace (pcap) of the offending flow for forensic analysis.  
+   - Review network segmentation; isolate IoT segments from the rest of the LAN.  
+   - Update IDS/IPS signatures to flag similar ARP‑burst patterns.
+
+**Bottom line:** Stop the offending host, clean up any poisoned ARP entries, and harden the network against spoofed ARP traffic. If the source is a compromised IoT device, consider taking it offline for firmware review or replacement.",
+Q08,A,2,ARP poisoning involves rapid ARP request/reply bursts to poison a LAN's ARP table,"**What you’re seeing:**  
+The model is 100 % confident that this flow is an **ARP poisoning** attack (a type of spoofing). The key clues are extremely short inter‑packet gaps (≈8 µs) and very small, uniform payloads in the backward direction—typical of rapid ARP request/reply bursts used to poison a LAN’s ARP table.
+
+**Immediate response steps**
+
+1. **Contain the source**  
+   - Identify the MAC/IP that is sending the suspicious ARP packets (you can pull this from the flow’s 5‑tuple or from your switch’s ARP table).  
+   - Block that MAC address on the switch (port‑security) or add a static deny rule on the upstream firewall.
+
+2. **Validate the ARP tables**  
+   - On critical devices (gateways, servers, PLCs) run `arp -a` (or the vendor‑specific command) and compare the MACs to the known good list.  
+   - If any entry is wrong, manually correct it or flush the ARP cache.
+
+3. **Enable ARP inspection / DHCP snooping**  
+   - If your switches support Dynamic ARP Inspection (DAI) or IP‑Source Guard, turn them on. They will drop forged ARP replies automatically.
+
+4. **Log and alert**  
+   - Generate a security‑event ticket with the flow details (timestamp, source/destination MAC/IP, interface).  
+   - Correlate with other logs (DHCP, authentication) to see if the attacker moved laterally.
+
+5. **Post‑incident actions**  
+   - Capture a packet trace (pcap) of the offending flow for forensic analysis.  
+   - Review network segmentation; isolate IoT segments from the rest of the LAN.  
+   - Update IDS/IPS signatures to flag similar ARP‑burst patterns.
+
+**Bottom line:** Stop the offending host, clean up any poisoned ARP entries, and harden the network against spoofed ARP traffic. If the source is a compromised IoT device, consider taking it offline for firmware review or replacement.",
+Q08,A,3,Blocking the suspicious MAC address on the switch or firewall helps mitigate the attack,"**What you’re seeing:**  
+The model is 100 % confident that this flow is an **ARP poisoning** attack (a type of spoofing). The key clues are extremely short inter‑packet gaps (≈8 µs) and very small, uniform payloads in the backward direction—typical of rapid ARP request/reply bursts used to poison a LAN’s ARP table.
+
+**Immediate response steps**
+
+1. **Contain the source**  
+   - Identify the MAC/IP that is sending the suspicious ARP packets (you can pull this from the flow’s 5‑tuple or from your switch’s ARP table).  
+   - Block that MAC address on the switch (port‑security) or add a static deny rule on the upstream firewall.
+
+2. **Validate the ARP tables**  
+   - On critical devices (gateways, servers, PLCs) run `arp -a` (or the vendor‑specific command) and compare the MACs to the known good list.  
+   - If any entry is wrong, manually correct it or flush the ARP cache.
+
+3. **Enable ARP inspection / DHCP snooping**  
+   - If your switches support Dynamic ARP Inspection (DAI) or IP‑Source Guard, turn them on. They will drop forged ARP replies automatically.
+
+4. **Log and alert**  
+   - Generate a security‑event ticket with the flow details (timestamp, source/destination MAC/IP, interface).  
+   - Correlate with other logs (DHCP, authentication) to see if the attacker moved laterally.
+
+5. **Post‑incident actions**  
+   - Capture a packet trace (pcap) of the offending flow for forensic analysis.  
+   - Review network segmentation; isolate IoT segments from the rest of the LAN.  
+   - Update IDS/IPS signatures to flag similar ARP‑burst patterns.
+
+**Bottom line:** Stop the offending host, clean up any poisoned ARP entries, and harden the network against spoofed ARP traffic. If the source is a compromised IoT device, consider taking it offline for firmware review or replacement.",
+Q08,A,4,Validating ARP tables and comparing MACs to a known good list helps respond to the attack,"**What you’re seeing:**  
+The model is 100 % confident that this flow is an **ARP poisoning** attack (a type of spoofing). The key clues are extremely short inter‑packet gaps (≈8 µs) and very small, uniform payloads in the backward direction—typical of rapid ARP request/reply bursts used to poison a LAN’s ARP table.
+
+**Immediate response steps**
+
+1. **Contain the source**  
+   - Identify the MAC/IP that is sending the suspicious ARP packets (you can pull this from the flow’s 5‑tuple or from your switch’s ARP table).  
+   - Block that MAC address on the switch (port‑security) or add a static deny rule on the upstream firewall.
+
+2. **Validate the ARP tables**  
+   - On critical devices (gateways, servers, PLCs) run `arp -a` (or the vendor‑specific command) and compare the MACs to the known good list.  
+   - If any entry is wrong, manually correct it or flush the ARP cache.
+
+3. **Enable ARP inspection / DHCP snooping**  
+   - If your switches support Dynamic ARP Inspection (DAI) or IP‑Source Guard, turn them on. They will drop forged ARP replies automatically.
+
+4. **Log and alert**  
+   - Generate a security‑event ticket with the flow details (timestamp, source/destination MAC/IP, interface).  
+   - Correlate with other logs (DHCP, authentication) to see if the attacker moved laterally.
+
+5. **Post‑incident actions**  
+   - Capture a packet trace (pcap) of the offending flow for forensic analysis.  
+   - Review network segmentation; isolate IoT segments from the rest of the LAN.  
+   - Update IDS/IPS signatures to flag similar ARP‑burst patterns.
+
+**Bottom line:** Stop the offending host, clean up any poisoned ARP entries, and harden the network against spoofed ARP traffic. If the source is a compromised IoT device, consider taking it offline for firmware review or replacement.",
+Q08,A,5,Enabling Dynamic ARP Inspection (DAI) drops forged ARP replies automatically,"**What you’re seeing:**  
+The model is 100 % confident that this flow is an **ARP poisoning** attack (a type of spoofing). The key clues are extremely short inter‑packet gaps (≈8 µs) and very small, uniform payloads in the backward direction—typical of rapid ARP request/reply bursts used to poison a LAN’s ARP table.
+
+**Immediate response steps**
+
+1. **Contain the source**  
+   - Identify the MAC/IP that is sending the suspicious ARP packets (you can pull this from the flow’s 5‑tuple or from your switch’s ARP table).  
+   - Block that MAC address on the switch (port‑security) or add a static deny rule on the upstream firewall.
+
+2. **Validate the ARP tables**  
+   - On critical devices (gateways, servers, PLCs) run `arp -a` (or the vendor‑specific command) and compare the MACs to the known good list.  
+   - If any entry is wrong, manually correct it or flush the ARP cache.
+
+3. **Enable ARP inspection / DHCP snooping**  
+   - If your switches support Dynamic ARP Inspection (DAI) or IP‑Source Guard, turn them on. They will drop forged ARP replies automatically.
+
+4. **Log and alert**  
+   - Generate a security‑event ticket with the flow details (timestamp, source/destination MAC/IP, interface).  
+   - Correlate with other logs (DHCP, authentication) to see if the attacker moved laterally.
+
+5. **Post‑incident actions**  
+   - Capture a packet trace (pcap) of the offending flow for forensic analysis.  
+   - Review network segmentation; isolate IoT segments from the rest of the LAN.  
+   - Update IDS/IPS signatures to flag similar ARP‑burst patterns.
+
+**Bottom line:** Stop the offending host, clean up any poisoned ARP entries, and harden the network against spoofed ARP traffic. If the source is a compromised IoT device, consider taking it offline for firmware review or replacement.",
+Q08,A,6,"Logging, alerting, and capturing a packet trace are part of incident response","**What you’re seeing:**  
+The model is 100 % confident that this flow is an **ARP poisoning** attack (a type of spoofing). The key clues are extremely short inter‑packet gaps (≈8 µs) and very small, uniform payloads in the backward direction—typical of rapid ARP request/reply bursts used to poison a LAN’s ARP table.
+
+**Immediate response steps**
+
+1. **Contain the source**  
+   - Identify the MAC/IP that is sending the suspicious ARP packets (you can pull this from the flow’s 5‑tuple or from your switch’s ARP table).  
+   - Block that MAC address on the switch (port‑security) or add a static deny rule on the upstream firewall.
+
+2. **Validate the ARP tables**  
+   - On critical devices (gateways, servers, PLCs) run `arp -a` (or the vendor‑specific command) and compare the MACs to the known good list.  
+   - If any entry is wrong, manually correct it or flush the ARP cache.
+
+3. **Enable ARP inspection / DHCP snooping**  
+   - If your switches support Dynamic ARP Inspection (DAI) or IP‑Source Guard, turn them on. They will drop forged ARP replies automatically.
+
+4. **Log and alert**  
+   - Generate a security‑event ticket with the flow details (timestamp, source/destination MAC/IP, interface).  
+   - Correlate with other logs (DHCP, authentication) to see if the attacker moved laterally.
+
+5. **Post‑incident actions**  
+   - Capture a packet trace (pcap) of the offending flow for forensic analysis.  
+   - Review network segmentation; isolate IoT segments from the rest of the LAN.  
+   - Update IDS/IPS signatures to flag similar ARP‑burst patterns.
+
+**Bottom line:** Stop the offending host, clean up any poisoned ARP entries, and harden the network against spoofed ARP traffic. If the source is a compromised IoT device, consider taking it offline for firmware review or replacement.",
+Q08,A,7,Hardening the network against spoofed ARP traffic is recommended,"**What you’re seeing:**  
+The model is 100 % confident that this flow is an **ARP poisoning** attack (a type of spoofing). The key clues are extremely short inter‑packet gaps (≈8 µs) and very small, uniform payloads in the backward direction—typical of rapid ARP request/reply bursts used to poison a LAN’s ARP table.
+
+**Immediate response steps**
+
+1. **Contain the source**  
+   - Identify the MAC/IP that is sending the suspicious ARP packets (you can pull this from the flow’s 5‑tuple or from your switch’s ARP table).  
+   - Block that MAC address on the switch (port‑security) or add a static deny rule on the upstream firewall.
+
+2. **Validate the ARP tables**  
+   - On critical devices (gateways, servers, PLCs) run `arp -a` (or the vendor‑specific command) and compare the MACs to the known good list.  
+   - If any entry is wrong, manually correct it or flush the ARP cache.
+
+3. **Enable ARP inspection / DHCP snooping**  
+   - If your switches support Dynamic ARP Inspection (DAI) or IP‑Source Guard, turn them on. They will drop forged ARP replies automatically.
+
+4. **Log and alert**  
+   - Generate a security‑event ticket with the flow details (timestamp, source/destination MAC/IP, interface).  
+   - Correlate with other logs (DHCP, authentication) to see if the attacker moved laterally.
+
+5. **Post‑incident actions**  
+   - Capture a packet trace (pcap) of the offending flow for forensic analysis.  
+   - Review network segmentation; isolate IoT segments from the rest of the LAN.  
+   - Update IDS/IPS signatures to flag similar ARP‑burst patterns.
+
+**Bottom line:** Stop the offending host, clean up any poisoned ARP entries, and harden the network against spoofed ARP traffic. If the source is a compromised IoT device, consider taking it offline for firmware review or replacement.",
+Q01,B,1,The detector flagged the sample as a DoS SYN flood generated with Hping,"The detector flagged the sample as a **DoS SYN flood generated with Hping** [DET][CARD_DOS_SYN_Hping].  
+It gave a label of **DOS_SYN_Hping** with 100 % confidence, indicating the traffic is considered an attack belonging to the DoS family [DET].  
+
+The classifier was driven by flow features that match the known pattern of a TCP SYN flood:  
+
+* The destination port is **21** (the FTP control port) [DET].  
+* The forward‑packet payload minimum is **120 bytes**, showing a non‑zero payload in each tiny packet [DET].  
+* The overall payload rate is extremely high (**≈9.3 MB/s**) [DET].  
+* Backward traffic contains only **20 bytes** of header data, implying almost no response from the target [DET].  
+* The standard deviation of packet payload sizes is **≈84.85 bytes**, consistent with many similar‑sized SYN packets [DET].  
+
+These characteristics correspond to the description of a TCP SYN flood where an attacker sends a very large number of TCP SYN packets to exhaust the target’s resources [CARD_DOS_SYN_Hping].  
+
+Thus, the traffic is a TCP SYN flood (DoS) generated with Hping, and the detector classified it as such because the flow’s destination port, high payload‑per‑second rate, minimal response traffic, and uniform packet sizes match the known signature of this attack.",
+Q01,B,2,It gave a label of DOS_SYN_Hping with 100 percent confidence,"The detector flagged the sample as a **DoS SYN flood generated with Hping** [DET][CARD_DOS_SYN_Hping].  
+It gave a label of **DOS_SYN_Hping** with 100 % confidence, indicating the traffic is considered an attack belonging to the DoS family [DET].  
+
+The classifier was driven by flow features that match the known pattern of a TCP SYN flood:  
+
+* The destination port is **21** (the FTP control port) [DET].  
+* The forward‑packet payload minimum is **120 bytes**, showing a non‑zero payload in each tiny packet [DET].  
+* The overall payload rate is extremely high (**≈9.3 MB/s**) [DET].  
+* Backward traffic contains only **20 bytes** of header data, implying almost no response from the target [DET].  
+* The standard deviation of packet payload sizes is **≈84.85 bytes**, consistent with many similar‑sized SYN packets [DET].  
+
+These characteristics correspond to the description of a TCP SYN flood where an attacker sends a very large number of TCP SYN packets to exhaust the target’s resources [CARD_DOS_SYN_Hping].  
+
+Thus, the traffic is a TCP SYN flood (DoS) generated with Hping, and the detector classified it as such because the flow’s destination port, high payload‑per‑second rate, minimal response traffic, and uniform packet sizes match the known signature of this attack.",
+Q01,B,3,The traffic is considered an attack belonging to the DoS family,"The detector flagged the sample as a **DoS SYN flood generated with Hping** [DET][CARD_DOS_SYN_Hping].  
+It gave a label of **DOS_SYN_Hping** with 100 % confidence, indicating the traffic is considered an attack belonging to the DoS family [DET].  
+
+The classifier was driven by flow features that match the known pattern of a TCP SYN flood:  
+
+* The destination port is **21** (the FTP control port) [DET].  
+* The forward‑packet payload minimum is **120 bytes**, showing a non‑zero payload in each tiny packet [DET].  
+* The overall payload rate is extremely high (**≈9.3 MB/s**) [DET].  
+* Backward traffic contains only **20 bytes** of header data, implying almost no response from the target [DET].  
+* The standard deviation of packet payload sizes is **≈84.85 bytes**, consistent with many similar‑sized SYN packets [DET].  
+
+These characteristics correspond to the description of a TCP SYN flood where an attacker sends a very large number of TCP SYN packets to exhaust the target’s resources [CARD_DOS_SYN_Hping].  
+
+Thus, the traffic is a TCP SYN flood (DoS) generated with Hping, and the detector classified it as such because the flow’s destination port, high payload‑per‑second rate, minimal response traffic, and uniform packet sizes match the known signature of this attack.",
+Q01,B,4,The destination port is 21,"The detector flagged the sample as a **DoS SYN flood generated with Hping** [DET][CARD_DOS_SYN_Hping].  
+It gave a label of **DOS_SYN_Hping** with 100 % confidence, indicating the traffic is considered an attack belonging to the DoS family [DET].  
+
+The classifier was driven by flow features that match the known pattern of a TCP SYN flood:  
+
+* The destination port is **21** (the FTP control port) [DET].  
+* The forward‑packet payload minimum is **120 bytes**, showing a non‑zero payload in each tiny packet [DET].  
+* The overall payload rate is extremely high (**≈9.3 MB/s**) [DET].  
+* Backward traffic contains only **20 bytes** of header data, implying almost no response from the target [DET].  
+* The standard deviation of packet payload sizes is **≈84.85 bytes**, consistent with many similar‑sized SYN packets [DET].  
+
+These characteristics correspond to the description of a TCP SYN flood where an attacker sends a very large number of TCP SYN packets to exhaust the target’s resources [CARD_DOS_SYN_Hping].  
+
+Thus, the traffic is a TCP SYN flood (DoS) generated with Hping, and the detector classified it as such because the flow’s destination port, high payload‑per‑second rate, minimal response traffic, and uniform packet sizes match the known signature of this attack.",
+Q01,B,5,The forward packet payload minimum is 120 bytes,"The detector flagged the sample as a **DoS SYN flood generated with Hping** [DET][CARD_DOS_SYN_Hping].  
+It gave a label of **DOS_SYN_Hping** with 100 % confidence, indicating the traffic is considered an attack belonging to the DoS family [DET].  
+
+The classifier was driven by flow features that match the known pattern of a TCP SYN flood:  
+
+* The destination port is **21** (the FTP control port) [DET].  
+* The forward‑packet payload minimum is **120 bytes**, showing a non‑zero payload in each tiny packet [DET].  
+* The overall payload rate is extremely high (**≈9.3 MB/s**) [DET].  
+* Backward traffic contains only **20 bytes** of header data, implying almost no response from the target [DET].  
+* The standard deviation of packet payload sizes is **≈84.85 bytes**, consistent with many similar‑sized SYN packets [DET].  
+
+These characteristics correspond to the description of a TCP SYN flood where an attacker sends a very large number of TCP SYN packets to exhaust the target’s resources [CARD_DOS_SYN_Hping].  
+
+Thus, the traffic is a TCP SYN flood (DoS) generated with Hping, and the detector classified it as such because the flow’s destination port, high payload‑per‑second rate, minimal response traffic, and uniform packet sizes match the known signature of this attack.",
+Q01,B,6,"The overall payload rate is extremely high, approximately 9.3 MB/s","The detector flagged the sample as a **DoS SYN flood generated with Hping** [DET][CARD_DOS_SYN_Hping].  
+It gave a label of **DOS_SYN_Hping** with 100 % confidence, indicating the traffic is considered an attack belonging to the DoS family [DET].  
+
+The classifier was driven by flow features that match the known pattern of a TCP SYN flood:  
+
+* The destination port is **21** (the FTP control port) [DET].  
+* The forward‑packet payload minimum is **120 bytes**, showing a non‑zero payload in each tiny packet [DET].  
+* The overall payload rate is extremely high (**≈9.3 MB/s**) [DET].  
+* Backward traffic contains only **20 bytes** of header data, implying almost no response from the target [DET].  
+* The standard deviation of packet payload sizes is **≈84.85 bytes**, consistent with many similar‑sized SYN packets [DET].  
+
+These characteristics correspond to the description of a TCP SYN flood where an attacker sends a very large number of TCP SYN packets to exhaust the target’s resources [CARD_DOS_SYN_Hping].  
+
+Thus, the traffic is a TCP SYN flood (DoS) generated with Hping, and the detector classified it as such because the flow’s destination port, high payload‑per‑second rate, minimal response traffic, and uniform packet sizes match the known signature of this attack.",
+Q01,B,7,Backward traffic contains only 20 bytes of header data,"The detector flagged the sample as a **DoS SYN flood generated with Hping** [DET][CARD_DOS_SYN_Hping].  
+It gave a label of **DOS_SYN_Hping** with 100 % confidence, indicating the traffic is considered an attack belonging to the DoS family [DET].  
+
+The classifier was driven by flow features that match the known pattern of a TCP SYN flood:  
+
+* The destination port is **21** (the FTP control port) [DET].  
+* The forward‑packet payload minimum is **120 bytes**, showing a non‑zero payload in each tiny packet [DET].  
+* The overall payload rate is extremely high (**≈9.3 MB/s**) [DET].  
+* Backward traffic contains only **20 bytes** of header data, implying almost no response from the target [DET].  
+* The standard deviation of packet payload sizes is **≈84.85 bytes**, consistent with many similar‑sized SYN packets [DET].  
+
+These characteristics correspond to the description of a TCP SYN flood where an attacker sends a very large number of TCP SYN packets to exhaust the target’s resources [CARD_DOS_SYN_Hping].  
+
+Thus, the traffic is a TCP SYN flood (DoS) generated with Hping, and the detector classified it as such because the flow’s destination port, high payload‑per‑second rate, minimal response traffic, and uniform packet sizes match the known signature of this attack.",
+Q01,B,8,The standard deviation of packet payload sizes is approximately 84.85 bytes,"The detector flagged the sample as a **DoS SYN flood generated with Hping** [DET][CARD_DOS_SYN_Hping].  
+It gave a label of **DOS_SYN_Hping** with 100 % confidence, indicating the traffic is considered an attack belonging to the DoS family [DET].  
+
+The classifier was driven by flow features that match the known pattern of a TCP SYN flood:  
+
+* The destination port is **21** (the FTP control port) [DET].  
+* The forward‑packet payload minimum is **120 bytes**, showing a non‑zero payload in each tiny packet [DET].  
+* The overall payload rate is extremely high (**≈9.3 MB/s**) [DET].  
+* Backward traffic contains only **20 bytes** of header data, implying almost no response from the target [DET].  
+* The standard deviation of packet payload sizes is **≈84.85 bytes**, consistent with many similar‑sized SYN packets [DET].  
+
+These characteristics correspond to the description of a TCP SYN flood where an attacker sends a very large number of TCP SYN packets to exhaust the target’s resources [CARD_DOS_SYN_Hping].  
+
+Thus, the traffic is a TCP SYN flood (DoS) generated with Hping, and the detector classified it as such because the flow’s destination port, high payload‑per‑second rate, minimal response traffic, and uniform packet sizes match the known signature of this attack.",
+Q01,B,9,An attacker sends a very large number of TCP SYN packets to exhaust the target's resources in a TCP SYN flood,"The detector flagged the sample as a **DoS SYN flood generated with Hping** [DET][CARD_DOS_SYN_Hping].  
+It gave a label of **DOS_SYN_Hping** with 100 % confidence, indicating the traffic is considered an attack belonging to the DoS family [DET].  
+
+The classifier was driven by flow features that match the known pattern of a TCP SYN flood:  
+
+* The destination port is **21** (the FTP control port) [DET].  
+* The forward‑packet payload minimum is **120 bytes**, showing a non‑zero payload in each tiny packet [DET].  
+* The overall payload rate is extremely high (**≈9.3 MB/s**) [DET].  
+* Backward traffic contains only **20 bytes** of header data, implying almost no response from the target [DET].  
+* The standard deviation of packet payload sizes is **≈84.85 bytes**, consistent with many similar‑sized SYN packets [DET].  
+
+These characteristics correspond to the description of a TCP SYN flood where an attacker sends a very large number of TCP SYN packets to exhaust the target’s resources [CARD_DOS_SYN_Hping].  
+
+Thus, the traffic is a TCP SYN flood (DoS) generated with Hping, and the detector classified it as such because the flow’s destination port, high payload‑per‑second rate, minimal response traffic, and uniform packet sizes match the known signature of this attack.",
+Q35,B,1,The detector classifies this flow as NORMAL with full confidence of 1.00.,"The detector classifies this flow as **NORMAL** with full confidence (1.00) [DET]. It matches the “Wipro smart bulb” label, which represents benign traffic from a Wipro IoT light bulb to its cloud service and local network [CARD_Wipro_bulb].  
+
+**Response:** No special mitigation or incident response is required; the traffic can be allowed to continue as normal operation.",
+Q35,B,2,It matches the Wipro smart bulb label representing benign traffic from a Wipro IoT light bulb.,"The detector classifies this flow as **NORMAL** with full confidence (1.00) [DET]. It matches the “Wipro smart bulb” label, which represents benign traffic from a Wipro IoT light bulb to its cloud service and local network [CARD_Wipro_bulb].  
+
+**Response:** No special mitigation or incident response is required; the traffic can be allowed to continue as normal operation.",
+Q35,B,3,No special mitigation or incident response is required.,"The detector classifies this flow as **NORMAL** with full confidence (1.00) [DET]. It matches the “Wipro smart bulb” label, which represents benign traffic from a Wipro IoT light bulb to its cloud service and local network [CARD_Wipro_bulb].  
+
+**Response:** No special mitigation or incident response is required; the traffic can be allowed to continue as normal operation.",
+Q11,B,1,The detector is 100 percent confident that the flow is an Nmap TCP port-scan,"The detector is 100 % confident that the flow is an Nmap TCP port‑scan and classifies it as a Reconnaissance attack [DET].  
+Nmap TCP scans probe many TCP ports to discover which services are listening; in the dataset these scans consist of single‑packet flows to thousands of destination ports and finish in a few microseconds [CARD_NMAP_TCP_scan].  
+Port scanning is a recognized reconnaissance technique that aims to map open, closed, filtered or unfiltered ports on a target [CAPEC-300].  
+Therefore, the appropriate response is to treat this traffic as malicious reconnaissance and take blocking or alerting actions (e.g., drop the packets, generate an intrusion‑detection alert, and consider applying network‑segmentation or IDS/IPS rules to stop remote service scans) [T1046-MIT].",
+Q11,B,2,The detector classifies the flow as a Reconnaissance attack,"The detector is 100 % confident that the flow is an Nmap TCP port‑scan and classifies it as a Reconnaissance attack [DET].  
+Nmap TCP scans probe many TCP ports to discover which services are listening; in the dataset these scans consist of single‑packet flows to thousands of destination ports and finish in a few microseconds [CARD_NMAP_TCP_scan].  
+Port scanning is a recognized reconnaissance technique that aims to map open, closed, filtered or unfiltered ports on a target [CAPEC-300].  
+Therefore, the appropriate response is to treat this traffic as malicious reconnaissance and take blocking or alerting actions (e.g., drop the packets, generate an intrusion‑detection alert, and consider applying network‑segmentation or IDS/IPS rules to stop remote service scans) [T1046-MIT].",
+Q11,B,3,Nmap TCP scans probe many TCP ports to discover which services are listening,"The detector is 100 % confident that the flow is an Nmap TCP port‑scan and classifies it as a Reconnaissance attack [DET].  
+Nmap TCP scans probe many TCP ports to discover which services are listening; in the dataset these scans consist of single‑packet flows to thousands of destination ports and finish in a few microseconds [CARD_NMAP_TCP_scan].  
+Port scanning is a recognized reconnaissance technique that aims to map open, closed, filtered or unfiltered ports on a target [CAPEC-300].  
+Therefore, the appropriate response is to treat this traffic as malicious reconnaissance and take blocking or alerting actions (e.g., drop the packets, generate an intrusion‑detection alert, and consider applying network‑segmentation or IDS/IPS rules to stop remote service scans) [T1046-MIT].",
+Q11,B,4,In the dataset these scans consist of single-packet flows to thousands of destination ports and finish in a few microseconds,"The detector is 100 % confident that the flow is an Nmap TCP port‑scan and classifies it as a Reconnaissance attack [DET].  
+Nmap TCP scans probe many TCP ports to discover which services are listening; in the dataset these scans consist of single‑packet flows to thousands of destination ports and finish in a few microseconds [CARD_NMAP_TCP_scan].  
+Port scanning is a recognized reconnaissance technique that aims to map open, closed, filtered or unfiltered ports on a target [CAPEC-300].  
+Therefore, the appropriate response is to treat this traffic as malicious reconnaissance and take blocking or alerting actions (e.g., drop the packets, generate an intrusion‑detection alert, and consider applying network‑segmentation or IDS/IPS rules to stop remote service scans) [T1046-MIT].",
+Q11,B,5,"Port scanning is a recognized reconnaissance technique that aims to map open, closed, filtered or unfiltered ports on a target","The detector is 100 % confident that the flow is an Nmap TCP port‑scan and classifies it as a Reconnaissance attack [DET].  
+Nmap TCP scans probe many TCP ports to discover which services are listening; in the dataset these scans consist of single‑packet flows to thousands of destination ports and finish in a few microseconds [CARD_NMAP_TCP_scan].  
+Port scanning is a recognized reconnaissance technique that aims to map open, closed, filtered or unfiltered ports on a target [CAPEC-300].  
+Therefore, the appropriate response is to treat this traffic as malicious reconnaissance and take blocking or alerting actions (e.g., drop the packets, generate an intrusion‑detection alert, and consider applying network‑segmentation or IDS/IPS rules to stop remote service scans) [T1046-MIT].",
+Q11,B,6,The appropriate response is to treat this traffic as malicious reconnaissance and take blocking or alerting actions,"The detector is 100 % confident that the flow is an Nmap TCP port‑scan and classifies it as a Reconnaissance attack [DET].  
+Nmap TCP scans probe many TCP ports to discover which services are listening; in the dataset these scans consist of single‑packet flows to thousands of destination ports and finish in a few microseconds [CARD_NMAP_TCP_scan].  
+Port scanning is a recognized reconnaissance technique that aims to map open, closed, filtered or unfiltered ports on a target [CAPEC-300].  
+Therefore, the appropriate response is to treat this traffic as malicious reconnaissance and take blocking or alerting actions (e.g., drop the packets, generate an intrusion‑detection alert, and consider applying network‑segmentation or IDS/IPS rules to stop remote service scans) [T1046-MIT].",
+Q11,B,7,"Actions include dropping the packets, generating an intrusion-detection alert, and applying network-segmentation or IDS/IPS rules to stop remote service scans","The detector is 100 % confident that the flow is an Nmap TCP port‑scan and classifies it as a Reconnaissance attack [DET].  
+Nmap TCP scans probe many TCP ports to discover which services are listening; in the dataset these scans consist of single‑packet flows to thousands of destination ports and finish in a few microseconds [CARD_NMAP_TCP_scan].  
+Port scanning is a recognized reconnaissance technique that aims to map open, closed, filtered or unfiltered ports on a target [CAPEC-300].  
+Therefore, the appropriate response is to treat this traffic as malicious reconnaissance and take blocking or alerting actions (e.g., drop the packets, generate an intrusion‑detection alert, and consider applying network‑segmentation or IDS/IPS rules to stop remote service scans) [T1046-MIT].",
+Q25,A,1,The sample is flagged as a Metasploit-generated brute-force SSH attack.,"**What the traffic is**
+
+The sample is being flagged as a **Metasploit‑generated brute‑force SSH attack**.  
+In other words, the flow looks like an automated tool (Metasploit) repeatedly trying to log in over SSH, guessing passwords until it succeeds.
+
+**Why the detector made that decision**
+
+The model looked at a handful of flow‑level statistics that are typical for this kind of attack:
+
+| Feature | Value | Why it matters for SSH brute‑force |
+|---------|-------|-----------------------------------|
+| **service_ssh = 1.0** | Zeek identified the protocol as SSH. | The attack must be targeting the SSH service. |
+| **flow_pkts_payload.avg = 106.7 B** | Average payload size per packet. | Brute‑force attempts send small authentication packets (≈100 B). |
+| **fwd_pkts_payload.max = 800 B** | Largest forward‑direction packet. | Occasionally a larger packet appears (e.g., a banner or a failed login response). |
+| **fwd_subflow_bytes = 624.5 B** | Avg bytes per forward sub‑flow. | Consistent, modest amounts of data sent from the attacker to the server. |
+| **bwd_iat.min = 132 µs** | Shortest inter‑arrival time of backward packets. | The server replies very quickly, typical of an automated script that gets immediate “password incorrect” messages. |
+
+These values together form a pattern the model has learned to associate with the **Metasploit_Brute_Force_SSH** class. The confidence of 1.00 means the model is certain the observed feature combination matches that pattern, and the alternative labels (ARP poisoning, ThingSpeak traffic) have essentially zero probability.",
+Q25,A,2,The flow involves an automated tool repeatedly trying to log in over SSH and guessing passwords.,"**What the traffic is**
+
+The sample is being flagged as a **Metasploit‑generated brute‑force SSH attack**.  
+In other words, the flow looks like an automated tool (Metasploit) repeatedly trying to log in over SSH, guessing passwords until it succeeds.
+
+**Why the detector made that decision**
+
+The model looked at a handful of flow‑level statistics that are typical for this kind of attack:
+
+| Feature | Value | Why it matters for SSH brute‑force |
+|---------|-------|-----------------------------------|
+| **service_ssh = 1.0** | Zeek identified the protocol as SSH. | The attack must be targeting the SSH service. |
+| **flow_pkts_payload.avg = 106.7 B** | Average payload size per packet. | Brute‑force attempts send small authentication packets (≈100 B). |
+| **fwd_pkts_payload.max = 800 B** | Largest forward‑direction packet. | Occasionally a larger packet appears (e.g., a banner or a failed login response). |
+| **fwd_subflow_bytes = 624.5 B** | Avg bytes per forward sub‑flow. | Consistent, modest amounts of data sent from the attacker to the server. |
+| **bwd_iat.min = 132 µs** | Shortest inter‑arrival time of backward packets. | The server replies very quickly, typical of an automated script that gets immediate “password incorrect” messages. |
+
+These values together form a pattern the model has learned to associate with the **Metasploit_Brute_Force_SSH** class. The confidence of 1.00 means the model is certain the observed feature combination matches that pattern, and the alternative labels (ARP poisoning, ThingSpeak traffic) have essentially zero probability.",
+Q25,A,3,The model used feature service_ssh = 1.0 indicating Zeek identified the SSH protocol.,"**What the traffic is**
+
+The sample is being flagged as a **Metasploit‑generated brute‑force SSH attack**.  
+In other words, the flow looks like an automated tool (Metasploit) repeatedly trying to log in over SSH, guessing passwords until it succeeds.
+
+**Why the detector made that decision**
+
+The model looked at a handful of flow‑level statistics that are typical for this kind of attack:
+
+| Feature | Value | Why it matters for SSH brute‑force |
+|---------|-------|-----------------------------------|
+| **service_ssh = 1.0** | Zeek identified the protocol as SSH. | The attack must be targeting the SSH service. |
+| **flow_pkts_payload.avg = 106.7 B** | Average payload size per packet. | Brute‑force attempts send small authentication packets (≈100 B). |
+| **fwd_pkts_payload.max = 800 B** | Largest forward‑direction packet. | Occasionally a larger packet appears (e.g., a banner or a failed login response). |
+| **fwd_subflow_bytes = 624.5 B** | Avg bytes per forward sub‑flow. | Consistent, modest amounts of data sent from the attacker to the server. |
+| **bwd_iat.min = 132 µs** | Shortest inter‑arrival time of backward packets. | The server replies very quickly, typical of an automated script that gets immediate “password incorrect” messages. |
+
+These values together form a pattern the model has learned to associate with the **Metasploit_Brute_Force_SSH** class. The confidence of 1.00 means the model is certain the observed feature combination matches that pattern, and the alternative labels (ARP poisoning, ThingSpeak traffic) have essentially zero probability.",
+Q25,A,4,The model used feature flow_pkts_payload.avg = 106.740741 bytes as the average packet payload.,"**What the traffic is**
+
+The sample is being flagged as a **Metasploit‑generated brute‑force SSH attack**.  
+In other words, the flow looks like an automated tool (Metasploit) repeatedly trying to log in over SSH, guessing passwords until it succeeds.
+
+**Why the detector made that decision**
+
+The model looked at a handful of flow‑level statistics that are typical for this kind of attack:
+
+| Feature | Value | Why it matters for SSH brute‑force |
+|---------|-------|-----------------------------------|
+| **service_ssh = 1.0** | Zeek identified the protocol as SSH. | The attack must be targeting the SSH service. |
+| **flow_pkts_payload.avg = 106.7 B** | Average payload size per packet. | Brute‑force attempts send small authentication packets (≈100 B). |
+| **fwd_pkts_payload.max = 800 B** | Largest forward‑direction packet. | Occasionally a larger packet appears (e.g., a banner or a failed login response). |
+| **fwd_subflow_bytes = 624.5 B** | Avg bytes per forward sub‑flow. | Consistent, modest amounts of data sent from the attacker to the server. |
+| **bwd_iat.min = 132 µs** | Shortest inter‑arrival time of backward packets. | The server replies very quickly, typical of an automated script that gets immediate “password incorrect” messages. |
+
+These values together form a pattern the model has learned to associate with the **Metasploit_Brute_Force_SSH** class. The confidence of 1.00 means the model is certain the observed feature combination matches that pattern, and the alternative labels (ARP poisoning, ThingSpeak traffic) have essentially zero probability.",
+Q25,A,5,The model used feature fwd_pkts_payload.max = 800.0 bytes as the largest forward packet payload.,"**What the traffic is**
+
+The sample is being flagged as a **Metasploit‑generated brute‑force SSH attack**.  
+In other words, the flow looks like an automated tool (Metasploit) repeatedly trying to log in over SSH, guessing passwords until it succeeds.
+
+**Why the detector made that decision**
+
+The model looked at a handful of flow‑level statistics that are typical for this kind of attack:
+
+| Feature | Value | Why it matters for SSH brute‑force |
+|---------|-------|-----------------------------------|
+| **service_ssh = 1.0** | Zeek identified the protocol as SSH. | The attack must be targeting the SSH service. |
+| **flow_pkts_payload.avg = 106.7 B** | Average payload size per packet. | Brute‑force attempts send small authentication packets (≈100 B). |
+| **fwd_pkts_payload.max = 800 B** | Largest forward‑direction packet. | Occasionally a larger packet appears (e.g., a banner or a failed login response). |
+| **fwd_subflow_bytes = 624.5 B** | Avg bytes per forward sub‑flow. | Consistent, modest amounts of data sent from the attacker to the server. |
+| **bwd_iat.min = 132 µs** | Shortest inter‑arrival time of backward packets. | The server replies very quickly, typical of an automated script that gets immediate “password incorrect” messages. |
+
+These values together form a pattern the model has learned to associate with the **Metasploit_Brute_Force_SSH** class. The confidence of 1.00 means the model is certain the observed feature combination matches that pattern, and the alternative labels (ARP poisoning, ThingSpeak traffic) have essentially zero probability.",
+Q25,A,6,The model used feature fwd_subflow_bytes = 624.5 as the average payload bytes per forward sub-flow.,"**What the traffic is**
+
+The sample is being flagged as a **Metasploit‑generated brute‑force SSH attack**.  
+In other words, the flow looks like an automated tool (Metasploit) repeatedly trying to log in over SSH, guessing passwords until it succeeds.
+
+**Why the detector made that decision**
+
+The model looked at a handful of flow‑level statistics that are typical for this kind of attack:
+
+| Feature | Value | Why it matters for SSH brute‑force |
+|---------|-------|-----------------------------------|
+| **service_ssh = 1.0** | Zeek identified the protocol as SSH. | The attack must be targeting the SSH service. |
+| **flow_pkts_payload.avg = 106.7 B** | Average payload size per packet. | Brute‑force attempts send small authentication packets (≈100 B). |
+| **fwd_pkts_payload.max = 800 B** | Largest forward‑direction packet. | Occasionally a larger packet appears (e.g., a banner or a failed login response). |
+| **fwd_subflow_bytes = 624.5 B** | Avg bytes per forward sub‑flow. | Consistent, modest amounts of data sent from the attacker to the server. |
+| **bwd_iat.min = 132 µs** | Shortest inter‑arrival time of backward packets. | The server replies very quickly, typical of an automated script that gets immediate “password incorrect” messages. |
+
+These values together form a pattern the model has learned to associate with the **Metasploit_Brute_Force_SSH** class. The confidence of 1.00 means the model is certain the observed feature combination matches that pattern, and the alternative labels (ARP poisoning, ThingSpeak traffic) have essentially zero probability.",
+Q25,A,7,The model used feature bwd_iat.min = 132.083893 microseconds as the shortest gap between consecutive backward packets.,"**What the traffic is**
+
+The sample is being flagged as a **Metasploit‑generated brute‑force SSH attack**.  
+In other words, the flow looks like an automated tool (Metasploit) repeatedly trying to log in over SSH, guessing passwords until it succeeds.
+
+**Why the detector made that decision**
+
+The model looked at a handful of flow‑level statistics that are typical for this kind of attack:
+
+| Feature | Value | Why it matters for SSH brute‑force |
+|---------|-------|-----------------------------------|
+| **service_ssh = 1.0** | Zeek identified the protocol as SSH. | The attack must be targeting the SSH service. |
+| **flow_pkts_payload.avg = 106.7 B** | Average payload size per packet. | Brute‑force attempts send small authentication packets (≈100 B). |
+| **fwd_pkts_payload.max = 800 B** | Largest forward‑direction packet. | Occasionally a larger packet appears (e.g., a banner or a failed login response). |
+| **fwd_subflow_bytes = 624.5 B** | Avg bytes per forward sub‑flow. | Consistent, modest amounts of data sent from the attacker to the server. |
+| **bwd_iat.min = 132 µs** | Shortest inter‑arrival time of backward packets. | The server replies very quickly, typical of an automated script that gets immediate “password incorrect” messages. |
+
+These values together form a pattern the model has learned to associate with the **Metasploit_Brute_Force_SSH** class. The confidence of 1.00 means the model is certain the observed feature combination matches that pattern, and the alternative labels (ARP poisoning, ThingSpeak traffic) have essentially zero probability.",
+Q25,A,8,The confidence of the model prediction is 1.00.,"**What the traffic is**
+
+The sample is being flagged as a **Metasploit‑generated brute‑force SSH attack**.  
+In other words, the flow looks like an automated tool (Metasploit) repeatedly trying to log in over SSH, guessing passwords until it succeeds.
+
+**Why the detector made that decision**
+
+The model looked at a handful of flow‑level statistics that are typical for this kind of attack:
+
+| Feature | Value | Why it matters for SSH brute‑force |
+|---------|-------|-----------------------------------|
+| **service_ssh = 1.0** | Zeek identified the protocol as SSH. | The attack must be targeting the SSH service. |
+| **flow_pkts_payload.avg = 106.7 B** | Average payload size per packet. | Brute‑force attempts send small authentication packets (≈100 B). |
+| **fwd_pkts_payload.max = 800 B** | Largest forward‑direction packet. | Occasionally a larger packet appears (e.g., a banner or a failed login response). |
+| **fwd_subflow_bytes = 624.5 B** | Avg bytes per forward sub‑flow. | Consistent, modest amounts of data sent from the attacker to the server. |
+| **bwd_iat.min = 132 µs** | Shortest inter‑arrival time of backward packets. | The server replies very quickly, typical of an automated script that gets immediate “password incorrect” messages. |
+
+These values together form a pattern the model has learned to associate with the **Metasploit_Brute_Force_SSH** class. The confidence of 1.00 means the model is certain the observed feature combination matches that pattern, and the alternative labels (ARP poisoning, ThingSpeak traffic) have essentially zero probability.",
+Q04,A,1,The sample is flagged as a Slow-loris style DDoS.,"**What the traffic is**
+
+The sample is being flagged as a **Slow‑loris style DDoS** (a DoS attack that holds many HTTP connections open by sending tiny, very‑slow packets). The flow was seen on port 80/443, so Zeek identified it as HTTP (`service_http = 1`).
+
+**Why the model made that decision**
+
+The detector looked at the five most influential features:
+
+| Feature | Value | Why it points to Slowloris |
+|---------|-------|----------------------------|
+| **service_http = 1** | 1 | Confirms the traffic is HTTP, the protocol Slowloris abuses. |
+| **bwd_init_window_size = 65160** | 65 KB | A relatively large TCP receive‑window advertised by the server side, typical when a server is trying to keep the connection alive. |
+| **active.min = 0.953 µs** | <1 µs | The flow sent at least one packet in an extremely short burst, then stopped—characteristic of the “slow‑send” pattern. |
+| **flow_iat.min = 0.953 µs** | <1 µs | The smallest inter‑arrival time is also sub‑microsecond, showing a rapid initial packet followed by long idle periods. |
+| **fwd_iat.tot = 26 377 954 µs** | ≈26 s | The total forward inter‑arrival time is large, meaning the client kept the connection open for many seconds while sending almost no data. |
+
+Slowloris attacks work by opening many HTTP connections, sending a tiny header fragment, then pausing for long intervals (seconds to minutes). The combination of **HTTP service**, **tiny active/flow intervals**, and a **large cumulative forward gap** matches that pattern, so the model gave a 100 % confidence label of `DDOS_Slowloris`.",
+Q04,A,2,"Slowloris is a DoS attack that holds many HTTP connections open by sending tiny, very slow packets.","**What the traffic is**
+
+The sample is being flagged as a **Slow‑loris style DDoS** (a DoS attack that holds many HTTP connections open by sending tiny, very‑slow packets). The flow was seen on port 80/443, so Zeek identified it as HTTP (`service_http = 1`).
+
+**Why the model made that decision**
+
+The detector looked at the five most influential features:
+
+| Feature | Value | Why it points to Slowloris |
+|---------|-------|----------------------------|
+| **service_http = 1** | 1 | Confirms the traffic is HTTP, the protocol Slowloris abuses. |
+| **bwd_init_window_size = 65160** | 65 KB | A relatively large TCP receive‑window advertised by the server side, typical when a server is trying to keep the connection alive. |
+| **active.min = 0.953 µs** | <1 µs | The flow sent at least one packet in an extremely short burst, then stopped—characteristic of the “slow‑send” pattern. |
+| **flow_iat.min = 0.953 µs** | <1 µs | The smallest inter‑arrival time is also sub‑microsecond, showing a rapid initial packet followed by long idle periods. |
+| **fwd_iat.tot = 26 377 954 µs** | ≈26 s | The total forward inter‑arrival time is large, meaning the client kept the connection open for many seconds while sending almost no data. |
+
+Slowloris attacks work by opening many HTTP connections, sending a tiny header fragment, then pausing for long intervals (seconds to minutes). The combination of **HTTP service**, **tiny active/flow intervals**, and a **large cumulative forward gap** matches that pattern, so the model gave a 100 % confidence label of `DDOS_Slowloris`.",
+Q04,A,3,Zeek identified the flow as HTTP with service_http = 1.,"**What the traffic is**
+
+The sample is being flagged as a **Slow‑loris style DDoS** (a DoS attack that holds many HTTP connections open by sending tiny, very‑slow packets). The flow was seen on port 80/443, so Zeek identified it as HTTP (`service_http = 1`).
+
+**Why the model made that decision**
+
+The detector looked at the five most influential features:
+
+| Feature | Value | Why it points to Slowloris |
+|---------|-------|----------------------------|
+| **service_http = 1** | 1 | Confirms the traffic is HTTP, the protocol Slowloris abuses. |
+| **bwd_init_window_size = 65160** | 65 KB | A relatively large TCP receive‑window advertised by the server side, typical when a server is trying to keep the connection alive. |
+| **active.min = 0.953 µs** | <1 µs | The flow sent at least one packet in an extremely short burst, then stopped—characteristic of the “slow‑send” pattern. |
+| **flow_iat.min = 0.953 µs** | <1 µs | The smallest inter‑arrival time is also sub‑microsecond, showing a rapid initial packet followed by long idle periods. |
+| **fwd_iat.tot = 26 377 954 µs** | ≈26 s | The total forward inter‑arrival time is large, meaning the client kept the connection open for many seconds while sending almost no data. |
+
+Slowloris attacks work by opening many HTTP connections, sending a tiny header fragment, then pausing for long intervals (seconds to minutes). The combination of **HTTP service**, **tiny active/flow intervals**, and a **large cumulative forward gap** matches that pattern, so the model gave a 100 % confidence label of `DDOS_Slowloris`.",
+Q04,A,4,bwd_init_window_size is 65160 bytes.,"**What the traffic is**
+
+The sample is being flagged as a **Slow‑loris style DDoS** (a DoS attack that holds many HTTP connections open by sending tiny, very‑slow packets). The flow was seen on port 80/443, so Zeek identified it as HTTP (`service_http = 1`).
+
+**Why the model made that decision**
+
+The detector looked at the five most influential features:
+
+| Feature | Value | Why it points to Slowloris |
+|---------|-------|----------------------------|
+| **service_http = 1** | 1 | Confirms the traffic is HTTP, the protocol Slowloris abuses. |
+| **bwd_init_window_size = 65160** | 65 KB | A relatively large TCP receive‑window advertised by the server side, typical when a server is trying to keep the connection alive. |
+| **active.min = 0.953 µs** | <1 µs | The flow sent at least one packet in an extremely short burst, then stopped—characteristic of the “slow‑send” pattern. |
+| **flow_iat.min = 0.953 µs** | <1 µs | The smallest inter‑arrival time is also sub‑microsecond, showing a rapid initial packet followed by long idle periods. |
+| **fwd_iat.tot = 26 377 954 µs** | ≈26 s | The total forward inter‑arrival time is large, meaning the client kept the connection open for many seconds while sending almost no data. |
+
+Slowloris attacks work by opening many HTTP connections, sending a tiny header fragment, then pausing for long intervals (seconds to minutes). The combination of **HTTP service**, **tiny active/flow intervals**, and a **large cumulative forward gap** matches that pattern, so the model gave a 100 % confidence label of `DDOS_Slowloris`.",
+Q04,A,5,active.min is 0.953674 microseconds.,"**What the traffic is**
+
+The sample is being flagged as a **Slow‑loris style DDoS** (a DoS attack that holds many HTTP connections open by sending tiny, very‑slow packets). The flow was seen on port 80/443, so Zeek identified it as HTTP (`service_http = 1`).
+
+**Why the model made that decision**
+
+The detector looked at the five most influential features:
+
+| Feature | Value | Why it points to Slowloris |
+|---------|-------|----------------------------|
+| **service_http = 1** | 1 | Confirms the traffic is HTTP, the protocol Slowloris abuses. |
+| **bwd_init_window_size = 65160** | 65 KB | A relatively large TCP receive‑window advertised by the server side, typical when a server is trying to keep the connection alive. |
+| **active.min = 0.953 µs** | <1 µs | The flow sent at least one packet in an extremely short burst, then stopped—characteristic of the “slow‑send” pattern. |
+| **flow_iat.min = 0.953 µs** | <1 µs | The smallest inter‑arrival time is also sub‑microsecond, showing a rapid initial packet followed by long idle periods. |
+| **fwd_iat.tot = 26 377 954 µs** | ≈26 s | The total forward inter‑arrival time is large, meaning the client kept the connection open for many seconds while sending almost no data. |
+
+Slowloris attacks work by opening many HTTP connections, sending a tiny header fragment, then pausing for long intervals (seconds to minutes). The combination of **HTTP service**, **tiny active/flow intervals**, and a **large cumulative forward gap** matches that pattern, so the model gave a 100 % confidence label of `DDOS_Slowloris`.",
+Q04,A,6,flow_iat.min is 0.953674 microseconds.,"**What the traffic is**
+
+The sample is being flagged as a **Slow‑loris style DDoS** (a DoS attack that holds many HTTP connections open by sending tiny, very‑slow packets). The flow was seen on port 80/443, so Zeek identified it as HTTP (`service_http = 1`).
+
+**Why the model made that decision**
+
+The detector looked at the five most influential features:
+
+| Feature | Value | Why it points to Slowloris |
+|---------|-------|----------------------------|
+| **service_http = 1** | 1 | Confirms the traffic is HTTP, the protocol Slowloris abuses. |
+| **bwd_init_window_size = 65160** | 65 KB | A relatively large TCP receive‑window advertised by the server side, typical when a server is trying to keep the connection alive. |
+| **active.min = 0.953 µs** | <1 µs | The flow sent at least one packet in an extremely short burst, then stopped—characteristic of the “slow‑send” pattern. |
+| **flow_iat.min = 0.953 µs** | <1 µs | The smallest inter‑arrival time is also sub‑microsecond, showing a rapid initial packet followed by long idle periods. |
+| **fwd_iat.tot = 26 377 954 µs** | ≈26 s | The total forward inter‑arrival time is large, meaning the client kept the connection open for many seconds while sending almost no data. |
+
+Slowloris attacks work by opening many HTTP connections, sending a tiny header fragment, then pausing for long intervals (seconds to minutes). The combination of **HTTP service**, **tiny active/flow intervals**, and a **large cumulative forward gap** matches that pattern, so the model gave a 100 % confidence label of `DDOS_Slowloris`.",
+Q04,A,7,fwd_iat.tot is 26377954.006195 microseconds.,"**What the traffic is**
+
+The sample is being flagged as a **Slow‑loris style DDoS** (a DoS attack that holds many HTTP connections open by sending tiny, very‑slow packets). The flow was seen on port 80/443, so Zeek identified it as HTTP (`service_http = 1`).
+
+**Why the model made that decision**
+
+The detector looked at the five most influential features:
+
+| Feature | Value | Why it points to Slowloris |
+|---------|-------|----------------------------|
+| **service_http = 1** | 1 | Confirms the traffic is HTTP, the protocol Slowloris abuses. |
+| **bwd_init_window_size = 65160** | 65 KB | A relatively large TCP receive‑window advertised by the server side, typical when a server is trying to keep the connection alive. |
+| **active.min = 0.953 µs** | <1 µs | The flow sent at least one packet in an extremely short burst, then stopped—characteristic of the “slow‑send” pattern. |
+| **flow_iat.min = 0.953 µs** | <1 µs | The smallest inter‑arrival time is also sub‑microsecond, showing a rapid initial packet followed by long idle periods. |
+| **fwd_iat.tot = 26 377 954 µs** | ≈26 s | The total forward inter‑arrival time is large, meaning the client kept the connection open for many seconds while sending almost no data. |
+
+Slowloris attacks work by opening many HTTP connections, sending a tiny header fragment, then pausing for long intervals (seconds to minutes). The combination of **HTTP service**, **tiny active/flow intervals**, and a **large cumulative forward gap** matches that pattern, so the model gave a 100 % confidence label of `DDOS_Slowloris`.",
+Q04,A,8,The model gave a 100 percent confidence label of DDOS_Slowloris.,"**What the traffic is**
+
+The sample is being flagged as a **Slow‑loris style DDoS** (a DoS attack that holds many HTTP connections open by sending tiny, very‑slow packets). The flow was seen on port 80/443, so Zeek identified it as HTTP (`service_http = 1`).
+
+**Why the model made that decision**
+
+The detector looked at the five most influential features:
+
+| Feature | Value | Why it points to Slowloris |
+|---------|-------|----------------------------|
+| **service_http = 1** | 1 | Confirms the traffic is HTTP, the protocol Slowloris abuses. |
+| **bwd_init_window_size = 65160** | 65 KB | A relatively large TCP receive‑window advertised by the server side, typical when a server is trying to keep the connection alive. |
+| **active.min = 0.953 µs** | <1 µs | The flow sent at least one packet in an extremely short burst, then stopped—characteristic of the “slow‑send” pattern. |
+| **flow_iat.min = 0.953 µs** | <1 µs | The smallest inter‑arrival time is also sub‑microsecond, showing a rapid initial packet followed by long idle periods. |
+| **fwd_iat.tot = 26 377 954 µs** | ≈26 s | The total forward inter‑arrival time is large, meaning the client kept the connection open for many seconds while sending almost no data. |
+
+Slowloris attacks work by opening many HTTP connections, sending a tiny header fragment, then pausing for long intervals (seconds to minutes). The combination of **HTTP service**, **tiny active/flow intervals**, and a **large cumulative forward gap** matches that pattern, so the model gave a 100 % confidence label of `DDOS_Slowloris`.",
+Q06,B,1,The traffic matches the Service Exhaustion Flood technique (T1499.002) in ATT&CK,"The traffic matches the **Service Exhaustion Flood** technique (T1499.002) in ATT&CK, which describes denial‑of‑service attacks against web services such as HTTP floods [T1499.002].  
+It also aligns with the **HTTP DoS** CAPEC pattern (CAPEC‑469), which details flooding the HTTP layer to exhaust server resources [CAPEC-469].
+
+The evidence does not list any CVE identifiers that are linked to this traffic, so no specific known vulnerabilities are mentioned.",
+Q06,B,2,ATT&CK technique T1499.002 describes denial-of-service attacks against web services such as HTTP floods,"The traffic matches the **Service Exhaustion Flood** technique (T1499.002) in ATT&CK, which describes denial‑of‑service attacks against web services such as HTTP floods [T1499.002].  
+It also aligns with the **HTTP DoS** CAPEC pattern (CAPEC‑469), which details flooding the HTTP layer to exhaust server resources [CAPEC-469].
+
+The evidence does not list any CVE identifiers that are linked to this traffic, so no specific known vulnerabilities are mentioned.",
+Q06,B,3,The traffic aligns with the HTTP DoS CAPEC pattern (CAPEC-469),"The traffic matches the **Service Exhaustion Flood** technique (T1499.002) in ATT&CK, which describes denial‑of‑service attacks against web services such as HTTP floods [T1499.002].  
+It also aligns with the **HTTP DoS** CAPEC pattern (CAPEC‑469), which details flooding the HTTP layer to exhaust server resources [CAPEC-469].
+
+The evidence does not list any CVE identifiers that are linked to this traffic, so no specific known vulnerabilities are mentioned.",
+Q06,B,4,CAPEC-469 details flooding the HTTP layer to exhaust server resources,"The traffic matches the **Service Exhaustion Flood** technique (T1499.002) in ATT&CK, which describes denial‑of‑service attacks against web services such as HTTP floods [T1499.002].  
+It also aligns with the **HTTP DoS** CAPEC pattern (CAPEC‑469), which details flooding the HTTP layer to exhaust server resources [CAPEC-469].
+
+The evidence does not list any CVE identifiers that are linked to this traffic, so no specific known vulnerabilities are mentioned.",
+Q06,B,5,The evidence does not list any CVE identifiers that are linked to this traffic,"The traffic matches the **Service Exhaustion Flood** technique (T1499.002) in ATT&CK, which describes denial‑of‑service attacks against web services such as HTTP floods [T1499.002].  
+It also aligns with the **HTTP DoS** CAPEC pattern (CAPEC‑469), which details flooding the HTTP layer to exhaust server resources [CAPEC-469].
+
+The evidence does not list any CVE identifiers that are linked to this traffic, so no specific known vulnerabilities are mentioned.",
+TRAP5,C,1,The traffic shows a single TCP connection to destination port 21,"**What the flow shows**
+
+- A single TCP connection to destination port 21 (FTP control channel).  
+- Only two packets were exchanged: a SYN‑ACK from the server (with the RST flag set) and an ACK from the client.  
+- The client sent 120 bytes of payload (likely the FTP “USER” or “PASS” command); the server sent no data.  
+- The whole exchange lasted only ~13 ms, so the packet‑per‑second and byte‑per‑second rates look huge only because the interval is tiny.  
+- No bulk data, no long‑lived session, and no obvious file‑transfer activity.
+
+**How this relates to MITRE ATT&CK technique T9999.099**
+
+Technique **T9999.099** (a placeholder for a “custom” or “unpublished” technique) is described as *“Use of short‑lived, single‑packet TCP handshakes to probe or trigger a service‑specific response that can be leveraged for credential harvesting or command execution.”*  
+
+The flow you posted matches that pattern:
+
+| Indicator | Why it fits the technique |
+|-----------|---------------------------|
+| **Destination port 21** | Targets the FTP service, a common credential‑harvesting vector. |
+| **Exactly two packets (SYN‑ACK + ACK) plus a tiny payload** | A minimal handshake that tries to elicit a response without establishing a full session. |
+| **Very short duration (≈13 ms)** | Shows the attacker is probing quickly, avoiding detection by time‑based thresholds. |
+| **RST flag on the server side** | The server immediately aborts the connection, which is typical when the service rejects malformed or unexpected commands—still, the attacker can infer the service’s presence and version from the RST. |
+| **No bulk data** | The goal is not data exfiltration but reconnaissance or credential‑guessing. |
+
+**What it likely means**
+
+- An automated scanner (or a malware component) is probing the device for an FTP service.  
+- By sending a single command (the 120‑byte payload) and watching the server’s RST/ACK behavior, the scanner can decide whether the service is reachable and possibly whether default credentials are accepted.  
+- Because the flow is so brief, it can slip past many anomaly‑based detectors that look for longer sessions or high data volumes.
+
+**What you should check**
+
+1. **Confirm FTP is needed** – If the device does not require FTP, block inbound/outbound port 21 at the firewall.  
+2. **Enable logging on the FTP server** – Look for repeated short connections from the same source IP; they may be brute‑force or version‑fingerprinting attempts.  
+3. **Apply rate‑limiting** – Limit the number of new TCP connections per second to port 21 to make rapid probing harder.  
+4. **Consider credential‑hardening** – Enforce strong passwords or disable anonymous login if FTP must stay enabled.
+
+In short, the flow is a textbook example of the “short‑lived probe” behavior described in T9999.099, used to discover and test an FTP service without establishing a full session.",
+TRAP5,C,2,The client sent 120 bytes of payload,"**What the flow shows**
+
+- A single TCP connection to destination port 21 (FTP control channel).  
+- Only two packets were exchanged: a SYN‑ACK from the server (with the RST flag set) and an ACK from the client.  
+- The client sent 120 bytes of payload (likely the FTP “USER” or “PASS” command); the server sent no data.  
+- The whole exchange lasted only ~13 ms, so the packet‑per‑second and byte‑per‑second rates look huge only because the interval is tiny.  
+- No bulk data, no long‑lived session, and no obvious file‑transfer activity.
+
+**How this relates to MITRE ATT&CK technique T9999.099**
+
+Technique **T9999.099** (a placeholder for a “custom” or “unpublished” technique) is described as *“Use of short‑lived, single‑packet TCP handshakes to probe or trigger a service‑specific response that can be leveraged for credential harvesting or command execution.”*  
+
+The flow you posted matches that pattern:
+
+| Indicator | Why it fits the technique |
+|-----------|---------------------------|
+| **Destination port 21** | Targets the FTP service, a common credential‑harvesting vector. |
+| **Exactly two packets (SYN‑ACK + ACK) plus a tiny payload** | A minimal handshake that tries to elicit a response without establishing a full session. |
+| **Very short duration (≈13 ms)** | Shows the attacker is probing quickly, avoiding detection by time‑based thresholds. |
+| **RST flag on the server side** | The server immediately aborts the connection, which is typical when the service rejects malformed or unexpected commands—still, the attacker can infer the service’s presence and version from the RST. |
+| **No bulk data** | The goal is not data exfiltration but reconnaissance or credential‑guessing. |
+
+**What it likely means**
+
+- An automated scanner (or a malware component) is probing the device for an FTP service.  
+- By sending a single command (the 120‑byte payload) and watching the server’s RST/ACK behavior, the scanner can decide whether the service is reachable and possibly whether default credentials are accepted.  
+- Because the flow is so brief, it can slip past many anomaly‑based detectors that look for longer sessions or high data volumes.
+
+**What you should check**
+
+1. **Confirm FTP is needed** – If the device does not require FTP, block inbound/outbound port 21 at the firewall.  
+2. **Enable logging on the FTP server** – Look for repeated short connections from the same source IP; they may be brute‑force or version‑fingerprinting attempts.  
+3. **Apply rate‑limiting** – Limit the number of new TCP connections per second to port 21 to make rapid probing harder.  
+4. **Consider credential‑hardening** – Enforce strong passwords or disable anonymous login if FTP must stay enabled.
+
+In short, the flow is a textbook example of the “short‑lived probe” behavior described in T9999.099, used to discover and test an FTP service without establishing a full session.",
+TRAP5,C,3,The traffic is a probe for credential harvesting or command execution,"**What the flow shows**
+
+- A single TCP connection to destination port 21 (FTP control channel).  
+- Only two packets were exchanged: a SYN‑ACK from the server (with the RST flag set) and an ACK from the client.  
+- The client sent 120 bytes of payload (likely the FTP “USER” or “PASS” command); the server sent no data.  
+- The whole exchange lasted only ~13 ms, so the packet‑per‑second and byte‑per‑second rates look huge only because the interval is tiny.  
+- No bulk data, no long‑lived session, and no obvious file‑transfer activity.
+
+**How this relates to MITRE ATT&CK technique T9999.099**
+
+Technique **T9999.099** (a placeholder for a “custom” or “unpublished” technique) is described as *“Use of short‑lived, single‑packet TCP handshakes to probe or trigger a service‑specific response that can be leveraged for credential harvesting or command execution.”*  
+
+The flow you posted matches that pattern:
+
+| Indicator | Why it fits the technique |
+|-----------|---------------------------|
+| **Destination port 21** | Targets the FTP service, a common credential‑harvesting vector. |
+| **Exactly two packets (SYN‑ACK + ACK) plus a tiny payload** | A minimal handshake that tries to elicit a response without establishing a full session. |
+| **Very short duration (≈13 ms)** | Shows the attacker is probing quickly, avoiding detection by time‑based thresholds. |
+| **RST flag on the server side** | The server immediately aborts the connection, which is typical when the service rejects malformed or unexpected commands—still, the attacker can infer the service’s presence and version from the RST. |
+| **No bulk data** | The goal is not data exfiltration but reconnaissance or credential‑guessing. |
+
+**What it likely means**
+
+- An automated scanner (or a malware component) is probing the device for an FTP service.  
+- By sending a single command (the 120‑byte payload) and watching the server’s RST/ACK behavior, the scanner can decide whether the service is reachable and possibly whether default credentials are accepted.  
+- Because the flow is so brief, it can slip past many anomaly‑based detectors that look for longer sessions or high data volumes.
+
+**What you should check**
+
+1. **Confirm FTP is needed** – If the device does not require FTP, block inbound/outbound port 21 at the firewall.  
+2. **Enable logging on the FTP server** – Look for repeated short connections from the same source IP; they may be brute‑force or version‑fingerprinting attempts.  
+3. **Apply rate‑limiting** – Limit the number of new TCP connections per second to port 21 to make rapid probing harder.  
+4. **Consider credential‑hardening** – Enforce strong passwords or disable anonymous login if FTP must stay enabled.
+
+In short, the flow is a textbook example of the “short‑lived probe” behavior described in T9999.099, used to discover and test an FTP service without establishing a full session.",
+Q14,A,1,The flow is a UDP-only stream,"**What the detector saw**
+
+- The flow is a **UDP‑only** stream (proto_udp = 1).  
+- It lasted **0 seconds** – essentially a single burst of packets.  
+- Only **8 bytes** of UDP header were sent forward, and **no packets came back** (bwd_pkts_tot = 0, bwd_pkts_per_sec = 0).  
+- This pattern matches the signature of an **Nmap UDP scan**, a classic reconnaissance technique where an attacker probes many ports with tiny UDP packets and expects no reply.
+
+**How to respond**
+
+1. **Confirm the alert**  
+   - Check the source IP against your asset inventory. Is it a known device (e.g., a management station) that might be running a legitimate scan?  
+   - Look at surrounding flows: are there many similar short UDP bursts to many destination ports/IPs?  
+
+2. **Contain if it’s unauthorized**  
+   - Block the source IP at the firewall or upstream router (temporary “deny” rule).  
+   - If you have an IDS/IPS, enable a rule to drop UDP packets matching the Nmap scan pattern (very small payload, no response).  
+
+3. **Investigate the source**  
+   - Pull logs from the host that generated the traffic (OS logs, process list) to see if Nmap or another scanner is running.  
+   - Verify that the host hasn’t been compromised or mis‑configured.  
+
+4. **Document and harden**  
+   - Record the incident (time, source/destination, ports scanned).  
+   - Review firewall rules to ensure only required UDP services are exposed.  
+   - Consider rate‑limiting or UDP‑port‑knocking for services that must stay open.  
+
+If the source is a legitimate internal scanner, you can whitelist it after confirming the activity is authorized. Otherwise, block and investigate further.",
+Q14,A,2,The flow lasted 0 seconds,"**What the detector saw**
+
+- The flow is a **UDP‑only** stream (proto_udp = 1).  
+- It lasted **0 seconds** – essentially a single burst of packets.  
+- Only **8 bytes** of UDP header were sent forward, and **no packets came back** (bwd_pkts_tot = 0, bwd_pkts_per_sec = 0).  
+- This pattern matches the signature of an **Nmap UDP scan**, a classic reconnaissance technique where an attacker probes many ports with tiny UDP packets and expects no reply.
+
+**How to respond**
+
+1. **Confirm the alert**  
+   - Check the source IP against your asset inventory. Is it a known device (e.g., a management station) that might be running a legitimate scan?  
+   - Look at surrounding flows: are there many similar short UDP bursts to many destination ports/IPs?  
+
+2. **Contain if it’s unauthorized**  
+   - Block the source IP at the firewall or upstream router (temporary “deny” rule).  
+   - If you have an IDS/IPS, enable a rule to drop UDP packets matching the Nmap scan pattern (very small payload, no response).  
+
+3. **Investigate the source**  
+   - Pull logs from the host that generated the traffic (OS logs, process list) to see if Nmap or another scanner is running.  
+   - Verify that the host hasn’t been compromised or mis‑configured.  
+
+4. **Document and harden**  
+   - Record the incident (time, source/destination, ports scanned).  
+   - Review firewall rules to ensure only required UDP services are exposed.  
+   - Consider rate‑limiting or UDP‑port‑knocking for services that must stay open.  
+
+If the source is a legitimate internal scanner, you can whitelist it after confirming the activity is authorized. Otherwise, block and investigate further.",
+Q14,A,3,No packets came back,"**What the detector saw**
+
+- The flow is a **UDP‑only** stream (proto_udp = 1).  
+- It lasted **0 seconds** – essentially a single burst of packets.  
+- Only **8 bytes** of UDP header were sent forward, and **no packets came back** (bwd_pkts_tot = 0, bwd_pkts_per_sec = 0).  
+- This pattern matches the signature of an **Nmap UDP scan**, a classic reconnaissance technique where an attacker probes many ports with tiny UDP packets and expects no reply.
+
+**How to respond**
+
+1. **Confirm the alert**  
+   - Check the source IP against your asset inventory. Is it a known device (e.g., a management station) that might be running a legitimate scan?  
+   - Look at surrounding flows: are there many similar short UDP bursts to many destination ports/IPs?  
+
+2. **Contain if it’s unauthorized**  
+   - Block the source IP at the firewall or upstream router (temporary “deny” rule).  
+   - If you have an IDS/IPS, enable a rule to drop UDP packets matching the Nmap scan pattern (very small payload, no response).  
+
+3. **Investigate the source**  
+   - Pull logs from the host that generated the traffic (OS logs, process list) to see if Nmap or another scanner is running.  
+   - Verify that the host hasn’t been compromised or mis‑configured.  
+
+4. **Document and harden**  
+   - Record the incident (time, source/destination, ports scanned).  
+   - Review firewall rules to ensure only required UDP services are exposed.  
+   - Consider rate‑limiting or UDP‑port‑knocking for services that must stay open.  
+
+If the source is a legitimate internal scanner, you can whitelist it after confirming the activity is authorized. Otherwise, block and investigate further.",
+Q14,A,4,This pattern matches the signature of an Nmap UDP scan,"**What the detector saw**
+
+- The flow is a **UDP‑only** stream (proto_udp = 1).  
+- It lasted **0 seconds** – essentially a single burst of packets.  
+- Only **8 bytes** of UDP header were sent forward, and **no packets came back** (bwd_pkts_tot = 0, bwd_pkts_per_sec = 0).  
+- This pattern matches the signature of an **Nmap UDP scan**, a classic reconnaissance technique where an attacker probes many ports with tiny UDP packets and expects no reply.
+
+**How to respond**
+
+1. **Confirm the alert**  
+   - Check the source IP against your asset inventory. Is it a known device (e.g., a management station) that might be running a legitimate scan?  
+   - Look at surrounding flows: are there many similar short UDP bursts to many destination ports/IPs?  
+
+2. **Contain if it’s unauthorized**  
+   - Block the source IP at the firewall or upstream router (temporary “deny” rule).  
+   - If you have an IDS/IPS, enable a rule to drop UDP packets matching the Nmap scan pattern (very small payload, no response).  
+
+3. **Investigate the source**  
+   - Pull logs from the host that generated the traffic (OS logs, process list) to see if Nmap or another scanner is running.  
+   - Verify that the host hasn’t been compromised or mis‑configured.  
+
+4. **Document and harden**  
+   - Record the incident (time, source/destination, ports scanned).  
+   - Review firewall rules to ensure only required UDP services are exposed.  
+   - Consider rate‑limiting or UDP‑port‑knocking for services that must stay open.  
+
+If the source is a legitimate internal scanner, you can whitelist it after confirming the activity is authorized. Otherwise, block and investigate further.",
+Q14,A,5,Blocking the source IP at the firewall or upstream router helps contain unauthorized scans,"**What the detector saw**
+
+- The flow is a **UDP‑only** stream (proto_udp = 1).  
+- It lasted **0 seconds** – essentially a single burst of packets.  
+- Only **8 bytes** of UDP header were sent forward, and **no packets came back** (bwd_pkts_tot = 0, bwd_pkts_per_sec = 0).  
+- This pattern matches the signature of an **Nmap UDP scan**, a classic reconnaissance technique where an attacker probes many ports with tiny UDP packets and expects no reply.
+
+**How to respond**
+
+1. **Confirm the alert**  
+   - Check the source IP against your asset inventory. Is it a known device (e.g., a management station) that might be running a legitimate scan?  
+   - Look at surrounding flows: are there many similar short UDP bursts to many destination ports/IPs?  
+
+2. **Contain if it’s unauthorized**  
+   - Block the source IP at the firewall or upstream router (temporary “deny” rule).  
+   - If you have an IDS/IPS, enable a rule to drop UDP packets matching the Nmap scan pattern (very small payload, no response).  
+
+3. **Investigate the source**  
+   - Pull logs from the host that generated the traffic (OS logs, process list) to see if Nmap or another scanner is running.  
+   - Verify that the host hasn’t been compromised or mis‑configured.  
+
+4. **Document and harden**  
+   - Record the incident (time, source/destination, ports scanned).  
+   - Review firewall rules to ensure only required UDP services are exposed.  
+   - Consider rate‑limiting or UDP‑port‑knocking for services that must stay open.  
+
+If the source is a legitimate internal scanner, you can whitelist it after confirming the activity is authorized. Otherwise, block and investigate further.",
+Q14,A,6,Review firewall rules to ensure only required UDP services are exposed,"**What the detector saw**
+
+- The flow is a **UDP‑only** stream (proto_udp = 1).  
+- It lasted **0 seconds** – essentially a single burst of packets.  
+- Only **8 bytes** of UDP header were sent forward, and **no packets came back** (bwd_pkts_tot = 0, bwd_pkts_per_sec = 0).  
+- This pattern matches the signature of an **Nmap UDP scan**, a classic reconnaissance technique where an attacker probes many ports with tiny UDP packets and expects no reply.
+
+**How to respond**
+
+1. **Confirm the alert**  
+   - Check the source IP against your asset inventory. Is it a known device (e.g., a management station) that might be running a legitimate scan?  
+   - Look at surrounding flows: are there many similar short UDP bursts to many destination ports/IPs?  
+
+2. **Contain if it’s unauthorized**  
+   - Block the source IP at the firewall or upstream router (temporary “deny” rule).  
+   - If you have an IDS/IPS, enable a rule to drop UDP packets matching the Nmap scan pattern (very small payload, no response).  
+
+3. **Investigate the source**  
+   - Pull logs from the host that generated the traffic (OS logs, process list) to see if Nmap or another scanner is running.  
+   - Verify that the host hasn’t been compromised or mis‑configured.  
+
+4. **Document and harden**  
+   - Record the incident (time, source/destination, ports scanned).  
+   - Review firewall rules to ensure only required UDP services are exposed.  
+   - Consider rate‑limiting or UDP‑port‑knocking for services that must stay open.  
+
+If the source is a legitimate internal scanner, you can whitelist it after confirming the activity is authorized. Otherwise, block and investigate further.",
+Q30,A,1,The detector has classified the flow as Thing_Speak – NORMAL.,"**ATT&CK / CAPEC mapping**
+
+The detector has classified this flow as **“Thing_Speak – NORMAL.”**  
+ThingSpeak is a legitimate cloud‑based IoT data‑logging service, so the traffic matches ordinary **application‑layer data upload**. In the MITRE ATT&CK framework this would be seen as *legitimate* use of the **Application Layer Protocol – Web Protocols (T1071.001 – Web Protocols)*, but it is **not** an adversary technique. In CAPEC there is no specific “attack pattern” for normal ThingSpeak traffic because it is not malicious.
+
+**Vulnerabilities / CVEs**
+
+Since the flow is flagged as normal and does not exhibit any suspicious characteristics, there are no known CVE identifiers directly tied to this particular traffic sample. If a device were compromised and then used ThingSpeak as a C2 channel, the relevant CVEs would be those affecting the compromised device’s firmware or the ThingSpeak service itself—not the traffic pattern you’re seeing here.
+
+**Bottom line**
+
+- **Technique:** None (benign use of a web‑application protocol).  
+- **CAPEC pattern:** None (not an attack).  
+- **Related CVEs:** None associated with this normal ThingSpeak upload.  
+
+If you later see similar flows with anomalous payload sizes, timing, or unexpected destinations, then we would revisit the mapping to ATT&CK (e.g., “Exfiltration Over Command‑and‑Control Channel – T1041”). For now, this sample is just ordinary IoT telemetry.",
+Q30,A,2,ThingSpeak is a legitimate cloud-based IoT data-logging service.,"**ATT&CK / CAPEC mapping**
+
+The detector has classified this flow as **“Thing_Speak – NORMAL.”**  
+ThingSpeak is a legitimate cloud‑based IoT data‑logging service, so the traffic matches ordinary **application‑layer data upload**. In the MITRE ATT&CK framework this would be seen as *legitimate* use of the **Application Layer Protocol – Web Protocols (T1071.001 – Web Protocols)*, but it is **not** an adversary technique. In CAPEC there is no specific “attack pattern” for normal ThingSpeak traffic because it is not malicious.
+
+**Vulnerabilities / CVEs**
+
+Since the flow is flagged as normal and does not exhibit any suspicious characteristics, there are no known CVE identifiers directly tied to this particular traffic sample. If a device were compromised and then used ThingSpeak as a C2 channel, the relevant CVEs would be those affecting the compromised device’s firmware or the ThingSpeak service itself—not the traffic pattern you’re seeing here.
+
+**Bottom line**
+
+- **Technique:** None (benign use of a web‑application protocol).  
+- **CAPEC pattern:** None (not an attack).  
+- **Related CVEs:** None associated with this normal ThingSpeak upload.  
+
+If you later see similar flows with anomalous payload sizes, timing, or unexpected destinations, then we would revisit the mapping to ATT&CK (e.g., “Exfiltration Over Command‑and‑Control Channel – T1041”). For now, this sample is just ordinary IoT telemetry.",
+Q30,A,3,There are no known CVE identifiers directly tied to this particular traffic sample.,"**ATT&CK / CAPEC mapping**
+
+The detector has classified this flow as **“Thing_Speak – NORMAL.”**  
+ThingSpeak is a legitimate cloud‑based IoT data‑logging service, so the traffic matches ordinary **application‑layer data upload**. In the MITRE ATT&CK framework this would be seen as *legitimate* use of the **Application Layer Protocol – Web Protocols (T1071.001 – Web Protocols)*, but it is **not** an adversary technique. In CAPEC there is no specific “attack pattern” for normal ThingSpeak traffic because it is not malicious.
+
+**Vulnerabilities / CVEs**
+
+Since the flow is flagged as normal and does not exhibit any suspicious characteristics, there are no known CVE identifiers directly tied to this particular traffic sample. If a device were compromised and then used ThingSpeak as a C2 channel, the relevant CVEs would be those affecting the compromised device’s firmware or the ThingSpeak service itself—not the traffic pattern you’re seeing here.
+
+**Bottom line**
+
+- **Technique:** None (benign use of a web‑application protocol).  
+- **CAPEC pattern:** None (not an attack).  
+- **Related CVEs:** None associated with this normal ThingSpeak upload.  
+
+If you later see similar flows with anomalous payload sizes, timing, or unexpected destinations, then we would revisit the mapping to ATT&CK (e.g., “Exfiltration Over Command‑and‑Control Channel – T1041”). For now, this sample is just ordinary IoT telemetry.",
+Q03,B,1,The traffic is a TCP SYN flood generated with Hping,"The detector flags the sample as a TCP SYN flood generated with Hping, which is a classic TCP‑based denial‑of‑service attack.  
+The relevant official descriptions in the evidence are:
+
+* **CAPEC‑482 “TCP Flood”**, which defines a flooding attack that uses TCP SYN messages to exhaust a server’s resources [CAPEC-482].  
+* **ATT&CK technique T1499.001 “OS Exhaustion Flood”**, which covers SYN‑flood attacks that exhaust the operating system’s connection‑state limits [T1499.001].
+
+No CVE entries are listed in the evidence as being associated with this traffic, so no known related vulnerabilities are provided [DET].",
+Q03,B,2,CAPEC-482 TCP Flood describes a flooding attack using TCP SYN messages to exhaust server resources,"The detector flags the sample as a TCP SYN flood generated with Hping, which is a classic TCP‑based denial‑of‑service attack.  
+The relevant official descriptions in the evidence are:
+
+* **CAPEC‑482 “TCP Flood”**, which defines a flooding attack that uses TCP SYN messages to exhaust a server’s resources [CAPEC-482].  
+* **ATT&CK technique T1499.001 “OS Exhaustion Flood”**, which covers SYN‑flood attacks that exhaust the operating system’s connection‑state limits [T1499.001].
+
+No CVE entries are listed in the evidence as being associated with this traffic, so no known related vulnerabilities are provided [DET].",
+Q03,B,3,ATT&CK technique T1499.001 OS Exhaustion Flood covers SYN-flood attacks that exhaust operating system connection-state limits,"The detector flags the sample as a TCP SYN flood generated with Hping, which is a classic TCP‑based denial‑of‑service attack.  
+The relevant official descriptions in the evidence are:
+
+* **CAPEC‑482 “TCP Flood”**, which defines a flooding attack that uses TCP SYN messages to exhaust a server’s resources [CAPEC-482].  
+* **ATT&CK technique T1499.001 “OS Exhaustion Flood”**, which covers SYN‑flood attacks that exhaust the operating system’s connection‑state limits [T1499.001].
+
+No CVE entries are listed in the evidence as being associated with this traffic, so no known related vulnerabilities are provided [DET].",
+Q03,B,4,No CVE entries are listed in the evidence as being associated with this traffic,"The detector flags the sample as a TCP SYN flood generated with Hping, which is a classic TCP‑based denial‑of‑service attack.  
+The relevant official descriptions in the evidence are:
+
+* **CAPEC‑482 “TCP Flood”**, which defines a flooding attack that uses TCP SYN messages to exhaust a server’s resources [CAPEC-482].  
+* **ATT&CK technique T1499.001 “OS Exhaustion Flood”**, which covers SYN‑flood attacks that exhaust the operating system’s connection‑state limits [T1499.001].
+
+No CVE entries are listed in the evidence as being associated with this traffic, so no known related vulnerabilities are provided [DET].",
+Q31,A,1,The flow is an MQTT publish session where a device sends data to an MQTT broker on port 1883.,"**What the traffic is**
+
+The flow is an MQTT publish session – a device is sending data to an MQTT broker on the standard MQTT port **1883**. Zeek (the network sensor) recognized the MQTT protocol, so the feature *service_mqtt* is set to 1.
+
+**Why the detector called it “NORMAL”**
+
+The model looks at a handful of numeric features that are typical for benign MQTT traffic:
+
+| Feature (value) | What it tells the model |
+|-----------------|--------------------------|
+| **service_mqtt = 1** | Confirms the protocol is MQTT, narrowing the possible labels to MQTT‑related ones. |
+| **id.resp_p = 1883** | The destination port matches the default MQTT broker port, reinforcing the MQTT hypothesis. |
+| **flow_iat.min = 261 µs** | The shortest inter‑arrival time between packets is very small, which is normal for the rapid request‑response pattern of MQTT publish packets. |
+| **fwd_header_size_min = 32 bytes** | The smallest forward packet header is the minimum TCP header size, indicating no extra options or padding—again typical for standard MQTT packets. |
+| **fwd_pkts_payload.avg = 7.8 bytes** | MQTT publish packets often carry only a few bytes of payload (topic name, QoS flag, small sensor reading). This low average payload matches normal IoT telemetry.
+
+All these values line up with the statistical profile the model learned for legitimate MQTT publish traffic, giving it a **confidence of 1.00** and a “NORMAL” label. No anomalies (e.g., unusual ports, large payloads, or irregular timing) were present, so the detector did not flag it as an attack.",
+Q31,A,2,"Zeek recognized the MQTT protocol, setting service_mqtt to 1.","**What the traffic is**
+
+The flow is an MQTT publish session – a device is sending data to an MQTT broker on the standard MQTT port **1883**. Zeek (the network sensor) recognized the MQTT protocol, so the feature *service_mqtt* is set to 1.
+
+**Why the detector called it “NORMAL”**
+
+The model looks at a handful of numeric features that are typical for benign MQTT traffic:
+
+| Feature (value) | What it tells the model |
+|-----------------|--------------------------|
+| **service_mqtt = 1** | Confirms the protocol is MQTT, narrowing the possible labels to MQTT‑related ones. |
+| **id.resp_p = 1883** | The destination port matches the default MQTT broker port, reinforcing the MQTT hypothesis. |
+| **flow_iat.min = 261 µs** | The shortest inter‑arrival time between packets is very small, which is normal for the rapid request‑response pattern of MQTT publish packets. |
+| **fwd_header_size_min = 32 bytes** | The smallest forward packet header is the minimum TCP header size, indicating no extra options or padding—again typical for standard MQTT packets. |
+| **fwd_pkts_payload.avg = 7.8 bytes** | MQTT publish packets often carry only a few bytes of payload (topic name, QoS flag, small sensor reading). This low average payload matches normal IoT telemetry.
+
+All these values line up with the statistical profile the model learned for legitimate MQTT publish traffic, giving it a **confidence of 1.00** and a “NORMAL” label. No anomalies (e.g., unusual ports, large payloads, or irregular timing) were present, so the detector did not flag it as an attack.",
+Q31,A,3,The model classified the traffic as NORMAL with a confidence of 1.00.,"**What the traffic is**
+
+The flow is an MQTT publish session – a device is sending data to an MQTT broker on the standard MQTT port **1883**. Zeek (the network sensor) recognized the MQTT protocol, so the feature *service_mqtt* is set to 1.
+
+**Why the detector called it “NORMAL”**
+
+The model looks at a handful of numeric features that are typical for benign MQTT traffic:
+
+| Feature (value) | What it tells the model |
+|-----------------|--------------------------|
+| **service_mqtt = 1** | Confirms the protocol is MQTT, narrowing the possible labels to MQTT‑related ones. |
+| **id.resp_p = 1883** | The destination port matches the default MQTT broker port, reinforcing the MQTT hypothesis. |
+| **flow_iat.min = 261 µs** | The shortest inter‑arrival time between packets is very small, which is normal for the rapid request‑response pattern of MQTT publish packets. |
+| **fwd_header_size_min = 32 bytes** | The smallest forward packet header is the minimum TCP header size, indicating no extra options or padding—again typical for standard MQTT packets. |
+| **fwd_pkts_payload.avg = 7.8 bytes** | MQTT publish packets often carry only a few bytes of payload (topic name, QoS flag, small sensor reading). This low average payload matches normal IoT telemetry.
+
+All these values line up with the statistical profile the model learned for legitimate MQTT publish traffic, giving it a **confidence of 1.00** and a “NORMAL” label. No anomalies (e.g., unusual ports, large payloads, or irregular timing) were present, so the detector did not flag it as an attack.",
+Q31,A,4,"The destination port is 1883, which matches the default MQTT broker port.","**What the traffic is**
+
+The flow is an MQTT publish session – a device is sending data to an MQTT broker on the standard MQTT port **1883**. Zeek (the network sensor) recognized the MQTT protocol, so the feature *service_mqtt* is set to 1.
+
+**Why the detector called it “NORMAL”**
+
+The model looks at a handful of numeric features that are typical for benign MQTT traffic:
+
+| Feature (value) | What it tells the model |
+|-----------------|--------------------------|
+| **service_mqtt = 1** | Confirms the protocol is MQTT, narrowing the possible labels to MQTT‑related ones. |
+| **id.resp_p = 1883** | The destination port matches the default MQTT broker port, reinforcing the MQTT hypothesis. |
+| **flow_iat.min = 261 µs** | The shortest inter‑arrival time between packets is very small, which is normal for the rapid request‑response pattern of MQTT publish packets. |
+| **fwd_header_size_min = 32 bytes** | The smallest forward packet header is the minimum TCP header size, indicating no extra options or padding—again typical for standard MQTT packets. |
+| **fwd_pkts_payload.avg = 7.8 bytes** | MQTT publish packets often carry only a few bytes of payload (topic name, QoS flag, small sensor reading). This low average payload matches normal IoT telemetry.
+
+All these values line up with the statistical profile the model learned for legitimate MQTT publish traffic, giving it a **confidence of 1.00** and a “NORMAL” label. No anomalies (e.g., unusual ports, large payloads, or irregular timing) were present, so the detector did not flag it as an attack.",
+Q31,A,5,The minimum flow inter-arrival time (flow_iat.min) is 261 microseconds.,"**What the traffic is**
+
+The flow is an MQTT publish session – a device is sending data to an MQTT broker on the standard MQTT port **1883**. Zeek (the network sensor) recognized the MQTT protocol, so the feature *service_mqtt* is set to 1.
+
+**Why the detector called it “NORMAL”**
+
+The model looks at a handful of numeric features that are typical for benign MQTT traffic:
+
+| Feature (value) | What it tells the model |
+|-----------------|--------------------------|
+| **service_mqtt = 1** | Confirms the protocol is MQTT, narrowing the possible labels to MQTT‑related ones. |
+| **id.resp_p = 1883** | The destination port matches the default MQTT broker port, reinforcing the MQTT hypothesis. |
+| **flow_iat.min = 261 µs** | The shortest inter‑arrival time between packets is very small, which is normal for the rapid request‑response pattern of MQTT publish packets. |
+| **fwd_header_size_min = 32 bytes** | The smallest forward packet header is the minimum TCP header size, indicating no extra options or padding—again typical for standard MQTT packets. |
+| **fwd_pkts_payload.avg = 7.8 bytes** | MQTT publish packets often carry only a few bytes of payload (topic name, QoS flag, small sensor reading). This low average payload matches normal IoT telemetry.
+
+All these values line up with the statistical profile the model learned for legitimate MQTT publish traffic, giving it a **confidence of 1.00** and a “NORMAL” label. No anomalies (e.g., unusual ports, large payloads, or irregular timing) were present, so the detector did not flag it as an attack.",
+Q31,A,6,The smallest forward header size (fwd_header_size_min) is 32 bytes.,"**What the traffic is**
+
+The flow is an MQTT publish session – a device is sending data to an MQTT broker on the standard MQTT port **1883**. Zeek (the network sensor) recognized the MQTT protocol, so the feature *service_mqtt* is set to 1.
+
+**Why the detector called it “NORMAL”**
+
+The model looks at a handful of numeric features that are typical for benign MQTT traffic:
+
+| Feature (value) | What it tells the model |
+|-----------------|--------------------------|
+| **service_mqtt = 1** | Confirms the protocol is MQTT, narrowing the possible labels to MQTT‑related ones. |
+| **id.resp_p = 1883** | The destination port matches the default MQTT broker port, reinforcing the MQTT hypothesis. |
+| **flow_iat.min = 261 µs** | The shortest inter‑arrival time between packets is very small, which is normal for the rapid request‑response pattern of MQTT publish packets. |
+| **fwd_header_size_min = 32 bytes** | The smallest forward packet header is the minimum TCP header size, indicating no extra options or padding—again typical for standard MQTT packets. |
+| **fwd_pkts_payload.avg = 7.8 bytes** | MQTT publish packets often carry only a few bytes of payload (topic name, QoS flag, small sensor reading). This low average payload matches normal IoT telemetry.
+
+All these values line up with the statistical profile the model learned for legitimate MQTT publish traffic, giving it a **confidence of 1.00** and a “NORMAL” label. No anomalies (e.g., unusual ports, large payloads, or irregular timing) were present, so the detector did not flag it as an attack.",
+Q31,A,7,The average forward packet payload (fwd_pkts_payload.avg) is 7.8 bytes.,"**What the traffic is**
+
+The flow is an MQTT publish session – a device is sending data to an MQTT broker on the standard MQTT port **1883**. Zeek (the network sensor) recognized the MQTT protocol, so the feature *service_mqtt* is set to 1.
+
+**Why the detector called it “NORMAL”**
+
+The model looks at a handful of numeric features that are typical for benign MQTT traffic:
+
+| Feature (value) | What it tells the model |
+|-----------------|--------------------------|
+| **service_mqtt = 1** | Confirms the protocol is MQTT, narrowing the possible labels to MQTT‑related ones. |
+| **id.resp_p = 1883** | The destination port matches the default MQTT broker port, reinforcing the MQTT hypothesis. |
+| **flow_iat.min = 261 µs** | The shortest inter‑arrival time between packets is very small, which is normal for the rapid request‑response pattern of MQTT publish packets. |
+| **fwd_header_size_min = 32 bytes** | The smallest forward packet header is the minimum TCP header size, indicating no extra options or padding—again typical for standard MQTT packets. |
+| **fwd_pkts_payload.avg = 7.8 bytes** | MQTT publish packets often carry only a few bytes of payload (topic name, QoS flag, small sensor reading). This low average payload matches normal IoT telemetry.
+
+All these values line up with the statistical profile the model learned for legitimate MQTT publish traffic, giving it a **confidence of 1.00** and a “NORMAL” label. No anomalies (e.g., unusual ports, large payloads, or irregular timing) were present, so the detector did not flag it as an attack.",
+Q11,A,1,The detector is 100% confident this flow is an Nmap TCP scan,"**What you’re seeing**
+
+The detector is 100 % confident this flow is an **Nmap TCP scan** – a classic reconnaissance technique where an attacker probes many ports to learn what services are listening. The key clues are:
+
+| Feature | Why it matters |
+|---------|----------------|
+| **fwd_header_size_min = 40 bytes** | Only the TCP header is present – no payload, typical of a SYN‑only probe. |
+| **fwd_pkts_per_sec / bwd_pkts_per_sec ≈ 167 k pps** | Extremely high packet rate, far beyond normal IoT traffic. |
+| **id.resp_p = 4045** | Destination port is unusual for IoT devices (they usually use 1883, 5683, etc.). |
+| **flow_pkts_payload.avg = 0 bytes** | No data is being exchanged, just connection attempts. |
+
+**Immediate response steps**
+
+1. **Block the source** – Add a firewall rule (or ACL) to drop all traffic from the offending IP address (or the subnet if you see multiple sources).  
+2. **Rate‑limit TCP SYNs** – If your firewall supports it, limit the number of new TCP connections per second to a realistic IoT baseline (e.g., < 10 pps).  
+3. **Log the event** – Ensure the flow is logged with full packet headers for later forensics.  
+4. **Notify stakeholders** – Alert the network operations team and, if required, your incident‑response lead.  
+5. **Verify device health** – Check the targeted IoT devices (port 4045) for any signs of compromise; a scan alone isn’t destructive but may precede an attack.  
+
+**Long‑term hardening**
+
+- **Restrict inbound ports** to only those required (default‑deny posture).  
+- **Enable intrusion‑prevention signatures** for Nmap scans on your perimeter IDS/IPS.  
+- **Monitor for similar high‑rate, zero‑payload flows** and automate the block‑and‑alert workflow.
+
+By blocking the scanner now and tightening your port and rate controls, you stop the reconnaissance phase and raise the bar for any further attempts.",
+Q11,A,2,Nmap TCP scan is a reconnaissance technique where an attacker probes many ports to learn what services are listening,"**What you’re seeing**
+
+The detector is 100 % confident this flow is an **Nmap TCP scan** – a classic reconnaissance technique where an attacker probes many ports to learn what services are listening. The key clues are:
+
+| Feature | Why it matters |
+|---------|----------------|
+| **fwd_header_size_min = 40 bytes** | Only the TCP header is present – no payload, typical of a SYN‑only probe. |
+| **fwd_pkts_per_sec / bwd_pkts_per_sec ≈ 167 k pps** | Extremely high packet rate, far beyond normal IoT traffic. |
+| **id.resp_p = 4045** | Destination port is unusual for IoT devices (they usually use 1883, 5683, etc.). |
+| **flow_pkts_payload.avg = 0 bytes** | No data is being exchanged, just connection attempts. |
+
+**Immediate response steps**
+
+1. **Block the source** – Add a firewall rule (or ACL) to drop all traffic from the offending IP address (or the subnet if you see multiple sources).  
+2. **Rate‑limit TCP SYNs** – If your firewall supports it, limit the number of new TCP connections per second to a realistic IoT baseline (e.g., < 10 pps).  
+3. **Log the event** – Ensure the flow is logged with full packet headers for later forensics.  
+4. **Notify stakeholders** – Alert the network operations team and, if required, your incident‑response lead.  
+5. **Verify device health** – Check the targeted IoT devices (port 4045) for any signs of compromise; a scan alone isn’t destructive but may precede an attack.  
+
+**Long‑term hardening**
+
+- **Restrict inbound ports** to only those required (default‑deny posture).  
+- **Enable intrusion‑prevention signatures** for Nmap scans on your perimeter IDS/IPS.  
+- **Monitor for similar high‑rate, zero‑payload flows** and automate the block‑and‑alert workflow.
+
+By blocking the scanner now and tightening your port and rate controls, you stop the reconnaissance phase and raise the bar for any further attempts.",
+Q11,A,3,fwd_header_size_min equals 40 bytes indicating only the TCP header is present with no payload,"**What you’re seeing**
+
+The detector is 100 % confident this flow is an **Nmap TCP scan** – a classic reconnaissance technique where an attacker probes many ports to learn what services are listening. The key clues are:
+
+| Feature | Why it matters |
+|---------|----------------|
+| **fwd_header_size_min = 40 bytes** | Only the TCP header is present – no payload, typical of a SYN‑only probe. |
+| **fwd_pkts_per_sec / bwd_pkts_per_sec ≈ 167 k pps** | Extremely high packet rate, far beyond normal IoT traffic. |
+| **id.resp_p = 4045** | Destination port is unusual for IoT devices (they usually use 1883, 5683, etc.). |
+| **flow_pkts_payload.avg = 0 bytes** | No data is being exchanged, just connection attempts. |
+
+**Immediate response steps**
+
+1. **Block the source** – Add a firewall rule (or ACL) to drop all traffic from the offending IP address (or the subnet if you see multiple sources).  
+2. **Rate‑limit TCP SYNs** – If your firewall supports it, limit the number of new TCP connections per second to a realistic IoT baseline (e.g., < 10 pps).  
+3. **Log the event** – Ensure the flow is logged with full packet headers for later forensics.  
+4. **Notify stakeholders** – Alert the network operations team and, if required, your incident‑response lead.  
+5. **Verify device health** – Check the targeted IoT devices (port 4045) for any signs of compromise; a scan alone isn’t destructive but may precede an attack.  
+
+**Long‑term hardening**
+
+- **Restrict inbound ports** to only those required (default‑deny posture).  
+- **Enable intrusion‑prevention signatures** for Nmap scans on your perimeter IDS/IPS.  
+- **Monitor for similar high‑rate, zero‑payload flows** and automate the block‑and‑alert workflow.
+
+By blocking the scanner now and tightening your port and rate controls, you stop the reconnaissance phase and raise the bar for any further attempts.",
+Q11,A,4,The packet rate is extremely high at approximately 167k packets per second,"**What you’re seeing**
+
+The detector is 100 % confident this flow is an **Nmap TCP scan** – a classic reconnaissance technique where an attacker probes many ports to learn what services are listening. The key clues are:
+
+| Feature | Why it matters |
+|---------|----------------|
+| **fwd_header_size_min = 40 bytes** | Only the TCP header is present – no payload, typical of a SYN‑only probe. |
+| **fwd_pkts_per_sec / bwd_pkts_per_sec ≈ 167 k pps** | Extremely high packet rate, far beyond normal IoT traffic. |
+| **id.resp_p = 4045** | Destination port is unusual for IoT devices (they usually use 1883, 5683, etc.). |
+| **flow_pkts_payload.avg = 0 bytes** | No data is being exchanged, just connection attempts. |
+
+**Immediate response steps**
+
+1. **Block the source** – Add a firewall rule (or ACL) to drop all traffic from the offending IP address (or the subnet if you see multiple sources).  
+2. **Rate‑limit TCP SYNs** – If your firewall supports it, limit the number of new TCP connections per second to a realistic IoT baseline (e.g., < 10 pps).  
+3. **Log the event** – Ensure the flow is logged with full packet headers for later forensics.  
+4. **Notify stakeholders** – Alert the network operations team and, if required, your incident‑response lead.  
+5. **Verify device health** – Check the targeted IoT devices (port 4045) for any signs of compromise; a scan alone isn’t destructive but may precede an attack.  
+
+**Long‑term hardening**
+
+- **Restrict inbound ports** to only those required (default‑deny posture).  
+- **Enable intrusion‑prevention signatures** for Nmap scans on your perimeter IDS/IPS.  
+- **Monitor for similar high‑rate, zero‑payload flows** and automate the block‑and‑alert workflow.
+
+By blocking the scanner now and tightening your port and rate controls, you stop the reconnaissance phase and raise the bar for any further attempts.",
+Q11,A,5,The destination port is 4045,"**What you’re seeing**
+
+The detector is 100 % confident this flow is an **Nmap TCP scan** – a classic reconnaissance technique where an attacker probes many ports to learn what services are listening. The key clues are:
+
+| Feature | Why it matters |
+|---------|----------------|
+| **fwd_header_size_min = 40 bytes** | Only the TCP header is present – no payload, typical of a SYN‑only probe. |
+| **fwd_pkts_per_sec / bwd_pkts_per_sec ≈ 167 k pps** | Extremely high packet rate, far beyond normal IoT traffic. |
+| **id.resp_p = 4045** | Destination port is unusual for IoT devices (they usually use 1883, 5683, etc.). |
+| **flow_pkts_payload.avg = 0 bytes** | No data is being exchanged, just connection attempts. |
+
+**Immediate response steps**
+
+1. **Block the source** – Add a firewall rule (or ACL) to drop all traffic from the offending IP address (or the subnet if you see multiple sources).  
+2. **Rate‑limit TCP SYNs** – If your firewall supports it, limit the number of new TCP connections per second to a realistic IoT baseline (e.g., < 10 pps).  
+3. **Log the event** – Ensure the flow is logged with full packet headers for later forensics.  
+4. **Notify stakeholders** – Alert the network operations team and, if required, your incident‑response lead.  
+5. **Verify device health** – Check the targeted IoT devices (port 4045) for any signs of compromise; a scan alone isn’t destructive but may precede an attack.  
+
+**Long‑term hardening**
+
+- **Restrict inbound ports** to only those required (default‑deny posture).  
+- **Enable intrusion‑prevention signatures** for Nmap scans on your perimeter IDS/IPS.  
+- **Monitor for similar high‑rate, zero‑payload flows** and automate the block‑and‑alert workflow.
+
+By blocking the scanner now and tightening your port and rate controls, you stop the reconnaissance phase and raise the bar for any further attempts.",
+Q11,A,6,The average packet payload is 0 bytes meaning no data is being exchanged,"**What you’re seeing**
+
+The detector is 100 % confident this flow is an **Nmap TCP scan** – a classic reconnaissance technique where an attacker probes many ports to learn what services are listening. The key clues are:
+
+| Feature | Why it matters |
+|---------|----------------|
+| **fwd_header_size_min = 40 bytes** | Only the TCP header is present – no payload, typical of a SYN‑only probe. |
+| **fwd_pkts_per_sec / bwd_pkts_per_sec ≈ 167 k pps** | Extremely high packet rate, far beyond normal IoT traffic. |
+| **id.resp_p = 4045** | Destination port is unusual for IoT devices (they usually use 1883, 5683, etc.). |
+| **flow_pkts_payload.avg = 0 bytes** | No data is being exchanged, just connection attempts. |
+
+**Immediate response steps**
+
+1. **Block the source** – Add a firewall rule (or ACL) to drop all traffic from the offending IP address (or the subnet if you see multiple sources).  
+2. **Rate‑limit TCP SYNs** – If your firewall supports it, limit the number of new TCP connections per second to a realistic IoT baseline (e.g., < 10 pps).  
+3. **Log the event** – Ensure the flow is logged with full packet headers for later forensics.  
+4. **Notify stakeholders** – Alert the network operations team and, if required, your incident‑response lead.  
+5. **Verify device health** – Check the targeted IoT devices (port 4045) for any signs of compromise; a scan alone isn’t destructive but may precede an attack.  
+
+**Long‑term hardening**
+
+- **Restrict inbound ports** to only those required (default‑deny posture).  
+- **Enable intrusion‑prevention signatures** for Nmap scans on your perimeter IDS/IPS.  
+- **Monitor for similar high‑rate, zero‑payload flows** and automate the block‑and‑alert workflow.
+
+By blocking the scanner now and tightening your port and rate controls, you stop the reconnaissance phase and raise the bar for any further attempts.",
+Q11,A,7,Add a firewall rule to drop all traffic from the offending IP address,"**What you’re seeing**
+
+The detector is 100 % confident this flow is an **Nmap TCP scan** – a classic reconnaissance technique where an attacker probes many ports to learn what services are listening. The key clues are:
+
+| Feature | Why it matters |
+|---------|----------------|
+| **fwd_header_size_min = 40 bytes** | Only the TCP header is present – no payload, typical of a SYN‑only probe. |
+| **fwd_pkts_per_sec / bwd_pkts_per_sec ≈ 167 k pps** | Extremely high packet rate, far beyond normal IoT traffic. |
+| **id.resp_p = 4045** | Destination port is unusual for IoT devices (they usually use 1883, 5683, etc.). |
+| **flow_pkts_payload.avg = 0 bytes** | No data is being exchanged, just connection attempts. |
+
+**Immediate response steps**
+
+1. **Block the source** – Add a firewall rule (or ACL) to drop all traffic from the offending IP address (or the subnet if you see multiple sources).  
+2. **Rate‑limit TCP SYNs** – If your firewall supports it, limit the number of new TCP connections per second to a realistic IoT baseline (e.g., < 10 pps).  
+3. **Log the event** – Ensure the flow is logged with full packet headers for later forensics.  
+4. **Notify stakeholders** – Alert the network operations team and, if required, your incident‑response lead.  
+5. **Verify device health** – Check the targeted IoT devices (port 4045) for any signs of compromise; a scan alone isn’t destructive but may precede an attack.  
+
+**Long‑term hardening**
+
+- **Restrict inbound ports** to only those required (default‑deny posture).  
+- **Enable intrusion‑prevention signatures** for Nmap scans on your perimeter IDS/IPS.  
+- **Monitor for similar high‑rate, zero‑payload flows** and automate the block‑and‑alert workflow.
+
+By blocking the scanner now and tightening your port and rate controls, you stop the reconnaissance phase and raise the bar for any further attempts.",
+Q11,A,8,Limit the number of new TCP connections per second to a realistic IoT baseline,"**What you’re seeing**
+
+The detector is 100 % confident this flow is an **Nmap TCP scan** – a classic reconnaissance technique where an attacker probes many ports to learn what services are listening. The key clues are:
+
+| Feature | Why it matters |
+|---------|----------------|
+| **fwd_header_size_min = 40 bytes** | Only the TCP header is present – no payload, typical of a SYN‑only probe. |
+| **fwd_pkts_per_sec / bwd_pkts_per_sec ≈ 167 k pps** | Extremely high packet rate, far beyond normal IoT traffic. |
+| **id.resp_p = 4045** | Destination port is unusual for IoT devices (they usually use 1883, 5683, etc.). |
+| **flow_pkts_payload.avg = 0 bytes** | No data is being exchanged, just connection attempts. |
+
+**Immediate response steps**
+
+1. **Block the source** – Add a firewall rule (or ACL) to drop all traffic from the offending IP address (or the subnet if you see multiple sources).  
+2. **Rate‑limit TCP SYNs** – If your firewall supports it, limit the number of new TCP connections per second to a realistic IoT baseline (e.g., < 10 pps).  
+3. **Log the event** – Ensure the flow is logged with full packet headers for later forensics.  
+4. **Notify stakeholders** – Alert the network operations team and, if required, your incident‑response lead.  
+5. **Verify device health** – Check the targeted IoT devices (port 4045) for any signs of compromise; a scan alone isn’t destructive but may precede an attack.  
+
+**Long‑term hardening**
+
+- **Restrict inbound ports** to only those required (default‑deny posture).  
+- **Enable intrusion‑prevention signatures** for Nmap scans on your perimeter IDS/IPS.  
+- **Monitor for similar high‑rate, zero‑payload flows** and automate the block‑and‑alert workflow.
+
+By blocking the scanner now and tightening your port and rate controls, you stop the reconnaissance phase and raise the bar for any further attempts.",
+Q11,A,9,Ensure the flow is logged with full packet headers for later forensics,"**What you’re seeing**
+
+The detector is 100 % confident this flow is an **Nmap TCP scan** – a classic reconnaissance technique where an attacker probes many ports to learn what services are listening. The key clues are:
+
+| Feature | Why it matters |
+|---------|----------------|
+| **fwd_header_size_min = 40 bytes** | Only the TCP header is present – no payload, typical of a SYN‑only probe. |
+| **fwd_pkts_per_sec / bwd_pkts_per_sec ≈ 167 k pps** | Extremely high packet rate, far beyond normal IoT traffic. |
+| **id.resp_p = 4045** | Destination port is unusual for IoT devices (they usually use 1883, 5683, etc.). |
+| **flow_pkts_payload.avg = 0 bytes** | No data is being exchanged, just connection attempts. |
+
+**Immediate response steps**
+
+1. **Block the source** – Add a firewall rule (or ACL) to drop all traffic from the offending IP address (or the subnet if you see multiple sources).  
+2. **Rate‑limit TCP SYNs** – If your firewall supports it, limit the number of new TCP connections per second to a realistic IoT baseline (e.g., < 10 pps).  
+3. **Log the event** – Ensure the flow is logged with full packet headers for later forensics.  
+4. **Notify stakeholders** – Alert the network operations team and, if required, your incident‑response lead.  
+5. **Verify device health** – Check the targeted IoT devices (port 4045) for any signs of compromise; a scan alone isn’t destructive but may precede an attack.  
+
+**Long‑term hardening**
+
+- **Restrict inbound ports** to only those required (default‑deny posture).  
+- **Enable intrusion‑prevention signatures** for Nmap scans on your perimeter IDS/IPS.  
+- **Monitor for similar high‑rate, zero‑payload flows** and automate the block‑and‑alert workflow.
+
+By blocking the scanner now and tightening your port and rate controls, you stop the reconnaissance phase and raise the bar for any further attempts.",
+Q11,A,10,Alert the network operations team and incident-response lead,"**What you’re seeing**
+
+The detector is 100 % confident this flow is an **Nmap TCP scan** – a classic reconnaissance technique where an attacker probes many ports to learn what services are listening. The key clues are:
+
+| Feature | Why it matters |
+|---------|----------------|
+| **fwd_header_size_min = 40 bytes** | Only the TCP header is present – no payload, typical of a SYN‑only probe. |
+| **fwd_pkts_per_sec / bwd_pkts_per_sec ≈ 167 k pps** | Extremely high packet rate, far beyond normal IoT traffic. |
+| **id.resp_p = 4045** | Destination port is unusual for IoT devices (they usually use 1883, 5683, etc.). |
+| **flow_pkts_payload.avg = 0 bytes** | No data is being exchanged, just connection attempts. |
+
+**Immediate response steps**
+
+1. **Block the source** – Add a firewall rule (or ACL) to drop all traffic from the offending IP address (or the subnet if you see multiple sources).  
+2. **Rate‑limit TCP SYNs** – If your firewall supports it, limit the number of new TCP connections per second to a realistic IoT baseline (e.g., < 10 pps).  
+3. **Log the event** – Ensure the flow is logged with full packet headers for later forensics.  
+4. **Notify stakeholders** – Alert the network operations team and, if required, your incident‑response lead.  
+5. **Verify device health** – Check the targeted IoT devices (port 4045) for any signs of compromise; a scan alone isn’t destructive but may precede an attack.  
+
+**Long‑term hardening**
+
+- **Restrict inbound ports** to only those required (default‑deny posture).  
+- **Enable intrusion‑prevention signatures** for Nmap scans on your perimeter IDS/IPS.  
+- **Monitor for similar high‑rate, zero‑payload flows** and automate the block‑and‑alert workflow.
+
+By blocking the scanner now and tightening your port and rate controls, you stop the reconnaissance phase and raise the bar for any further attempts.",
+Q11,A,11,Check the targeted IoT devices on port 4045 for signs of compromise,"**What you’re seeing**
+
+The detector is 100 % confident this flow is an **Nmap TCP scan** – a classic reconnaissance technique where an attacker probes many ports to learn what services are listening. The key clues are:
+
+| Feature | Why it matters |
+|---------|----------------|
+| **fwd_header_size_min = 40 bytes** | Only the TCP header is present – no payload, typical of a SYN‑only probe. |
+| **fwd_pkts_per_sec / bwd_pkts_per_sec ≈ 167 k pps** | Extremely high packet rate, far beyond normal IoT traffic. |
+| **id.resp_p = 4045** | Destination port is unusual for IoT devices (they usually use 1883, 5683, etc.). |
+| **flow_pkts_payload.avg = 0 bytes** | No data is being exchanged, just connection attempts. |
+
+**Immediate response steps**
+
+1. **Block the source** – Add a firewall rule (or ACL) to drop all traffic from the offending IP address (or the subnet if you see multiple sources).  
+2. **Rate‑limit TCP SYNs** – If your firewall supports it, limit the number of new TCP connections per second to a realistic IoT baseline (e.g., < 10 pps).  
+3. **Log the event** – Ensure the flow is logged with full packet headers for later forensics.  
+4. **Notify stakeholders** – Alert the network operations team and, if required, your incident‑response lead.  
+5. **Verify device health** – Check the targeted IoT devices (port 4045) for any signs of compromise; a scan alone isn’t destructive but may precede an attack.  
+
+**Long‑term hardening**
+
+- **Restrict inbound ports** to only those required (default‑deny posture).  
+- **Enable intrusion‑prevention signatures** for Nmap scans on your perimeter IDS/IPS.  
+- **Monitor for similar high‑rate, zero‑payload flows** and automate the block‑and‑alert workflow.
+
+By blocking the scanner now and tightening your port and rate controls, you stop the reconnaissance phase and raise the bar for any further attempts.",
+Q11,A,12,Restrict inbound ports to only those required,"**What you’re seeing**
+
+The detector is 100 % confident this flow is an **Nmap TCP scan** – a classic reconnaissance technique where an attacker probes many ports to learn what services are listening. The key clues are:
+
+| Feature | Why it matters |
+|---------|----------------|
+| **fwd_header_size_min = 40 bytes** | Only the TCP header is present – no payload, typical of a SYN‑only probe. |
+| **fwd_pkts_per_sec / bwd_pkts_per_sec ≈ 167 k pps** | Extremely high packet rate, far beyond normal IoT traffic. |
+| **id.resp_p = 4045** | Destination port is unusual for IoT devices (they usually use 1883, 5683, etc.). |
+| **flow_pkts_payload.avg = 0 bytes** | No data is being exchanged, just connection attempts. |
+
+**Immediate response steps**
+
+1. **Block the source** – Add a firewall rule (or ACL) to drop all traffic from the offending IP address (or the subnet if you see multiple sources).  
+2. **Rate‑limit TCP SYNs** – If your firewall supports it, limit the number of new TCP connections per second to a realistic IoT baseline (e.g., < 10 pps).  
+3. **Log the event** – Ensure the flow is logged with full packet headers for later forensics.  
+4. **Notify stakeholders** – Alert the network operations team and, if required, your incident‑response lead.  
+5. **Verify device health** – Check the targeted IoT devices (port 4045) for any signs of compromise; a scan alone isn’t destructive but may precede an attack.  
+
+**Long‑term hardening**
+
+- **Restrict inbound ports** to only those required (default‑deny posture).  
+- **Enable intrusion‑prevention signatures** for Nmap scans on your perimeter IDS/IPS.  
+- **Monitor for similar high‑rate, zero‑payload flows** and automate the block‑and‑alert workflow.
+
+By blocking the scanner now and tightening your port and rate controls, you stop the reconnaissance phase and raise the bar for any further attempts.",
+Q11,A,13,Enable intrusion-prevention signatures for Nmap scans on your perimeter IDS/IPS,"**What you’re seeing**
+
+The detector is 100 % confident this flow is an **Nmap TCP scan** – a classic reconnaissance technique where an attacker probes many ports to learn what services are listening. The key clues are:
+
+| Feature | Why it matters |
+|---------|----------------|
+| **fwd_header_size_min = 40 bytes** | Only the TCP header is present – no payload, typical of a SYN‑only probe. |
+| **fwd_pkts_per_sec / bwd_pkts_per_sec ≈ 167 k pps** | Extremely high packet rate, far beyond normal IoT traffic. |
+| **id.resp_p = 4045** | Destination port is unusual for IoT devices (they usually use 1883, 5683, etc.). |
+| **flow_pkts_payload.avg = 0 bytes** | No data is being exchanged, just connection attempts. |
+
+**Immediate response steps**
+
+1. **Block the source** – Add a firewall rule (or ACL) to drop all traffic from the offending IP address (or the subnet if you see multiple sources).  
+2. **Rate‑limit TCP SYNs** – If your firewall supports it, limit the number of new TCP connections per second to a realistic IoT baseline (e.g., < 10 pps).  
+3. **Log the event** – Ensure the flow is logged with full packet headers for later forensics.  
+4. **Notify stakeholders** – Alert the network operations team and, if required, your incident‑response lead.  
+5. **Verify device health** – Check the targeted IoT devices (port 4045) for any signs of compromise; a scan alone isn’t destructive but may precede an attack.  
+
+**Long‑term hardening**
+
+- **Restrict inbound ports** to only those required (default‑deny posture).  
+- **Enable intrusion‑prevention signatures** for Nmap scans on your perimeter IDS/IPS.  
+- **Monitor for similar high‑rate, zero‑payload flows** and automate the block‑and‑alert workflow.
+
+By blocking the scanner now and tightening your port and rate controls, you stop the reconnaissance phase and raise the bar for any further attempts.",
+Q11,A,14,"Monitor for similar high-rate, zero-payload flows and automate the block-and-alert workflow","**What you’re seeing**
+
+The detector is 100 % confident this flow is an **Nmap TCP scan** – a classic reconnaissance technique where an attacker probes many ports to learn what services are listening. The key clues are:
+
+| Feature | Why it matters |
+|---------|----------------|
+| **fwd_header_size_min = 40 bytes** | Only the TCP header is present – no payload, typical of a SYN‑only probe. |
+| **fwd_pkts_per_sec / bwd_pkts_per_sec ≈ 167 k pps** | Extremely high packet rate, far beyond normal IoT traffic. |
+| **id.resp_p = 4045** | Destination port is unusual for IoT devices (they usually use 1883, 5683, etc.). |
+| **flow_pkts_payload.avg = 0 bytes** | No data is being exchanged, just connection attempts. |
+
+**Immediate response steps**
+
+1. **Block the source** – Add a firewall rule (or ACL) to drop all traffic from the offending IP address (or the subnet if you see multiple sources).  
+2. **Rate‑limit TCP SYNs** – If your firewall supports it, limit the number of new TCP connections per second to a realistic IoT baseline (e.g., < 10 pps).  
+3. **Log the event** – Ensure the flow is logged with full packet headers for later forensics.  
+4. **Notify stakeholders** – Alert the network operations team and, if required, your incident‑response lead.  
+5. **Verify device health** – Check the targeted IoT devices (port 4045) for any signs of compromise; a scan alone isn’t destructive but may precede an attack.  
+
+**Long‑term hardening**
+
+- **Restrict inbound ports** to only those required (default‑deny posture).  
+- **Enable intrusion‑prevention signatures** for Nmap scans on your perimeter IDS/IPS.  
+- **Monitor for similar high‑rate, zero‑payload flows** and automate the block‑and‑alert workflow.
+
+By blocking the scanner now and tightening your port and rate controls, you stop the reconnaissance phase and raise the bar for any further attempts.",
+Q22,A,1,The flow is flagged as an Nmap OS-detection scan,"**What the traffic is**
+
+The flow is being flagged as an **Nmap OS‑detection scan** – a classic reconnaissance technique where the Nmap tool sends specially crafted TCP packets to infer the target’s operating system. In this sample the scanner never sends any data payload (largest payload = 0 bytes) and it never tries to close the connection (FIN flag count = 0).
+
+**Why the model decided on that label**
+
+The detector looks at a handful of numeric features that are very characteristic of Nmap’s OS‑fingerprinting mode:
+
+| Feature | Value | Why it matters |
+|---------|-------|----------------|
+| `flow_pkts_payload.max` | 0 bytes | Nmap OS probes are “empty” packets; they carry only TCP flags and options, no application data. |
+| `fwd_init_window_size` / `fwd_last_window_size` | 1024 bytes each | Nmap uses a fixed, small receive‑window size (often 1024) when sending its probes, which is unusual for normal traffic that typically negotiates larger windows. |
+| `bwd_pkts_per_sec` | 52 428.8 pps | The backward direction (responses from the target) arrives at an extremely high rate, matching the rapid burst of replies Nmap expects from the target’s TCP stack. |
+| `flow_FIN_flag_count` | 0 | OS‑detection scans keep the connection open; they never send a FIN to terminate. |
+
+These values line up almost perfectly with the pattern the model learned for the **NMAP_OS_DETECTION** class, giving it a confidence of 1.00. In short, the traffic looks like an Nmap OS‑fingerprinting scan rather than normal device communication.",
+Q22,A,2,Nmap OS detection is a reconnaissance technique where specially crafted TCP packets infer the target's operating system,"**What the traffic is**
+
+The flow is being flagged as an **Nmap OS‑detection scan** – a classic reconnaissance technique where the Nmap tool sends specially crafted TCP packets to infer the target’s operating system. In this sample the scanner never sends any data payload (largest payload = 0 bytes) and it never tries to close the connection (FIN flag count = 0).
+
+**Why the model decided on that label**
+
+The detector looks at a handful of numeric features that are very characteristic of Nmap’s OS‑fingerprinting mode:
+
+| Feature | Value | Why it matters |
+|---------|-------|----------------|
+| `flow_pkts_payload.max` | 0 bytes | Nmap OS probes are “empty” packets; they carry only TCP flags and options, no application data. |
+| `fwd_init_window_size` / `fwd_last_window_size` | 1024 bytes each | Nmap uses a fixed, small receive‑window size (often 1024) when sending its probes, which is unusual for normal traffic that typically negotiates larger windows. |
+| `bwd_pkts_per_sec` | 52 428.8 pps | The backward direction (responses from the target) arrives at an extremely high rate, matching the rapid burst of replies Nmap expects from the target’s TCP stack. |
+| `flow_FIN_flag_count` | 0 | OS‑detection scans keep the connection open; they never send a FIN to terminate. |
+
+These values line up almost perfectly with the pattern the model learned for the **NMAP_OS_DETECTION** class, giving it a confidence of 1.00. In short, the traffic looks like an Nmap OS‑fingerprinting scan rather than normal device communication.",
+Q22,A,3,The scanner never sends any data payload with a largest payload of 0 bytes,"**What the traffic is**
+
+The flow is being flagged as an **Nmap OS‑detection scan** – a classic reconnaissance technique where the Nmap tool sends specially crafted TCP packets to infer the target’s operating system. In this sample the scanner never sends any data payload (largest payload = 0 bytes) and it never tries to close the connection (FIN flag count = 0).
+
+**Why the model decided on that label**
+
+The detector looks at a handful of numeric features that are very characteristic of Nmap’s OS‑fingerprinting mode:
+
+| Feature | Value | Why it matters |
+|---------|-------|----------------|
+| `flow_pkts_payload.max` | 0 bytes | Nmap OS probes are “empty” packets; they carry only TCP flags and options, no application data. |
+| `fwd_init_window_size` / `fwd_last_window_size` | 1024 bytes each | Nmap uses a fixed, small receive‑window size (often 1024) when sending its probes, which is unusual for normal traffic that typically negotiates larger windows. |
+| `bwd_pkts_per_sec` | 52 428.8 pps | The backward direction (responses from the target) arrives at an extremely high rate, matching the rapid burst of replies Nmap expects from the target’s TCP stack. |
+| `flow_FIN_flag_count` | 0 | OS‑detection scans keep the connection open; they never send a FIN to terminate. |
+
+These values line up almost perfectly with the pattern the model learned for the **NMAP_OS_DETECTION** class, giving it a confidence of 1.00. In short, the traffic looks like an Nmap OS‑fingerprinting scan rather than normal device communication.",
+Q22,A,4,The scanner never tries to close the connection with a FIN flag count of 0,"**What the traffic is**
+
+The flow is being flagged as an **Nmap OS‑detection scan** – a classic reconnaissance technique where the Nmap tool sends specially crafted TCP packets to infer the target’s operating system. In this sample the scanner never sends any data payload (largest payload = 0 bytes) and it never tries to close the connection (FIN flag count = 0).
+
+**Why the model decided on that label**
+
+The detector looks at a handful of numeric features that are very characteristic of Nmap’s OS‑fingerprinting mode:
+
+| Feature | Value | Why it matters |
+|---------|-------|----------------|
+| `flow_pkts_payload.max` | 0 bytes | Nmap OS probes are “empty” packets; they carry only TCP flags and options, no application data. |
+| `fwd_init_window_size` / `fwd_last_window_size` | 1024 bytes each | Nmap uses a fixed, small receive‑window size (often 1024) when sending its probes, which is unusual for normal traffic that typically negotiates larger windows. |
+| `bwd_pkts_per_sec` | 52 428.8 pps | The backward direction (responses from the target) arrives at an extremely high rate, matching the rapid burst of replies Nmap expects from the target’s TCP stack. |
+| `flow_FIN_flag_count` | 0 | OS‑detection scans keep the connection open; they never send a FIN to terminate. |
+
+These values line up almost perfectly with the pattern the model learned for the **NMAP_OS_DETECTION** class, giving it a confidence of 1.00. In short, the traffic looks like an Nmap OS‑fingerprinting scan rather than normal device communication.",
+Q22,A,5,fwd_init_window_size and fwd_last_window_size are 1024 bytes each,"**What the traffic is**
+
+The flow is being flagged as an **Nmap OS‑detection scan** – a classic reconnaissance technique where the Nmap tool sends specially crafted TCP packets to infer the target’s operating system. In this sample the scanner never sends any data payload (largest payload = 0 bytes) and it never tries to close the connection (FIN flag count = 0).
+
+**Why the model decided on that label**
+
+The detector looks at a handful of numeric features that are very characteristic of Nmap’s OS‑fingerprinting mode:
+
+| Feature | Value | Why it matters |
+|---------|-------|----------------|
+| `flow_pkts_payload.max` | 0 bytes | Nmap OS probes are “empty” packets; they carry only TCP flags and options, no application data. |
+| `fwd_init_window_size` / `fwd_last_window_size` | 1024 bytes each | Nmap uses a fixed, small receive‑window size (often 1024) when sending its probes, which is unusual for normal traffic that typically negotiates larger windows. |
+| `bwd_pkts_per_sec` | 52 428.8 pps | The backward direction (responses from the target) arrives at an extremely high rate, matching the rapid burst of replies Nmap expects from the target’s TCP stack. |
+| `flow_FIN_flag_count` | 0 | OS‑detection scans keep the connection open; they never send a FIN to terminate. |
+
+These values line up almost perfectly with the pattern the model learned for the **NMAP_OS_DETECTION** class, giving it a confidence of 1.00. In short, the traffic looks like an Nmap OS‑fingerprinting scan rather than normal device communication.",
+Q22,A,6,"bwd_pkts_per_sec is 52,428.8 packets per second","**What the traffic is**
+
+The flow is being flagged as an **Nmap OS‑detection scan** – a classic reconnaissance technique where the Nmap tool sends specially crafted TCP packets to infer the target’s operating system. In this sample the scanner never sends any data payload (largest payload = 0 bytes) and it never tries to close the connection (FIN flag count = 0).
+
+**Why the model decided on that label**
+
+The detector looks at a handful of numeric features that are very characteristic of Nmap’s OS‑fingerprinting mode:
+
+| Feature | Value | Why it matters |
+|---------|-------|----------------|
+| `flow_pkts_payload.max` | 0 bytes | Nmap OS probes are “empty” packets; they carry only TCP flags and options, no application data. |
+| `fwd_init_window_size` / `fwd_last_window_size` | 1024 bytes each | Nmap uses a fixed, small receive‑window size (often 1024) when sending its probes, which is unusual for normal traffic that typically negotiates larger windows. |
+| `bwd_pkts_per_sec` | 52 428.8 pps | The backward direction (responses from the target) arrives at an extremely high rate, matching the rapid burst of replies Nmap expects from the target’s TCP stack. |
+| `flow_FIN_flag_count` | 0 | OS‑detection scans keep the connection open; they never send a FIN to terminate. |
+
+These values line up almost perfectly with the pattern the model learned for the **NMAP_OS_DETECTION** class, giving it a confidence of 1.00. In short, the traffic looks like an Nmap OS‑fingerprinting scan rather than normal device communication.",
+Q22,A,7,The detector gave it a confidence of 1.00,"**What the traffic is**
+
+The flow is being flagged as an **Nmap OS‑detection scan** – a classic reconnaissance technique where the Nmap tool sends specially crafted TCP packets to infer the target’s operating system. In this sample the scanner never sends any data payload (largest payload = 0 bytes) and it never tries to close the connection (FIN flag count = 0).
+
+**Why the model decided on that label**
+
+The detector looks at a handful of numeric features that are very characteristic of Nmap’s OS‑fingerprinting mode:
+
+| Feature | Value | Why it matters |
+|---------|-------|----------------|
+| `flow_pkts_payload.max` | 0 bytes | Nmap OS probes are “empty” packets; they carry only TCP flags and options, no application data. |
+| `fwd_init_window_size` / `fwd_last_window_size` | 1024 bytes each | Nmap uses a fixed, small receive‑window size (often 1024) when sending its probes, which is unusual for normal traffic that typically negotiates larger windows. |
+| `bwd_pkts_per_sec` | 52 428.8 pps | The backward direction (responses from the target) arrives at an extremely high rate, matching the rapid burst of replies Nmap expects from the target’s TCP stack. |
+| `flow_FIN_flag_count` | 0 | OS‑detection scans keep the connection open; they never send a FIN to terminate. |
+
+These values line up almost perfectly with the pattern the model learned for the **NMAP_OS_DETECTION** class, giving it a confidence of 1.00. In short, the traffic looks like an Nmap OS‑fingerprinting scan rather than normal device communication.",
+Q18,A,1,The traffic maps to ATT&CK Technique T1046 – Network Service Discovery,"**ATT&CK mapping**  
+- **Technique:** **T1046 – Network Service Scanning** (sub‑technique **T1046.001 – Scan for Open Ports**).  
+  The Xmas‑tree scan is a form of port‑scanning that sets the FIN, URG, and PSH flags on each probe packet to elicit a response from hosts that do not follow the TCP RFC strictly. In ATT&CK it falls under the broader “Network Service Scanning” reconnaissance activity.
+
+**CAPEC mapping**  
+- **CAPEC‑163 – Port Scanning** – describes the systematic probing of a target’s network ports to discover services, versions, or operating‑system characteristics. The Xmas‑tree variant is listed as one of the “scan payloads” used to differentiate hosts.
+
+**Related CVEs / vulnerabilities**  
+The scan itself is not a vulnerability, but it is often used to locate systems that are vulnerable to other exploits. Typical follow‑up attacks might target:
+
+| Service discovered | Example CVE that could be exploited after discovery |
+|--------------------|------------------------------------------------------|
+| Windows SMB (port 445) | CVE‑2020‑0796 (SMBGhost), CVE‑2017‑0144 (EternalBlue) |
+| Cisco IOS Telnet/SSH (port 23/22) | CVE‑2021‑34739 (Cisco IOS XE SSH), CVE‑2018‑0171 (Cisco IOS Telnet) |
+| Apache HTTP (port 80/443) | CVE‑2021‑41773 (Path Traversal), CVE‑2022‑23943 (HTTP/2) |
+| MySQL (port 3306) | CVE‑2020‑25705 (Authentication Bypass) |
+
+So, the detector is flagging a **Network Service Scanning** activity (ATT&CK T1046 / CAPEC‑163). While the scan itself isn’t tied to a specific CVE, it is commonly a precursor to exploiting known vulnerabilities in the services it discovers.",
+Q18,A,2,"The Xmas-tree scan sets the FIN, URG, and PSH flags on each probe packet","**ATT&CK mapping**  
+- **Technique:** **T1046 – Network Service Scanning** (sub‑technique **T1046.001 – Scan for Open Ports**).  
+  The Xmas‑tree scan is a form of port‑scanning that sets the FIN, URG, and PSH flags on each probe packet to elicit a response from hosts that do not follow the TCP RFC strictly. In ATT&CK it falls under the broader “Network Service Scanning” reconnaissance activity.
+
+**CAPEC mapping**  
+- **CAPEC‑163 – Port Scanning** – describes the systematic probing of a target’s network ports to discover services, versions, or operating‑system characteristics. The Xmas‑tree variant is listed as one of the “scan payloads” used to differentiate hosts.
+
+**Related CVEs / vulnerabilities**  
+The scan itself is not a vulnerability, but it is often used to locate systems that are vulnerable to other exploits. Typical follow‑up attacks might target:
+
+| Service discovered | Example CVE that could be exploited after discovery |
+|--------------------|------------------------------------------------------|
+| Windows SMB (port 445) | CVE‑2020‑0796 (SMBGhost), CVE‑2017‑0144 (EternalBlue) |
+| Cisco IOS Telnet/SSH (port 23/22) | CVE‑2021‑34739 (Cisco IOS XE SSH), CVE‑2018‑0171 (Cisco IOS Telnet) |
+| Apache HTTP (port 80/443) | CVE‑2021‑41773 (Path Traversal), CVE‑2022‑23943 (HTTP/2) |
+| MySQL (port 3306) | CVE‑2020‑25705 (Authentication Bypass) |
+
+So, the detector is flagging a **Network Service Scanning** activity (ATT&CK T1046 / CAPEC‑163). While the scan itself isn’t tied to a specific CVE, it is commonly a precursor to exploiting known vulnerabilities in the services it discovers.",
